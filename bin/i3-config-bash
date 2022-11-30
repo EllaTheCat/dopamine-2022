@@ -880,6 +880,24 @@ function swap_two_containers_by_value
 }
 
 #
+# ${AltSecondary} m DDD but with a dmenu.
+#
+function goto_mark_interactive
+{
+    mark=$(i3-msg -t get_marks | sed 's/[[,]/\n/g' | grep -E '[0-9]{3}'| ${dmenulooknfeel} -p 'goto mark ')
+    i3-msg "[con_mark=$mark] focus"
+}
+
+#
+# ${AltSecondary} x DDD but with a dmenu.
+#
+function swap_mark_interactive
+{
+    mark=$(i3-msg -t get_marks | sed 's/[[,]/\n/g' | grep -E '[0-9]{3}'| ${dmenulooknfeel} -p 'swap mark ')
+    i3-msg "swap container with mark ${mark};"
+}
+
+#
 # Arrange three screens using functions rotate and swap.
 #
 # Consider three monitors side-by-side. Imagine the three are mounted
@@ -1030,45 +1048,6 @@ function backdrop
             ;;
     esac
 }
-
-# = UNUSED? OBSOLETE? ============================================ #
-
-function marks
-{
-    notify-send "i3-config-bash: function marks" "Programmer Error!"
-    case "$1" in
-        (restart|init)
-            # i3-msg -t subscribe window events lives in here and we
-            # want to hide its monotonous output, until something
-            # stalls, then we want to see that it is still alive.
-            xterm -T 'marks subscribe window' -e /bin/bash \
-                -c ~/local/i3/bin/i3-marks subscribe window
-            ;;
-        (kill)
-            i3-msg "unmark"
-            if [ "$(pgrep -c -af "xterm -T 'marks subscribe window'")" -gt 0 ]; then
-                pkill -f "xterm -T 'marks subscribe window'"
-            fi
-            ;;
-    esac
-    exit 112
-}
-
-# = UNUSED, IN RESERVE =========================================== #
-
-### function empty_workspace_watchdog
-### {
-###     percent=0
-###     seconds=300
-###     while [ $seconds -gt 0 ]; do
-###         zenity --title='empty workspace watchdog' --progress \
-###                --timeout=33 --time-remaining --percentage="$percent" \
-###                --auto-close --text="$1"
-###         (( seconds = seconds - 30 ))
-###         (( percent = percent + 10 ))
-###     done
-### }
-
 
 # = UNUSED, IN RESERVE =========================================== #
 
@@ -1221,6 +1200,9 @@ function params2x1word
             "$1"
             ;;
         (swap_two_containers_by_value)
+            "$1"
+            ;;
+        (goto_mark_interactive|swap_mark_interactive)
             "$1"
             ;;
         (rotate|swap)
