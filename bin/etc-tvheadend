@@ -1,0 +1,100 @@
+#!/bin/bash
+# -*- Mode: Shell-script -*-
+#
+# EllaTheCat's tvheadend
+# -  A script for watching broadcast digital television on my PC using
+# -  the tvheadend server.
+#
+# -  tvheadend was built from source, and is run from the build directory.
+# -  I've hardcoded the build directory and the hostnames, also browser
+#    download directories.
+
+function tvh
+{
+    case "$(hostname)" in
+        # DVB-T2 USB tuners on hardware running 20.04 LTS up-to-date
+        # kernel.
+        (quietpc)
+            case "$1" in
+                (start)
+                    tvhpath=/home/"${USER}"/kaiju/packages/tvheadend/tvheadend
+                    pushd "${tvhpath}" || exit
+                    # shellcheck disable=SC2154
+                    xterm -T "tvh-server-$(hostname)" \
+                          -e ./build.linux/tvheadend --noacl &
+                    popd || exit
+                    ;;
+                (stop)
+                    purgetickets
+                    pkill -f "xterm -T tvh-server-$(hostname)"
+                    ;;
+            esac
+            ;;
+        (tbs5922se)
+            # DVB-S2 USB tuners in a VM running 20.04 LTS custom
+            # kernel; the VM is on quietpc.
+            case "$1" in
+                (start)
+                ;;
+                (stop)
+                ;;
+            esac
+            ;;
+        (tiramisu)
+            # I have a VM running 22.04.01 LTS on quietpc running
+            # 20.04 LTS.
+            case "$1" in
+                (start)
+                ;;
+                (stop)
+                ;;
+            esac
+            ;;
+    esac
+}
+
+#
+# I cannot restore the click-to-play behaviour of firefox when I wish
+# to watch TV, instead the tickets are downloaded. Use this to delete
+# them.
+#
+function purgetickets
+{
+    case "$(hostname)" in
+        (quietpc)
+            # Browser ticket downloads directory.
+            folder=/home/"${USER}"/kaiju/Downloads
+
+            # Basename of a ticket is 32 lowercase hexdigit characters long.
+            # Firefox sometimes appends a number in brackets.
+
+            # shellcheck disable=SC2010,SC2012,SC2196
+            for line in $(ls "${folder}" | grep -E '[0-9a-f]{32}'); do
+                rm "${folder}/$line"
+            done
+            ;;
+        (tbs5922se|tiramisu)
+            ;;
+    esac
+}
+
+
+#
+# Start here.
+#
+
+case "$1" in
+    (tvh)
+        # EllaTheCat scripts use this style.
+        "$1" "$2"
+        ;;
+    (start|stop)
+        # Preferred style in this instance:
+        # etc-tvheadend start|stop
+        tvh "$1"
+        ;;
+esac
+
+#
+# Done.
+#

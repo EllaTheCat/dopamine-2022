@@ -1,0 +1,105 @@
+# -*- Mode: Shell-script -*-
+#
+# The hash-shriek comments in here form the title and header of the i3 config digest.
+# If you do want standard i3 bindings it is better to put them in here.
+#
+
+#! I3 CONFIG DIGEST
+
+#! By defining this so early, it is unlikely to fail, and will be there when you need it.
+bindsym Mod4+Return exec --no-startup-id xfce4-terminal
+
+# THE 1st & 2nd MODE SELECT KEYS ================================= #
+
+set $_1st 94
+set $_2nd 133
+
+bindcode --release $_1st mode "$Primary"
+bindcode --release $_2nd mode "$Secondary"
+
+# TWO MODE SELECT KEYS CONFIGURATION 1of2  ======================== #
+
+### set $_1st 94
+### set $_2nd 133 or 134
+
+# I'll be honest, your typo count will go thriough the roof as you try
+# to get used to this.
+
+# TWO MODE SELECT KEYS CONFIGURATION 2of2 ======================== #
+
+### set $_1st 135
+### set $_2nd 134 or 133
+
+# REVEALING HIDDEN MODIFIER KEYS ================================= #
+
+# You can still have a Super key modifier on the left, use Left
+# Control after swapping with Left Super. (setxkbmap)
+
+# You can still have a Control key modifier on the left, use Caps
+# Lock, after setting it to be a Control key modifier, or atfer
+# swapping it with Left Control. (setxkbmap)
+
+# You can arrange for Left Alt to generate Left Meta for Emacs such
+# that typing Left Alt then a letter is the same as typing the latter
+# with Left Alt acting as a modifier. (xcape)
+
+# KEYBOARD BLOWS UP WHEN ... ==================================== #
+
+# Unfortunately the more such keyboarc tweaks you do, the greater the
+# chance it blows up in your face. The following method seems to be
+# reliably setting caps as control and alt alone as escape. The
+# function is present in "bin/i3_config_bash" where you are urged to
+# gut the function body and hardcode whatever works for you.
+
+###                function keyboard
+###                {
+###                    setxkbmap -option
+###                    setxkbmap -option caps:ctrl_modifier
+###                    killall -q xcape
+###                    k2='Alt_L=Escape'
+###                    xcape -t 667 -e "$k2"
+###                }
+
+# Z MODE TO TYPE HIDDEN CHARACTERS =============================== #
+
+# Stealing a key for the 1st mode select key loses one character,
+# which is in this example and in my case the backslash, so you must
+# find a way to type it. The shifted key is unchanged.
+
+# The general solution is called Z mode, because Z is adjacent to
+# backslash on my keyboard. If I hit backslash, i can hit Z to enter Z
+# mode where all keys, except for space, do what they normally do, in
+# this case the key types a backslash. Remember, space always goes
+# back to default mode.
+
+# MODIFIER KEYS ================================================== #
+
+#! Define this modifier even if you think you will never use the key.
+set $mod Mod4
+
+#! When moving or resizing a floating container by dragging the mouse, hold down this key to make it easier.
+floating_modifier Mod4
+
+#! When dragging on a non-floating (tiling) container, click on the titlebar first to make it easier.
+tiling_drag titlebar
+
+#! When toggling a container from default to fullscreen global, require this modifier.
+set $fgm Mod4
+
+# Fullscreen global renders the image over all monitors, as one might
+# for a panorama. Accidental selection of the wrong target can become
+# irreversible without git. The modifier serves as a reminder to be
+# careful.
+
+# FUNCTION KEYS ================================================== #
+
+# There are some F-key bindings in default mode, alternatives to their
+# existing mode select key bindings. They eliminate one-third of the
+# keystrokes for commands in $AltSecondary mode and are enabled for
+# evaluation. Office people take note.
+
+# Checklist: F5,F6,F7,F8
+
+#
+# Done
+#

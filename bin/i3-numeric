@@ -1,0 +1,122 @@
+#!/bin/bash
+#
+# i3-three-digits
+#
+
+
+
+#
+# The argument is 1 letter followed by 3 digits (or a "string",
+# strings are deprecated).
+
+# Marks are 3 digit. Marks are in the range 032 to 999. Mark
+# operations are in the range 000 to 031. All are entered with 3
+# keystrokes.
+
+# Containers are 3 digit in the range 010 to 099, entered with 2
+# keystrokes. Container Operations are 3 digit in the range 000 to
+# 009, entered with 2 keystrokes.
+#
+function decode
+{
+    case "$1" in
+        (clear|m030)
+            # Clear the auto-generated 3 digit numeric mark on the
+            # container with focus.
+            ~/local/i3/bin/i3-marks clear
+            notify-send "i3-numeric" "clear mark<"
+            ;;
+        (auto|m031)
+            # Apply an auto-generated 3 digit numeric mark to the
+            # container with focus.
+            ~/local/i3/bin/i3-marks auto
+            notify-send "i3-numeric" "set mark auto"
+            ;;
+        ([m][0-9][0-9][0-9])
+            # 000 through 031 inclusive are reserved.
+            m=${1/m}
+            i3-msg [con_mark="$m"] focus
+            notify-send "i3-numeric" "visit mark >$m<"
+            ;;
+        ([x][0-9][0-9][0-9])
+            # 000 through 031 inclusive are reserved.
+            m=${1/x}
+            i3-msg swap container with mark "$m"
+            notify-send "i3-numeric" "swap contents of focused and >$m<"
+            ;;
+        ([w][0][1-9][0-9])
+            w=${1/w0/}
+            i3-msg workspace --no-auto-back-and-forth "$w"
+            notify-send "i3-numeric" "visit workspace >$w<"
+            ;;
+        (w000)
+            w=${1/w0/w}
+            notify-send "i3-numeric" "($w) workspace back and forth"
+            i3-msg workspace back_and_forth
+            ;;
+        (w001)
+            w=${1/w0/w}
+            notify-send "i3-numeric" "($w) move workspace between left and right outputs"
+            i3-msg move workspace to output HDMI2 VGA1
+            ;;
+        (w002)
+            w=${1/w0/w}
+            notify-send "i3-numeric" "($w) move workspace between middle and left outputs"
+            i3-msg move workspace to output HDMI1 HDMI2
+            ;;
+        (w003)
+            w=${1/w0/w}
+            notify-send "i3-numeric" "($w) move workspace between right and middle outputs"
+            i3-msg move workspace to output VGA1 HDMI1
+            ;;
+        (w008)
+            w=${1/w0/w}
+            notify-send "i3-numeric" "($w) move to the previous workspace on this output"
+            i3-msg workspace prev_on_output
+            ;;
+        (w009)
+            w=${1/w0/w}
+            notify-send "i3-numeric" "($w) move to the next workspace on this output"
+            i3-msg workspace next_on_output
+            ;;
+        ([w][0][0][4-7])
+            w=${1/w0/}
+            notify-send "i3-numeric" "->$w<- reserved outside range 10 to 99"
+            ;;
+        ([c][0][1-9][0-9])
+            w=${1/c0/}
+            i3-msg move container to workspace "$w"
+            notify-send "i3-numeric" "move --no-auto-back-and-forth container to workspace >$w<"
+            ;;
+        (c008)
+            w=${1/c0/c}
+            notify-send "i3-numeric" "($w) move container to the previous workspace on this output"
+            i3-msg move container to workspace prev_on_output
+            ;;
+        (c009)
+            w=${1/c0/c}
+            notify-send "i3-numeric" "($w) move container to the next workspace on this output"
+            i3-msg move container to workspace next_on_output
+            ;;
+        ([c][0][0][0-7])
+            w=${1/c0/}
+            notify-send "i3-numeric" "->$w<- reserved outside range 10 to 99"
+            ;;
+    esac
+    i3-msg mode default  # B&B only, we should have been put in mode default already.
+}
+
+
+#
+# Start here.
+#
+
+case "$1" in
+    (decode)
+        "$1" "$2"
+        ;;
+esac
+
+#
+# Done.
+#

@@ -1,0 +1,129 @@
+#!/bin/bash
+#
+# i3-focus-app-by-alias
+#
+
+#
+# The dictionary "wsapps" should only contain entries for apps that
+# have dedicated workspaces, whereas "not_wsapps" is for adding an
+# emacs frame or web/file browser tab/window to "wsapps" windows.
+#
+
+###INSERT_APPS00_HERE###
+
+#
+# Focus a running instance of an app given its command alias,
+# launching the instance beforehand as necessary.
+#
+focus ()
+{
+    case "$1" in
+        ([mxwc][0-9][0-9][0-9]|clear|auto)
+            # B&B i3-numeric commands belong in i3-dispatcher.
+            echo "Programmer error"
+            exit 112
+            ;;
+	([a-z][0-9]|[a-z][a-z])
+            # The app can launch in its dedicated workspace.
+            # shellcheck disable=SC2154
+            wsapp=${wsapps[$1]}
+            # The app can only launch in the current workspace.
+            # shellcheck disable=SC2154
+            not_wsapp=${not_wsapps[$1]}
+
+            # A workspace whose name matches the command alias.
+            ws=$(i3-msg -t get_workspaces | jq '.[] | .name'| grep "$1")
+            # The current workspace. Thank you i3wm subreddit.
+            cws=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name')
+
+            if [ "_${wsapp}" != "_" ]; then
+                # Why does this work? Initially app "xy" is marked
+                # "[xy]". The mark may be passed on to other apps in
+                # the workspace.
+                status=$(i3-msg "[workspace=\"$1\" con_mark=\"${1:0:2}\"] focus")
+                # "No window matches given criteria" is not an
+                # error here, it's one of two desired outcomes.
+	        case "${status}" in
+		    (*true*)
+		        i3-msg "workspace --no-auto-back-and-forth \"$1\""
+                        notify-send "i3-focus-apps-by-alias" "$(printf "%s\n%s" \
+                                    "the current workspace has changed to $1," \
+                                    "${wsapp} was already running.")"
+                        ;;
+		    (*false*)
+                        # We want the script to terminate hence using i3-msg.
+		        i3-msg "workspace --no-auto-back-and-forth \"$1\""
+		        # The enhanced PATH is exported by the dispatcher.
+                        # The i3-msg recipient can't see the enhanced PATH.
+                        # Extract and prepend the path directory components.
+                        # The executable name remains after removing the
+                        # "longest matching suffix", defined by space star.
+                        # Get the full path to the executable, remove the
+                        # name part, prepend the rest to the command.
+                        arg0=${wsapp%% *}
+                        path=$(command -v "${arg0}")    # "which"
+                        path=${path/${arg0}/}
+                        i3-msg "exec --no-startup-id ${path}${wsapp}"
+                        notify-send "i3-focus-apps-by-alias" "$(printf "%s\n%s" \
+                                    "the current workspace has changed to $1," \
+                                    "${wsapp} has been launched.")"
+                        ;;
+                esac
+            elif [ "_${not_wsapp}" != "_" ]; then
+                arg0=${not_wsapp%% *}
+                path=$(command -v "${arg0}")
+                path=${path/${arg0}/}
+                i3-msg "exec --no-startup-id ${path}${not_wsapp}"
+                notify-send "i3-focus-apps-by-alias" "$(printf "%s\n%s"  \
+                            "the current workspace ${cws} is unchanged," \
+                            "${not_wsapp} has been launched.")"
+            elif [ "_$ws" != "_" ]; then
+                # The last two cases might be merged in future. This is 1st of 2.
+ 	        i3-msg "workspace --no-auto-back-and-forth \"$1\""
+                notify-send "i3-focus-apps-by-alias" "$(printf "%s\n%s"  \
+                            "the current workspace has changed to [$1]," \
+                            "no app has been launched. [1of2]")"
+            else
+                # The last two cases might be merged in future. This is 2nd of 2.
+                i3-msg "workspace --no-auto-back-and-forth \"$1\""
+                notify-send "i3-focus-apps-by-alias" "$(printf "%s\n%s" \
+                            "no workspace matches [$1]," \
+                            "no app has been launched. [2of2]")"
+            fi
+            ;;
+        (*)
+            echo "Programmer error!"
+            exit 112
+            ;;
+    esac
+}
+
+#
+# Start here.
+#
+
+case "$1" in
+    (focus)
+        "$1" "${@:2}"
+        ;;
+    (menu)
+        item=$(for cmd in "${!wsapps[@]} ${!not_wsapps[@]}"; do echo "$cmd"; done | sort | /usr/local/bin/dmenu -b -p "Esc to quit, Return for help: ")
+        # Search the deployed version of this file (which includes
+        # cfg/apps00) for the cfg/apps00 array key that matches the
+        # selected menu item, and return the comment on the line
+        # above, which describes what the item (a two character
+        # command) does.
+        grep -B1 "$(printf '\[\"%s\"\]\=' "$item")" \
+             ~/local/i3/bin/i3-focus-app-by-alias | grep '#.' | \
+            /usr/local/bin/dmenu -b -p "Esc to quit, Return to invoke: "
+        focus "$item"
+        ;;
+    (*)
+        echo "Programmer error!"
+        exit 112
+        ;;
+esac
+
+#
+# Done.
+#

@@ -1,0 +1,1662 @@
+# -*- Mode: Shell-script -*-
+#
+# etc i3 configuration file
+# etc isn't et cetera, etc is EllaThcat!
+#
+# Pass the result of pressing several keys to i3-config bash $1
+#
+# Enter mode x_h for 3 key presses, result 000 through 999
+# Enter mode x_t0 for 2 key presses, result 000 through 099
+# Enter mode x_u00 for 1 key presses, result 000 through 009
+
+# ================================================================ #
+# Bind 10 keys that correspond to the digits 0-9 (one table only).
+# ================================================================ #
+
+#
+# Table 1 = number keys on top row of main keyboard.
+#
+
+### $key0 0
+### $key1 1
+### $key2 2
+### $key3 3
+### $key4 4
+### $key5 5
+### $key6 6
+### $key7 7
+### $key8 8
+### $key9 9
+
+#
+# Table 2 = numpad overlay onto main keyboard.
+#
+
+# This numpad has 10 keys in roughly the same relative positions as a
+# calculator has digits420  4565. The main difference is the shear to the left
+# from the top. The shearing defines a trapezoidal outline rather than
+# a rectangular one.
+
+# The numpad will scramble your brains at first, but repetition will
+# eventually progam your muscle memory.
+set $key7 7
+set $key8 8
+set $key9 9
+
+set $key4 u
+set $key5 i
+set $key6 o
+
+set $key1 j
+set $key2 k
+set $key3 l
+
+set $key0 m
+
+# Keys m,x,w,c are mnemonic, but here we try to reduce the distances
+# (times in millseconds) between keypresses by using keys either side
+# of the table 2 numpad.
+
+set $keyM 6
+set $keyX Y
+set $keyW 0
+set $keyC P
+
+
+# ================================================================ #
+# You shouldn't need to edit anything below here (except mistakes).
+# The mode names are hardcoded, no $, for BMI and quoting reasons.
+# ================================================================ #
+
+mode "x_h" {
+     bindsym $key0 mode x_t0
+     bindsym $key1 mode x_t1
+     bindsym $key2 mode x_t2
+     bindsym $key3 mode x_t3
+     bindsym $key4 mode x_t4
+     bindsym $key5 mode x_t5
+     bindsym $key6 mode x_t6
+     bindsym $key7 mode x_t7
+     bindsym $key8 mode x_t8
+     bindsym $key9 mode x_t9
+     bindsym $keyX mode default
+}
+
+
+# ================================================================ #
+
+mode "x_t0" {
+     bindsym $key0 mode x_u00
+     bindsym $key1 mode x_u01
+     bindsym $key2 mode x_u02
+     bindsym $key3 mode x_u03
+     bindsym $key4 mode x_u04
+     bindsym $key5 mode x_u05
+     bindsym $key6 mode x_u06
+     bindsym $key7 mode x_u07
+     bindsym $key8 mode x_u08
+     bindsym $key9 mode x_u09
+     bindsym space mode default
+}
+
+
+mode "x_t1" {
+     bindsym $key0 mode x_u10
+     bindsym $key1 mode x_u11
+     bindsym $key2 mode x_u12
+     bindsym $key3 mode x_u13
+     bindsym $key4 mode x_u14
+     bindsym $key5 mode x_u15
+     bindsym $key6 mode x_u16
+     bindsym $key7 mode x_u17
+     bindsym $key8 mode x_u18
+     bindsym $key9 mode x_u19
+     bindsym space mode default
+}
+
+
+mode "x_t2" {
+     bindsym $key0 mode x_u20
+     bindsym $key1 mode x_u21
+     bindsym $key2 mode x_u22
+     bindsym $key3 mode x_u23
+     bindsym $key4 mode x_u24
+     bindsym $key5 mode x_u25
+     bindsym $key6 mode x_u26
+     bindsym $key7 mode x_u27
+     bindsym $key8 mode x_u28
+     bindsym $key9 mode x_u29
+     bindsym space mode default
+}
+
+
+mode "x_t3" {
+     bindsym $key0 mode x_u30
+     bindsym $key1 mode x_u31
+     bindsym $key2 mode x_u32
+     bindsym $key3 mode x_u33
+     bindsym $key4 mode x_u34
+     bindsym $key5 mode x_u35
+     bindsym $key6 mode x_u36
+     bindsym $key7 mode x_u37
+     bindsym $key8 mode x_u38
+     bindsym $key9 mode x_u39
+     bindsym space mode default
+}
+
+
+mode "x_t4" {
+     bindsym $key0 mode x_u40
+     bindsym $key1 mode x_u41
+     bindsym $key2 mode x_u42
+     bindsym $key3 mode x_u43
+     bindsym $key4 mode x_u44
+     bindsym $key5 mode x_u45
+     bindsym $key6 mode x_u46
+     bindsym $key7 mode x_u47
+     bindsym $key8 mode x_u48
+     bindsym $key9 mode x_u49
+     bindsym space mode default
+}
+
+
+mode "x_t5" {
+     bindsym $key0 mode x_u50
+     bindsym $key1 mode x_u51
+     bindsym $key2 mode x_u52
+     bindsym $key3 mode x_u53
+     bindsym $key4 mode x_u54
+     bindsym $key5 mode x_u55
+     bindsym $key6 mode x_u56
+     bindsym $key7 mode x_u57
+     bindsym $key8 mode x_u58
+     bindsym $key9 mode x_u59
+     bindsym space mode default
+}
+
+
+mode "x_t6" {
+     bindsym $key0 mode x_u60
+     bindsym $key1 mode x_u61
+     bindsym $key2 mode x_u62
+     bindsym $key3 mode x_u63
+     bindsym $key4 mode x_u64
+     bindsym $key5 mode x_u65
+     bindsym $key6 mode x_u66
+     bindsym $key7 mode x_u67
+     bindsym $key8 mode x_u68
+     bindsym $key9 mode x_u69
+     bindsym space mode default
+}
+
+
+mode "x_t7" {
+     bindsym $key0 mode x_u70
+     bindsym $key1 mode x_u71
+     bindsym $key2 mode x_u72
+     bindsym $key3 mode x_u73
+     bindsym $key4 mode x_u74
+     bindsym $key5 mode x_u75
+     bindsym $key6 mode x_u76
+     bindsym $key7 mode x_u77
+     bindsym $key8 mode x_u78
+     bindsym $key9 mode x_u79
+     bindsym space mode default
+}
+
+
+mode "x_t8" {
+     bindsym $key0 mode x_u80
+     bindsym $key1 mode x_u81
+     bindsym $key2 mode x_u82
+     bindsym $key3 mode x_u83
+     bindsym $key4 mode x_u84
+     bindsym $key5 mode x_u85
+     bindsym $key6 mode x_u86
+     bindsym $key7 mode x_u87
+     bindsym $key8 mode x_u88
+     bindsym $key9 mode x_u89
+     bindsym space mode default
+}
+
+
+mode "x_t9" {
+     bindsym $key0 mode x_u90
+     bindsym $key1 mode x_u91
+     bindsym $key2 mode x_u92
+     bindsym $key3 mode x_u93
+     bindsym $key4 mode x_u94
+     bindsym $key5 mode x_u95
+     bindsym $key6 mode x_u96
+     bindsym $key7 mode x_u97
+     bindsym $key8 mode x_u98
+     bindsym $key9 mode x_u99
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u00" {
+     bindsym $key0 $emit 000
+     bindsym $key1 $emit 001
+     bindsym $key2 $emit 002
+     bindsym $key3 $emit 003
+     bindsym $key4 $emit 004
+     bindsym $key5 $emit 005
+     bindsym $key6 $emit 006
+     bindsym $key7 $emit 007
+     bindsym $key8 $emit 008
+     bindsym $key9 $emit 009
+     bindsym space mode default
+}
+
+mode "x_u01" {
+     bindsym $key0 $emit 010
+     bindsym $key1 $emit 011
+     bindsym $key2 $emit 012
+     bindsym $key3 $emit 013
+     bindsym $key4 $emit 014
+     bindsym $key5 $emit 015
+     bindsym $key6 $emit 016
+     bindsym $key7 $emit 017
+     bindsym $key8 $emit 018
+     bindsym $key9 $emit 019
+     bindsym space mode default
+}
+
+mode "x_u02" {
+     bindsym $key0 $emit 020
+     bindsym $key1 $emit 021
+     bindsym $key2 $emit 022
+     bindsym $key3 $emit 023
+     bindsym $key4 $emit 024
+     bindsym $key5 $emit 025
+     bindsym $key6 $emit 026
+     bindsym $key7 $emit 027
+     bindsym $key8 $emit 028
+     bindsym $key9 $emit 029
+     bindsym space mode default
+}
+
+mode "x_u03" {
+     bindsym $key0 $emit 030
+     bindsym $key1 $emit 031
+     bindsym $key2 $emit 032
+     bindsym $key3 $emit 033
+     bindsym $key4 $emit 034
+     bindsym $key5 $emit 035
+     bindsym $key6 $emit 036
+     bindsym $key7 $emit 037
+     bindsym $key8 $emit 038
+     bindsym $key9 $emit 039
+     bindsym space mode default
+}
+
+mode "x_u04" {
+     bindsym $key0 $emit 040
+     bindsym $key1 $emit 041
+     bindsym $key2 $emit 042
+     bindsym $key3 $emit 043
+     bindsym $key4 $emit 044
+     bindsym $key5 $emit 045
+     bindsym $key6 $emit 046
+     bindsym $key7 $emit 047
+     bindsym $key8 $emit 048
+     bindsym $key9 $emit 049
+     bindsym space mode default
+}
+
+mode "x_u05" {
+     bindsym $key0 $emit 050
+     bindsym $key1 $emit 051
+     bindsym $key2 $emit 052
+     bindsym $key3 $emit 053
+     bindsym $key4 $emit 054
+     bindsym $key5 $emit 055
+     bindsym $key6 $emit 056
+     bindsym $key7 $emit 057
+     bindsym $key8 $emit 058
+     bindsym $key9 $emit 059
+     bindsym space mode default
+}
+
+mode "x_u06" {
+     bindsym $key0 $emit 060
+     bindsym $key1 $emit 061
+     bindsym $key2 $emit 062
+     bindsym $key3 $emit 063
+     bindsym $key4 $emit 064
+     bindsym $key5 $emit 065
+     bindsym $key6 $emit 066
+     bindsym $key7 $emit 067
+     bindsym $key8 $emit 068
+     bindsym $key9 $emit 069
+     bindsym space mode default
+}
+
+mode "x_u07" {
+     bindsym $key0 $emit 070
+     bindsym $key1 $emit 071
+     bindsym $key2 $emit 072
+     bindsym $key3 $emit 073
+     bindsym $key4 $emit 074
+     bindsym $key5 $emit 075
+     bindsym $key6 $emit 076
+     bindsym $key7 $emit 077
+     bindsym $key8 $emit 078
+     bindsym $key9 $emit 079
+     bindsym space mode default
+}
+
+mode "x_u08" {
+     bindsym $key0 $emit 080
+     bindsym $key1 $emit 081
+     bindsym $key2 $emit 082
+     bindsym $key3 $emit 083
+     bindsym $key4 $emit 084
+     bindsym $key5 $emit 085
+     bindsym $key6 $emit 086
+     bindsym $key7 $emit 087
+     bindsym $key8 $emit 088
+     bindsym $key9 $emit 089
+     bindsym space mode default
+}
+
+mode "x_u09" {
+     bindsym $key0 $emit 090
+     bindsym $key1 $emit 091
+     bindsym $key2 $emit 092
+     bindsym $key3 $emit 093
+     bindsym $key4 $emit 094
+     bindsym $key5 $emit 095
+     bindsym $key6 $emit 096
+     bindsym $key7 $emit 097
+     bindsym $key8 $emit 098
+     bindsym $key9 $emit 099
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u10" {
+     bindsym $key0 $emit 100
+     bindsym $key1 $emit 101
+     bindsym $key2 $emit 102
+     bindsym $key3 $emit 103
+     bindsym $key4 $emit 104
+     bindsym $key5 $emit 105
+     bindsym $key6 $emit 106
+     bindsym $key7 $emit 107
+     bindsym $key8 $emit 108
+     bindsym $key9 $emit 109
+     bindsym space mode default
+}
+
+mode "x_u11" {
+     bindsym $key0 $emit 010
+     bindsym $key1 $emit 111
+     bindsym $key2 $emit 112
+     bindsym $key3 $emit 113
+     bindsym $key4 $emit 114
+     bindsym $key5 $emit 115
+     bindsym $key6 $emit 116
+     bindsym $key7 $emit 117
+     bindsym $key8 $emit 118
+     bindsym $key9 $emit 119
+     bindsym space mode default
+}
+
+mode "x_u12" {
+     bindsym $key0 $emit 120
+     bindsym $key1 $emit 121
+     bindsym $key2 $emit 122
+     bindsym $key3 $emit 123
+     bindsym $key4 $emit 124
+     bindsym $key5 $emit 125
+     bindsym $key6 $emit 126
+     bindsym $key7 $emit 127
+     bindsym $key8 $emit 128
+     bindsym $key9 $emit 129
+     bindsym space mode default
+}
+
+mode "x_u13" {
+     bindsym $key0 $emit 130
+     bindsym $key1 $emit 131
+     bindsym $key2 $emit 132
+     bindsym $key3 $emit 133
+     bindsym $key4 $emit 134
+     bindsym $key5 $emit 135
+     bindsym $key6 $emit 136
+     bindsym $key7 $emit 137
+     bindsym $key8 $emit 138
+     bindsym $key9 $emit 139
+     bindsym space mode default
+}
+
+mode "x_u14" {
+     bindsym $key0 $emit 140
+
+     bindsym $key1 $emit 141
+     bindsym $key2 $emit 142
+     bindsym $key3 $emit 143
+     bindsym $key4 $emit 144
+     bindsym $key5 $emit 145
+     bindsym $key6 $emit 146
+     bindsym $key7 $emit 147
+     bindsym $key8 $emit 148
+     bindsym $key9 $emit 149
+     bindsym space mode default
+}
+
+mode "x_u15" {
+     bindsym $key0 $emit 150
+     bindsym $key1 $emit 151
+     bindsym $key2 $emit 152
+     bindsym $key3 $emit 153
+     bindsym $key4 $emit 154
+     bindsym $key5 $emit 155
+     bindsym $key6 $emit 156
+     bindsym $key7 $emit 157
+     bindsym $key8 $emit 158
+     bindsym $key9 $emit 159
+     bindsym space mode default
+}
+
+mode "x_u16" {
+     bindsym $key0 $emit 160
+     bindsym $key1 $emit 161
+     bindsym $key2 $emit 162
+     bindsym $key3 $emit 163
+     bindsym $key4 $emit 164
+     bindsym $key5 $emit 165
+     bindsym $key6 $emit 166
+     bindsym $key7 $emit 167
+     bindsym $key8 $emit 168
+     bindsym $key9 $emit 169
+     bindsym space mode default
+}
+
+mode "x_u17" {
+     bindsym $key0 $emit 170
+     bindsym $key1 $emit 171
+     bindsym $key2 $emit 172
+     bindsym $key3 $emit 173
+     bindsym $key4 $emit 174
+     bindsym $key5 $emit 175
+     bindsym $key6 $emit 176
+     bindsym $key7 $emit 177
+     bindsym $key8 $emit 178
+     bindsym $key9 $emit 179
+     bindsym space mode default
+}
+
+mode "x_u18" {
+     bindsym $key0 $emit 180
+     bindsym $key1 $emit 181
+     bindsym $key2 $emit 182
+     bindsym $key3 $emit 183
+     bindsym $key4 $emit 184
+     bindsym $key5 $emit 185
+     bindsym $key6 $emit 186
+     bindsym $key7 $emit 187
+     bindsym $key8 $emit 188
+     bindsym $key9 $emit 189
+     bindsym space mode default
+}
+
+mode "x_u19" {
+     bindsym $key0 $emit 190
+     bindsym $key1 $emit 191
+     bindsym $key2 $emit 192
+     bindsym $key3 $emit 193
+     bindsym $key4 $emit 194
+     bindsym $key5 $emit 195
+     bindsym $key6 $emit 196
+     bindsym $key7 $emit 197
+     bindsym $key8 $emit 198
+     bindsym $key9 $emit 199
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u20" {
+     bindsym $key0 $emit 200
+     bindsym $key1 $emit 201
+     bindsym $key2 $emit 202
+     bindsym $key3 $emit 203
+     bindsym $key4 $emit 204
+     bindsym $key5 $emit 205
+     bindsym $key6 $emit 206
+     bindsym $key7 $emit 207
+     bindsym $key8 $emit 208
+     bindsym $key9 $emit 209
+     bindsym space mode default
+}
+
+mode "x_u21" {
+     bindsym $key0 $emit 210
+     bindsym $key1 $emit 211
+     bindsym $key2 $emit 212
+     bindsym $key3 $emit 213
+     bindsym $key4 $emit 214
+     bindsym $key5 $emit 215
+     bindsym $key6 $emit 216
+     bindsym $key7 $emit 217
+     bindsym $key8 $emit 218
+     bindsym $key9 $emit 219
+     bindsym space mode default
+}
+
+mode "x_u22" {
+     bindsym $key0 $emit 220
+     bindsym $key1 $emit 221
+     bindsym $key2 $emit 222
+     bindsym $key3 $emit 223
+     bindsym $key4 $emit 224
+     bindsym $key5 $emit 225
+     bindsym $key6 $emit 226
+     bindsym $key7 $emit 227
+     bindsym $key8 $emit 228
+     bindsym $key9 $emit 229
+     bindsym space mode default
+}
+
+mode "x_u23" {
+     bindsym $key0 $emit 230
+     bindsym $key1 $emit 231
+     bindsym $key2 $emit 232
+     bindsym $key3 $emit 233
+     bindsym $key4 $emit 234
+     bindsym $key5 $emit 235
+     bindsym $key6 $emit 236
+     bindsym $key7 $emit 237
+     bindsym $key8 $emit 238
+     bindsym $key9 $emit 239
+     bindsym space mode default
+}
+
+mode "x_u24" {
+     bindsym $key0 $emit 240
+     bindsym $key1 $emit 241
+     bindsym $key2 $emit 242
+     bindsym $key3 $emit 243
+     bindsym $key4 $emit 244
+     bindsym $key5 $emit 245
+     bindsym $key6 $emit 246
+     bindsym $key7 $emit 247
+     bindsym $key8 $emit 248
+     bindsym $key9 $emit 249
+     bindsym space mode default
+}
+
+mode "x_u25" {
+     bindsym $key0 $emit 250
+     bindsym $key1 $emit 251
+     bindsym $key2 $emit 252
+     bindsym $key3 $emit 253
+     bindsym $key4 $emit 254
+     bindsym $key5 $emit 255
+     bindsym $key6 $emit 256
+     bindsym $key7 $emit 257
+     bindsym $key8 $emit 258
+     bindsym $key9 $emit 259
+     bindsym space mode default
+}
+
+mode "x_u26" {
+     bindsym $key0 $emit 260
+     bindsym $key1 $emit 261
+     bindsym $key2 $emit 262
+     bindsym $key3 $emit 263
+     bindsym $key4 $emit 264
+     bindsym $key5 $emit 265
+     bindsym $key6 $emit 266
+     bindsym $key7 $emit 267
+     bindsym $key8 $emit 268
+     bindsym $key9 $emit 269
+     bindsym space mode default
+}
+
+mode "x_u27" {
+     bindsym $key0 $emit 270
+     bindsym $key1 $emit 271
+     bindsym $key2 $emit 272
+     bindsym $key3 $emit 273
+     bindsym $key4 $emit 274
+     bindsym $key5 $emit 275
+     bindsym $key6 $emit 276
+     bindsym $key7 $emit 277
+     bindsym $key8 $emit 278
+     bindsym $key9 $emit 279
+     bindsym space mode default
+}
+
+mode "x_u28" {
+     bindsym $key0 $emit 280
+     bindsym $key1 $emit 281
+     bindsym $key2 $emit 282
+     bindsym $key3 $emit 283
+     bindsym $key4 $emit 284
+     bindsym $key5 $emit 285
+     bindsym $key6 $emit 286
+     bindsym $key7 $emit 287
+     bindsym $key8 $emit 288
+     bindsym $key9 $emit 289
+     bindsym space mode default
+}
+
+mode "x_u29" {
+     bindsym $key0 $emit 290
+     bindsym $key1 $emit 291
+     bindsym $key2 $emit 292
+     bindsym $key3 $emit 293
+     bindsym $key4 $emit 294
+     bindsym $key5 $emit 295
+     bindsym $key6 $emit 296
+     bindsym $key7 $emit 297
+     bindsym $key8 $emit 298
+     bindsym $key9 $emit 299
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u30" {
+     bindsym $key0 $emit 300
+     bindsym $key1 $emit 301
+     bindsym $key2 $emit 302
+     bindsym $key3 $emit 303
+     bindsym $key4 $emit 304
+     bindsym $key5 $emit 305
+     bindsym $key6 $emit 306
+     bindsym $key7 $emit 307
+     bindsym $key8 $emit 308
+     bindsym $key9 $emit 309
+     bindsym space mode default
+}
+
+mode "x_u31" {
+     bindsym $key0 $emit 310
+     bindsym $key1 $emit 311
+     bindsym $key2 $emit 312
+     bindsym $key3 $emit 313
+     bindsym $key4 $emit 314
+     bindsym $key5 $emit 315
+     bindsym $key6 $emit 316
+     bindsym $key7 $emit 317
+     bindsym $key8 $emit 318
+     bindsym $key9 $emit 319
+     bindsym space mode default
+}
+
+mode "x_u32" {
+     bindsym $key0 $emit 320
+     bindsym $key1 $emit 321
+     bindsym $key2 $emit 322
+     bindsym $key3 $emit 323
+     bindsym $key4 $emit 324
+     bindsym $key5 $emit 325
+     bindsym $key6 $emit 326
+     bindsym $key7 $emit 327
+     bindsym $key8 $emit 328
+     bindsym $key9 $emit 329
+     bindsym space mode default
+}
+
+mode "x_u33" {
+     bindsym $key0 $emit 330
+     bindsym $key1 $emit 331
+     bindsym $key2 $emit 332
+     bindsym $key3 $emit 333
+     bindsym $key4 $emit 334
+     bindsym $key5 $emit 335
+     bindsym $key6 $emit 336
+     bindsym $key7 $emit 337
+     bindsym $key8 $emit 338
+     bindsym $key9 $emit 339
+     bindsym space mode default
+}
+
+mode "x_u34" {
+     bindsym $key0 $emit 340
+     bindsym $key1 $emit 341
+     bindsym $key2 $emit 342
+     bindsym $key3 $emit 343
+     bindsym $key4 $emit 344
+     bindsym $key5 $emit 345
+     bindsym $key6 $emit 346
+     bindsym $key7 $emit 347
+     bindsym $key8 $emit 348
+     bindsym $key9 $emit 349
+     bindsym space mode default
+}
+
+mode "x_u35" {
+     bindsym $key0 $emit 350
+     bindsym $key1 $emit 351
+     bindsym $key2 $emit 352
+     bindsym $key3 $emit 353
+     bindsym $key4 $emit 354
+     bindsym $key5 $emit 355
+     bindsym $key6 $emit 356
+     bindsym $key7 $emit 357
+     bindsym $key8 $emit 358
+     bindsym $key9 $emit 359
+     bindsym space mode default
+}
+
+mode "x_u36" {
+     bindsym $key0 $emit 360
+     bindsym $key1 $emit 361
+     bindsym $key2 $emit 362
+     bindsym $key3 $emit 363
+     bindsym $key4 $emit 364
+     bindsym $key5 $emit 365
+     bindsym $key6 $emit 366
+     bindsym $key7 $emit 367
+     bindsym $key8 $emit 368
+     bindsym $key9 $emit 369
+     bindsym space mode default
+}
+
+mode "x_u37" {
+     bindsym $key0 $emit 370
+     bindsym $key1 $emit 371
+     bindsym $key2 $emit 372
+     bindsym $key3 $emit 373
+     bindsym $key4 $emit 374
+     bindsym $key5 $emit 375
+     bindsym $key6 $emit 376
+     bindsym $key7 $emit 377
+     bindsym $key8 $emit 378
+     bindsym $key9 $emit 379
+     bindsym space mode default
+}
+
+mode "x_u38" {
+     bindsym $key0 $emit 380
+     bindsym $key1 $emit 381
+     bindsym $key2 $emit 382
+     bindsym $key3 $emit 383
+     bindsym $key4 $emit 384
+     bindsym $key5 $emit 385
+     bindsym $key6 $emit 386
+     bindsym $key7 $emit 387
+     bindsym $key8 $emit 388
+     bindsym $key9 $emit 389
+     bindsym space mode default
+}
+
+mode "x_u39" {
+     bindsym $key0 $emit 390
+     bindsym $key1 $emit 391
+     bindsym $key2 $emit 392
+     bindsym $key3 $emit 393
+     bindsym $key4 $emit 394
+     bindsym $key5 $emit 395
+     bindsym $key6 $emit 396
+     bindsym $key7 $emit 397
+     bindsym $key8 $emit 398
+     bindsym $key9 $emit 399
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u40" {
+     bindsym $key0 $emit 400
+     bindsym $key1 $emit 401
+     bindsym $key2 $emit 402
+     bindsym $key3 $emit 403
+     bindsym $key4 $emit 404
+     bindsym $key5 $emit 405
+     bindsym $key6 $emit 406
+     bindsym $key7 $emit 407
+     bindsym $key8 $emit 408
+     bindsym $key9 $emit 409
+     bindsym space mode default
+}
+
+mode "x_u41" {
+     bindsym $key0 $emit 410
+     bindsym $key1 $emit 411
+     bindsym $key2 $emit 412
+     bindsym $key3 $emit 413
+     bindsym $key4 $emit 414
+     bindsym $key5 $emit 415
+     bindsym $key6 $emit 416
+     bindsym $key7 $emit 417
+     bindsym $key8 $emit 418
+     bindsym $key9 $emit 419
+     bindsym space mode default
+}
+
+mode "x_u42" {
+     bindsym $key0 $emit 420
+     bindsym $key1 $emit 421
+     bindsym $key2 $emit 422
+     bindsym $key3 $emit 423
+     bindsym $key4 $emit 424
+     bindsym $key5 $emit 425
+     bindsym $key6 $emit 426
+     bindsym $key7 $emit 427
+     bindsym $key8 $emit 428
+     bindsym $key9 $emit 429
+     bindsym space mode default
+}
+
+mode "x_u43" {
+     bindsym $key0 $emit 430
+     bindsym $key1 $emit 431
+     bindsym $key2 $emit 432
+     bindsym $key3 $emit 433
+     bindsym $key4 $emit 434
+     bindsym $key5 $emit 435
+     bindsym $key6 $emit 436
+     bindsym $key7 $emit 437
+     bindsym $key8 $emit 438
+     bindsym $key9 $emit 439
+     bindsym space mode default
+}
+
+mode "x_u44" {
+     bindsym $key0 $emit 440
+     bindsym $key1 $emit 441
+     bindsym $key2 $emit 442
+     bindsym $key3 $emit 443
+     bindsym $key4 $emit 444
+     bindsym $key5 $emit 445
+     bindsym $key6 $emit 446
+     bindsym $key7 $emit 447
+     bindsym $key8 $emit 448
+     bindsym $key9 $emit 449
+     bindsym space mode default
+}
+
+mode "x_u45" {
+     bindsym $key0 $emit 450
+     bindsym $key1 $emit 451
+     bindsym $key2 $emit 452
+     bindsym $key3 $emit 453
+     bindsym $key4 $emit 454
+     bindsym $key5 $emit 455
+     bindsym $key6 $emit 456
+     bindsym $key7 $emit 457
+     bindsym $key8 $emit 458
+     bindsym $key9 $emit 459
+     bindsym space mode default
+}
+
+mode "x_u46" {
+     bindsym $key0 $emit 460
+     bindsym $key1 $emit 461
+     bindsym $key2 $emit 462
+     bindsym $key3 $emit 463
+     bindsym $key4 $emit 464
+     bindsym $key5 $emit 465
+     bindsym $key6 $emit 466
+     bindsym $key7 $emit 467
+     bindsym $key8 $emit 468
+     bindsym $key9 $emit 469
+     bindsym space mode default
+}
+
+mode "x_u47" {
+     bindsym $key0 $emit 470
+     bindsym $key1 $emit 471
+     bindsym $key2 $emit 472
+     bindsym $key3 $emit 473
+     bindsym $key4 $emit 474
+     bindsym $key5 $emit 475
+     bindsym $key6 $emit 476
+     bindsym $key7 $emit 477
+     bindsym $key8 $emit 478
+     bindsym $key9 $emit 479
+     bindsym space mode default
+}
+
+mode "x_u48" {
+     bindsym $key0 $emit 480
+     bindsym $key1 $emit 481
+     bindsym $key2 $emit 482
+     bindsym $key3 $emit 483
+     bindsym $key4 $emit 484
+     bindsym $key5 $emit 485
+     bindsym $key6 $emit 486
+     bindsym $key7 $emit 487
+     bindsym $key8 $emit 488
+     bindsym $key9 $emit 489
+     bindsym space mode default
+}
+
+mode "x_u49" {
+     bindsym $key0 $emit 490
+     bindsym $key1 $emit 491
+     bindsym $key2 $emit 492
+     bindsym $key3 $emit 493
+     bindsym $key4 $emit 494
+     bindsym $key5 $emit 495
+     bindsym $key6 $emit 496
+     bindsym $key7 $emit 497
+     bindsym $key8 $emit 498
+     bindsym $key9 $emit 499
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u50" {
+     bindsym $key0 $emit 500
+     bindsym $key1 $emit 501
+     bindsym $key2 $emit 502
+     bindsym $key3 $emit 503
+     bindsym $key4 $emit 504
+     bindsym $key5 $emit 505
+     bindsym $key6 $emit 506
+     bindsym $key7 $emit 507
+     bindsym $key8 $emit 508
+     bindsym $key9 $emit 509
+     bindsym space mode default
+}
+
+mode "x_u51" {
+     bindsym $key0 $emit 510
+     bindsym $key1 $emit 511
+     bindsym $key2 $emit 512
+     bindsym $key3 $emit 513
+     bindsym $key4 $emit 514
+     bindsym $key5 $emit 515
+     bindsym $key6 $emit 516
+     bindsym $key7 $emit 517
+     bindsym $key8 $emit 518
+     bindsym $key9 $emit 519
+     bindsym space mode default
+}
+
+mode "x_u52" {
+     bindsym $key0 $emit 520
+     bindsym $key1 $emit 521
+     bindsym $key2 $emit 522
+     bindsym $key3 $emit 523
+     bindsym $key4 $emit 524
+     bindsym $key5 $emit 525
+     bindsym $key6 $emit 526
+     bindsym $key7 $emit 527
+     bindsym $key8 $emit 528
+     bindsym $key9 $emit 529
+     bindsym space mode default
+}
+
+mode "x_u53" {
+     bindsym $key0 $emit 530
+     bindsym $key1 $emit 531
+     bindsym $key2 $emit 532
+     bindsym $key3 $emit 533
+     bindsym $key4 $emit 534
+     bindsym $key5 $emit 535
+     bindsym $key6 $emit 536
+     bindsym $key7 $emit 537
+     bindsym $key8 $emit 538
+     bindsym $key9 $emit 539
+     bindsym space mode default
+}
+
+mode "x_u54" {
+     bindsym $key0 $emit 540
+     bindsym $key1 $emit 541
+     bindsym $key2 $emit 542
+     bindsym $key3 $emit 543
+     bindsym $key4 $emit 544
+     bindsym $key5 $emit 545
+     bindsym $key6 $emit 546
+     bindsym $key7 $emit 547
+     bindsym $key8 $emit 548
+     bindsym $key9 $emit 549
+     bindsym space mode default
+}
+
+mode "x_u55" {
+     bindsym $key0 $emit 550
+     bindsym $key1 $emit 551
+     bindsym $key2 $emit 552
+     bindsym $key3 $emit 553
+     bindsym $key4 $emit 554
+     bindsym $key5 $emit 555
+     bindsym $key6 $emit 556
+     bindsym $key7 $emit 557
+     bindsym $key8 $emit 558
+     bindsym $key9 $emit 559
+     bindsym space mode default
+}
+
+mode "x_u56" {
+     bindsym $key0 $emit 560
+     bindsym $key1 $emit 561
+     bindsym $key2 $emit 562
+     bindsym $key3 $emit 563
+     bindsym $key4 $emit 564
+     bindsym $key5 $emit 565
+     bindsym $key6 $emit 566
+     bindsym $key7 $emit 567
+     bindsym $key8 $emit 568
+     bindsym $key9 $emit 569
+     bindsym space mode default
+}
+
+mode "x_u57" {
+     bindsym $key0 $emit 570
+     bindsym $key1 $emit 571
+     bindsym $key2 $emit 572
+     bindsym $key3 $emit 573
+     bindsym $key4 $emit 574
+     bindsym $key5 $emit 575
+     bindsym $key6 $emit 576
+     bindsym $key7 $emit 577
+     bindsym $key8 $emit 578
+     bindsym $key9 $emit 579
+     bindsym space mode default
+}
+
+mode "x_u58" {
+     bindsym $key0 $emit 580
+     bindsym $key1 $emit 581
+     bindsym $key2 $emit 582
+     bindsym $key3 $emit 583
+     bindsym $key4 $emit 584
+     bindsym $key5 $emit 585
+     bindsym $key6 $emit 586
+     bindsym $key7 $emit 587
+     bindsym $key8 $emit 588
+     bindsym $key9 $emit 589
+     bindsym space mode default
+}
+
+mode "x_u59" {
+     bindsym $key0 $emit 590
+     bindsym $key1 $emit 591
+     bindsym $key2 $emit 592
+     bindsym $key3 $emit 593
+     bindsym $key4 $emit 594
+     bindsym $key5 $emit 595
+     bindsym $key6 $emit 596
+     bindsym $key7 $emit 597
+     bindsym $key8 $emit 598
+     bindsym $key9 $emit 599
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u60" {
+     bindsym $key0 $emit 600
+     bindsym $key1 $emit 601
+     bindsym $key2 $emit 602
+     bindsym $key3 $emit 603
+     bindsym $key4 $emit 604
+     bindsym $key5 $emit 605
+     bindsym $key6 $emit 606
+     bindsym $key7 $emit 607
+     bindsym $key8 $emit 608
+     bindsym $key9 $emit 609
+     bindsym space mode default
+}
+
+mode "x_u61" {
+     bindsym $key0 $emit 610
+     bindsym $key1 $emit 611
+     bindsym $key2 $emit 612
+     bindsym $key3 $emit 613
+     bindsym $key4 $emit 614
+     bindsym $key5 $emit 615
+     bindsym $key6 $emit 616
+     bindsym $key7 $emit 617
+     bindsym $key8 $emit 618
+     bindsym $key9 $emit 619
+     bindsym space mode default
+}
+
+mode "x_u62" {
+     bindsym $key0 $emit 620
+     bindsym $key1 $emit 621
+     bindsym $key2 $emit 622
+     bindsym $key3 $emit 623
+     bindsym $key4 $emit 624
+     bindsym $key5 $emit 625
+     bindsym $key6 $emit 626
+     bindsym $key7 $emit 627
+     bindsym $key8 $emit 628
+     bindsym $key9 $emit 629
+     bindsym space mode default
+}
+
+mode "x_u63" {
+     bindsym $key0 $emit 630
+     bindsym $key1 $emit 631
+     bindsym $key2 $emit 632
+     bindsym $key3 $emit 633
+     bindsym $key4 $emit 634
+     bindsym $key5 $emit 635
+     bindsym $key6 $emit 636
+     bindsym $key7 $emit 637
+     bindsym $key8 $emit 638
+     bindsym $key9 $emit 639
+     bindsym space mode default
+}
+
+mode "x_u64" {
+     bindsym $key0 $emit 640
+     bindsym $key1 $emit 641
+     bindsym $key2 $emit 642
+     bindsym $key3 $emit 643
+     bindsym $key4 $emit 644
+     bindsym $key5 $emit 645
+     bindsym $key6 $emit 646
+     bindsym $key7 $emit 647
+     bindsym $key8 $emit 648
+     bindsym $key9 $emit 649
+     bindsym space mode default
+}
+
+mode "x_u65" {
+     bindsym $key0 $emit 650
+     bindsym $key1 $emit 651
+     bindsym $key2 $emit 652
+     bindsym $key3 $emit 653
+     bindsym $key4 $emit 654
+     bindsym $key5 $emit 655
+     bindsym $key6 $emit 656
+     bindsym $key7 $emit 657
+     bindsym $key8 $emit 658
+     bindsym $key9 $emit 659
+     bindsym space mode default
+}
+
+mode "x_u66" {
+     bindsym $key0 $emit 660
+     bindsym $key1 $emit 661
+     bindsym $key2 $emit 662
+     bindsym $key3 $emit 663
+     bindsym $key4 $emit 664
+     bindsym $key5 $emit 665
+     bindsym $key6 $emit 666
+     bindsym $key7 $emit 667
+     bindsym $key8 $emit 668
+     bindsym $key9 $emit 669
+     bindsym space mode default
+}
+
+mode "x_u67" {
+     bindsym $key0 $emit 670
+     bindsym $key1 $emit 671
+     bindsym $key2 $emit 672
+     bindsym $key3 $emit 673
+     bindsym $key4 $emit 674
+     bindsym $key5 $emit 675
+     bindsym $key6 $emit 676
+     bindsym $key7 $emit 677
+     bindsym $key8 $emit 678
+     bindsym $key9 $emit 679
+     bindsym space mode default
+}
+
+mode "x_u68" {
+     bindsym $key0 $emit 680
+     bindsym $key1 $emit 681
+     bindsym $key2 $emit 682
+     bindsym $key3 $emit 683
+     bindsym $key4 $emit 684
+     bindsym $key5 $emit 685
+     bindsym $key6 $emit 686
+     bindsym $key7 $emit 687
+     bindsym $key8 $emit 688
+     bindsym $key9 $emit 689
+     bindsym space mode default
+}
+
+mode "x_u69" {
+     bindsym $key0 $emit 690
+     bindsym $key1 $emit 691
+     bindsym $key2 $emit 692
+     bindsym $key3 $emit 693
+     bindsym $key4 $emit 694
+     bindsym $key5 $emit 695
+     bindsym $key6 $emit 696
+     bindsym $key7 $emit 697
+     bindsym $key8 $emit 698
+     bindsym $key9 $emit 699
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u70" {
+     bindsym $key0 $emit 700
+     bindsym $key1 $emit 701
+     bindsym $key2 $emit 702
+     bindsym $key3 $emit 703
+     bindsym $key4 $emit 704
+     bindsym $key5 $emit 705
+     bindsym $key6 $emit 706
+     bindsym $key7 $emit 707
+     bindsym $key8 $emit 708
+     bindsym $key9 $emit 709
+     bindsym space mode default
+}
+
+mode "x_u71" {
+     bindsym $key0 $emit 710
+     bindsym $key1 $emit 711
+     bindsym $key2 $emit 712
+     bindsym $key3 $emit 713
+     bindsym $key4 $emit 714
+     bindsym $key5 $emit 715
+     bindsym $key6 $emit 716
+     bindsym $key7 $emit 717
+     bindsym $key8 $emit 718
+     bindsym $key9 $emit 719
+     bindsym space mode default
+}
+
+mode "x_u72" {
+     bindsym $key0 $emit 720
+     bindsym $key1 $emit 721
+     bindsym $key2 $emit 722
+     bindsym $key3 $emit 723
+     bindsym $key4 $emit 724
+     bindsym $key5 $emit 725
+     bindsym $key6 $emit 726
+     bindsym $key7 $emit 727
+     bindsym $key8 $emit 728
+     bindsym $key9 $emit 729
+     bindsym space mode default
+}
+
+mode "x_u73" {
+     bindsym $key0 $emit 730
+     bindsym $key1 $emit 731
+     bindsym $key2 $emit 732
+     bindsym $key3 $emit 733
+     bindsym $key4 $emit 734
+     bindsym $key5 $emit 735
+     bindsym $key6 $emit 736
+     bindsym $key7 $emit 737
+     bindsym $key8 $emit 738
+     bindsym $key9 $emit 739
+     bindsym space mode default
+}
+
+mode "x_u74" {
+     bindsym $key0 $emit 740
+     bindsym $key1 $emit 741
+     bindsym $key2 $emit 742
+     bindsym $key3 $emit 743
+     bindsym $key4 $emit 744
+     bindsym $key5 $emit 745
+     bindsym $key6 $emit 746
+     bindsym $key7 $emit 747
+     bindsym $key8 $emit 748
+     bindsym $key9 $emit 749
+     bindsym space mode default
+}
+
+mode "x_u75" {
+     bindsym $key0 $emit 750
+     bindsym $key1 $emit 751
+     bindsym $key2 $emit 752
+     bindsym $key3 $emit 753
+     bindsym $key4 $emit 754
+     bindsym $key5 $emit 755
+     bindsym $key6 $emit 756
+     bindsym $key7 $emit 757
+     bindsym $key8 $emit 758
+     bindsym $key9 $emit 759
+     bindsym space mode default
+}
+
+mode "x_u76" {
+     bindsym $key0 $emit 760
+     bindsym $key1 $emit 761
+     bindsym $key2 $emit 762
+     bindsym $key3 $emit 763
+     bindsym $key4 $emit 764
+     bindsym $key5 $emit 765
+     bindsym $key6 $emit 766
+     bindsym $key7 $emit 767
+     bindsym $key8 $emit 768
+     bindsym $key9 $emit 769
+     bindsym space mode default
+}
+
+mode "x_u77" {
+     bindsym $key0 $emit 770
+     bindsym $key1 $emit 771
+     bindsym $key2 $emit 772
+     bindsym $key3 $emit 773
+     bindsym $key4 $emit 774
+     bindsym $key5 $emit 775
+     bindsym $key6 $emit 776
+     bindsym $key7 $emit 777
+     bindsym $key8 $emit 778
+     bindsym $key9 $emit 779
+     bindsym space mode default
+}
+
+mode "x_u78" {
+     bindsym $key0 $emit 780
+     bindsym $key1 $emit 781
+     bindsym $key2 $emit 782
+     bindsym $key3 $emit 783
+     bindsym $key4 $emit 784
+     bindsym $key5 $emit 785
+     bindsym $key6 $emit 786
+     bindsym $key7 $emit 787
+     bindsym $key8 $emit 788
+     bindsym $key9 $emit 789
+     bindsym space mode default
+}
+
+mode "x_u79" {
+     bindsym $key0 $emit 790
+     bindsym $key1 $emit 791
+     bindsym $key2 $emit 792
+     bindsym $key3 $emit 793
+     bindsym $key4 $emit 794
+     bindsym $key5 $emit 795
+     bindsym $key6 $emit 796
+     bindsym $key7 $emit 797
+     bindsym $key8 $emit 798
+     bindsym $key9 $emit 799
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u80" {
+     bindsym $key0 $emit 800
+     bindsym $key1 $emit 801
+     bindsym $key2 $emit 802
+     bindsym $key3 $emit 803
+     bindsym $key4 $emit 804
+     bindsym $key5 $emit 805
+     bindsym $key6 $emit 806
+     bindsym $key7 $emit 807
+     bindsym $key8 $emit 808
+     bindsym $key9 $emit 809
+     bindsym space mode default
+}
+
+mode "x_u81" {
+     bindsym $key0 $emit 810
+     bindsym $key1 $emit 811
+     bindsym $key2 $emit 812
+     bindsym $key3 $emit 813
+     bindsym $key4 $emit 814
+     bindsym $key5 $emit 815
+     bindsym $key6 $emit 816
+     bindsym $key7 $emit 817
+     bindsym $key8 $emit 818
+     bindsym $key9 $emit 819
+     bindsym space mode default
+}
+
+mode "x_u82" {
+     bindsym $key0 $emit 820
+     bindsym $key1 $emit 821
+     bindsym $key2 $emit 822
+     bindsym $key3 $emit 823
+     bindsym $key4 $emit 824
+     bindsym $key5 $emit 825
+     bindsym $key6 $emit 826
+     bindsym $key7 $emit 827
+     bindsym $key8 $emit 828
+     bindsym $key9 $emit 829
+     bindsym space mode default
+}
+
+mode "x_u83" {
+     bindsym $key0 $emit 830
+     bindsym $key1 $emit 831
+     bindsym $key2 $emit 832
+     bindsym $key3 $emit 833
+     bindsym $key4 $emit 834
+     bindsym $key5 $emit 835
+     bindsym $key6 $emit 836
+     bindsym $key7 $emit 837
+     bindsym $key8 $emit 838
+     bindsym $key9 $emit 839
+     bindsym space mode default
+}
+
+mode "x_u84" {
+     bindsym $key0 $emit 840
+     bindsym $key1 $emit 841
+     bindsym $key2 $emit 842
+     bindsym $key3 $emit 843
+     bindsym $key4 $emit 844
+     bindsym $key5 $emit 845
+     bindsym $key6 $emit 846
+     bindsym $key7 $emit 847
+     bindsym $key8 $emit 848
+     bindsym $key9 $emit 849
+     bindsym space mode default
+}
+
+mode "x_u85" {
+     bindsym $key0 $emit 850
+     bindsym $key1 $emit 851
+     bindsym $key2 $emit 852
+     bindsym $key3 $emit 853
+     bindsym $key4 $emit 854
+     bindsym $key5 $emit 855
+     bindsym $key6 $emit 856
+     bindsym $key7 $emit 857
+     bindsym $key8 $emit 858
+     bindsym $key9 $emit 859
+     bindsym space mode default
+}
+
+mode "x_u86" {
+     bindsym $key0 $emit 860
+     bindsym $key1 $emit 861
+     bindsym $key2 $emit 862
+     bindsym $key3 $emit 863
+     bindsym $key4 $emit 864
+     bindsym $key5 $emit 865
+     bindsym $key6 $emit 866
+     bindsym $key7 $emit 867
+     bindsym $key8 $emit 868
+     bindsym $key9 $emit 869
+     bindsym space mode default
+}
+
+mode "x_u87" {
+     bindsym $key0 $emit 870
+     bindsym $key1 $emit 871
+     bindsym $key2 $emit 872
+     bindsym $key3 $emit 873
+     bindsym $key4 $emit 874
+     bindsym $key5 $emit 875
+     bindsym $key6 $emit 876
+     bindsym $key7 $emit 877
+     bindsym $key8 $emit 878
+     bindsym $key9 $emit 879
+     bindsym space mode default
+}
+
+mode "x_u88" {
+     bindsym $key0 $emit 880
+     bindsym $key1 $emit 881
+     bindsym $key2 $emit 882
+     bindsym $key3 $emit 883
+     bindsym $key4 $emit 884
+     bindsym $key5 $emit 885
+     bindsym $key6 $emit 886
+     bindsym $key7 $emit 887
+     bindsym $key8 $emit 888
+     bindsym $key9 $emit 889
+     bindsym space mode default
+}
+
+mode "x_u89" {
+     bindsym $key0 $emit 890
+     bindsym $key1 $emit 891
+     bindsym $key2 $emit 892
+     bindsym $key3 $emit 893
+     bindsym $key4 $emit 894
+     bindsym $key5 $emit 895
+     bindsym $key6 $emit 896
+     bindsym $key7 $emit 897
+     bindsym $key8 $emit 898
+     bindsym $key9 $emit 899
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "x_u90" {
+     bindsym $key0 $emit 900
+     bindsym $key1 $emit 901
+     bindsym $key2 $emit 902
+     bindsym $key3 $emit 903
+     bindsym $key4 $emit 904
+     bindsym $key5 $emit 905
+     bindsym $key6 $emit 906
+     bindsym $key7 $emit 907
+     bindsym $key8 $emit 908
+     bindsym $key9 $emit 909
+     bindsym space mode default
+}
+
+mode "x_u91" {
+     bindsym $key0 $emit 910
+     bindsym $key1 $emit 911
+     bindsym $key2 $emit 912
+     bindsym $key3 $emit 913
+     bindsym $key4 $emit 914
+     bindsym $key5 $emit 915
+     bindsym $key6 $emit 916
+     bindsym $key7 $emit 917
+     bindsym $key8 $emit 918
+     bindsym $key9 $emit 919
+     bindsym space mode default
+}
+
+mode "x_u92" {
+     bindsym $key0 $emit 920
+     bindsym $key1 $emit 921
+     bindsym $key2 $emit 922
+     bindsym $key3 $emit 923
+     bindsym $key4 $emit 924
+     bindsym $key5 $emit 925
+     bindsym $key6 $emit 926
+     bindsym $key7 $emit 927
+     bindsym $key8 $emit 928
+     bindsym $key9 $emit 929
+     bindsym space mode default
+}
+
+mode "x_u93" {
+     bindsym $key0 $emit 930
+     bindsym $key1 $emit 931
+     bindsym $key2 $emit 932
+     bindsym $key3 $emit 933
+     bindsym $key4 $emit 934
+     bindsym $key5 $emit 935
+     bindsym $key6 $emit 936
+     bindsym $key7 $emit 937
+     bindsym $key8 $emit 938
+     bindsym $key9 $emit 939
+     bindsym space mode default
+}
+
+mode "x_u94" {
+     bindsym $key0 $emit 940
+     bindsym $key1 $emit 941
+     bindsym $key2 $emit 942
+     bindsym $key3 $emit 943
+     bindsym $key4 $emit 944
+     bindsym $key5 $emit 945
+     bindsym $key6 $emit 946
+     bindsym $key7 $emit 947
+     bindsym $key8 $emit 948
+     bindsym $key9 $emit 949
+     bindsym space mode default
+}
+
+mode "x_u95" {
+     bindsym $key0 $emit 950
+     bindsym $key1 $emit 951
+     bindsym $key2 $emit 952
+     bindsym $key3 $emit 953
+     bindsym $key4 $emit 954
+     bindsym $key5 $emit 955
+     bindsym $key6 $emit 956
+     bindsym $key7 $emit 957
+     bindsym $key8 $emit 958
+     bindsym $key9 $emit 959
+     bindsym space mode default
+}
+
+mode "x_u96" {
+     bindsym $key0 $emit 960
+     bindsym $key1 $emit 961
+     bindsym $key2 $emit 962
+     bindsym $key3 $emit 963
+     bindsym $key4 $emit 964
+     bindsym $key5 $emit 965
+     bindsym $key6 $emit 966
+     bindsym $key7 $emit 967
+     bindsym $key8 $emit 968
+     bindsym $key9 $emit 969
+     bindsym space mode default
+}
+
+mode "x_u97" {
+     bindsym $key0 $emit 970
+     bindsym $key1 $emit 971
+     bindsym $key2 $emit 972
+     bindsym $key3 $emit 973
+     bindsym $key4 $emit 974
+     bindsym $key5 $emit 975
+     bindsym $key6 $emit 976
+     bindsym $key7 $emit 977
+     bindsym $key8 $emit 978
+     bindsym $key9 $emit 979
+     bindsym space mode default
+}
+
+mode "x_u98" {
+     bindsym $key0 $emit 980
+     bindsym $key1 $emit 981
+     bindsym $key2 $emit 982
+     bindsym $key3 $emit 983
+     bindsym $key4 $emit 984
+     bindsym $key5 $emit 985
+     bindsym $key6 $emit 986
+     bindsym $key7 $emit 987
+     bindsym $key8 $emit 988
+     bindsym $key9 $emit 989
+     bindsym space mode default
+}
+
+mode "x_u99" {
+     bindsym $key0 $emit 990
+     bindsym $key1 $emit 991
+     bindsym $key2 $emit 992
+     bindsym $key3 $emit 993
+     bindsym $key4 $emit 994
+     bindsym $key5 $emit 995
+     bindsym $key6 $emit 996
+     bindsym $key7 $emit 997
+     bindsym $key8 $emit 998
+     bindsym $key9 $emit 999
+     bindsym space mode default
+}
+
+# ================================================================ #
+
+#
+# Done.
+#

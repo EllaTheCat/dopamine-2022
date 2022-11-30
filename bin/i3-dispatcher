@@ -1,0 +1,58 @@
+#!/bin/bash
+# -*- Mode: Shell-script -*-
+#
+# i3-dispatcher
+#
+
+#
+# Forward the command to one of two functions when valid, warn and stop when not valid. My gut feel is that it could be eliminated with better validation downtream.
+#
+forward ()
+{
+    # DANGER WILL ROBINSON! Do not "tidy up" (= "delete") this line:
+    export PATH=${HOME}/local/i3/bin:${PATH}
+    case "$1" in
+        (clear|m0030|auto|m031)
+            # Strings (deprecated in favour of mark ops).
+            notify-send "i3-dispatcher:" "&lt;$1&gt; to i3-numeric"
+            nohup ~/local/i3/bin/i3-numeric decode "$1"
+            ;;
+        ([mx][0-9][0-9][0-9])
+            # 1 letter 3 digits.
+            notify-send "i3-dispatcher:" "&lt;$1&gt; to i3-numeric"
+            nohup ~/local/i3/bin/i3-numeric decode "$1"
+            ;;
+        ([wc][0][0-9][0-9])
+            # 1 letter 1 padding zero 2 digits.
+            notify-send "i3-dispatcher:" "&lt;$1&gt; to i3-numeric"
+            nohup ~/local/i3/bin/i3-numeric decode "$1"
+            ;;
+        ([a-z][a-z]|[a-z][0-9]|[a-z][a-z])
+            # 2 letters OR letter digit OR 2 digit,
+            notify-send "i3-dispatcher:" "&lt;$1&gt; to i3-focus-app-by-alias"
+            nohup ~/local/i3/bin/i3-focus-app-by-alias focus "$1"
+            ;;
+        ([0-9][a-z])
+            notify-send "i3-dispatcher:" \
+                        "No digit-lowercase: &lt;$*&gt; request rejected."
+            ;;
+        ([A-Z]?|?[A-Z])
+            notify-send "i3-dispatcher:" \
+                        "No uppercase: &lt;$*&gt; request rejected."
+            ;;
+	(*)
+            notify-send "i3-dispatcher:" \
+                        "No non-alphanumeric: &lt;$*&gt; request rejected."
+	    ;;
+    esac
+}
+
+#
+# Start here.
+#
+
+"$1" "${@:2}"
+
+#
+# Done.
+#

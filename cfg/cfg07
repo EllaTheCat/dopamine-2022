@@ -1,0 +1,179 @@
+# -*- Mode: Shell-script -*-
+
+#
+# NON EXECUTABLE SETTINGS BEGIN HERE.
+#
+
+# Start a session with these workspaces on these outputs.
+# airblader's algorithm
+workspace "w1" output HDMI2
+workspace "w2" output HDMI1
+workspace "w3" output VGA1
+
+# Turning off the compositor sidesteps a long standing software bug in
+# 20.04 LTS that hides everything but the title bar.
+for_window [title="Software Updater"] floating enable, $nocompositor;
+
+# "The notification area lost selection" popup at startup while i3bar
+# and xfce4-panel wake up. Stupid title, let's hope we don't miss any
+# similar ones. Kill is a bit harsh but until 'move scratchpad' can
+# ensure that it doesn't block. On 22.04 LTS the title is now empty.
+for_window [title="^$" instance="wrapper-2.0"] kill
+
+# ================================================================ #
+
+# Assign marks to windows automatically.
+# The option for that is 'auto', but if you decide against automatic
+# marks set the option to 'noauto'.
+
+for_window [instance="(?i)emacs"] \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto
+for_window [instance="(?i)emacsclient"] \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto
+for_window [instance="Navigator" class="firefox"] \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto
+for_window [instance="google-chrome"] \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto
+for_window [instance="xfce4-terminal"] \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto
+for_window [instance="xterm"] \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto
+
+# Special little windows stack up on i3.
+
+for_window [instance="xterm" title="=xterm="] floating enable, move position center;
+for_window [instance="xterm" title="i3 config digest"] floating enable, resize set 50 ppt 20 ppt, move position center;
+
+for_window [instance="xterm" title="filewatcher"] floating enable, move position center;
+for_window [instance="xterm" title="wswatcher"]   floating enable, move position center;
+for_window [instance="xterm" title="tvh-server"]  floating enable, move position center;
+for_window [instance="xterm" title="tvheadend"]   floating enable, move position center;
+
+assign [instance="xterm" title="filewatcher"] i3
+assign [instance="xterm" title="wswatcher"]   i3
+assign [instance="xterm" title="tvh-server"]  i3
+assign [instance="xterm" title="tvheadend"]   i3
+
+# ================================================================ #
+
+# mpv and vlc.
+assign [class="mpv"] mp
+assign [title="VLC media player$"] vp
+workspace "mp" output HDMI2
+workspace "vp" output HDMI2
+
+for_window [class="mpv" instance="gl"] floating disable, \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto;
+for_window [title="VLC media player$"] floating disable, \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto;
+for_window [class="ffplay"] floating enable, \
+           exec --no-startup-id ~/local/i3/bin/i3-marks auto;
+
+# ================================================================ #
+
+workspace "au" output HDMI1
+assign [title="Bluetooth Devices"] au
+assign [title="Volume Control"] au
+for_window [title="Bluetooth Devices"] floating disable
+for_window [title="Volume Control"] floating disable
+
+# Volume Widgets.
+for_window [title="PulseAudio Volume Meter"] \
+           floating enable, move absolute position 2400 48;
+
+# Metadata.
+assign [title="EasyTAG"] et
+
+# ================================================================ #
+
+# Discreet xterms like my tv server that should not be restarted.
+assign [title="tvheadend"] i3
+for_window [class="(?i)xterm" title="tvheadend"] floating enable
+
+# This is a very persistent subtitle generator, restrict it to HDMI1.
+assign [title="Live Caption"] HDMI1
+for_window [title="Live Caption"] \
+           floating enable, move absolute position 1968 480;
+
+# ================================================================ #
+
+# Record where workspaces are ending up instead of defining some grand
+# placement scheme.
+
+workspace "f1" output HDMI2
+workspace "n2" output HDMI2
+workspace "tm" output HDMI1
+
+workspace "e0" output HDMI1
+workspace "f4" output HDMI1
+workspace "g0" output HDMI1
+workspace "s7" output HDMI1
+
+workspace "i3" output VGA1
+
+# ================================================================ #
+
+# Application Windows to maximise.
+
+for_window [title="Meld$"] floating disable, layout tabbed;
+for_window [title="Spotify"] floating disable, layout tabbed;
+# This works well with fullscreen guests, keyboard & mouse capture.
+for_window [title="VirtualBox Manager"] \
+           floating disable, layout tabbed;
+
+# ================================================================ #
+
+# xfce4 dialogs. I have 2 monitors but 3 outputs; VGA1 is the dummy
+# plug. Note the positioning of the dialog by its top left corner.
+# This list is likely incomplete, ...
+
+for_window [title="Add New Items"] \
+           floating enable, move absolute position 2400 48;
+for_window [title="Edit Launcher"] \
+           floating enable, move absolute position 2400 48;
+for_window [title="^Launcher"] \
+           floating enable, move absolute position 2400 48;
+
+# Yet Another Dialog.
+for_window [instance="yad"] floating enable;
+
+# ================================================================ #
+
+# ImageMagick, needs more..
+for_window [class="Display"] floating enable;
+for_window [class="Display-im6"] floating enable;
+for_window [class="Display-im6.q16"] floating enable;
+
+# A long standing issue with ImageMagick dialogs. The list is
+# incomplete but sufficient. Please add more as-and-when.
+for_window [class="Display-im6" title="Browse and Select a File"] \
+           floating enable, move absolute position 2000 100, resize set 50 ppt 50 ppt;
+for_window [class="Display-im6.q16" title="Browse and Select a File"] \
+           floating enable, move absolute position 2000 100, resize set 50 ppt 50 ppt;
+
+# ================================================================ #
+
+#
+# Odds and ends.
+#
+
+# Floating please.
+for_window [instance="dtvkit"] floating enable;
+for_window [instance="xfce4-notifyd$"] floating enable;
+
+# Floating please.
+for_window [title="Do Not Panic"] floating enable;
+for_window [title="File Operation Progress"] floating enable;
+for_window [title="Unlock Keyring"] floating enable;
+
+# Windows to hide.
+for_window [title="KeyClick"] move scratchpad;
+
+# Windows that annoy me, that I can't fix.
+for_window [title="Add Security Exception"] kill;
+
+# ================================================================ #
+
+#
+# NON EXECUTABLE SETTINGS END HERE.
+#

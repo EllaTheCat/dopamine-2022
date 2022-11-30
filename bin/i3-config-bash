@@ -1,0 +1,1283 @@
+#!/bin/bash
+#
+# i3-config-bash
+#
+
+# i3-config-bash is a ragbag set of building block functions calld
+# from i3-config because bash scripting is required to achieve some
+# ends.
+
+
+# ENSURING CONSISTENT DMENU LOOK & FEEL=========================== #
+
+dmenulooknfeel=$(printf "/usr/local/bin/dmenu -b -m %d -fn DejaVu-16 -nf darkblue -nb white -sf darkblue -sb gray" "$(cat /dev/shm/"$USER"/i3/state/dmenunumber)")
+
+#d BE CAREFUL REGARDING =========================================== #
+
+# Check that the dmenu font works unde all expected use cases becsuse
+# it seems to be fussy.
+
+# https://unix.stackexchange.com/questions/287391/custom-font-with-dmenu-run-in-i3
+# Since 4.6 Xft is used for font rendering, so you need to follow the
+# font specification syntax from #
+# https://www.freedesktop.org/software/fontconfig/fontconfig-user.html
+
+# Peserve and do not split long lines, unless it s worth the effort?
+# xfce4-terminal uses 'DejaVu Sans Mono Book 11'
+
+# The dmenunumber FILE is VOLATILE and contains an integer VALUE
+# initialised near the end of the 'config' file. Furthermore the
+# system can hijack it 'cos it knows what you want.
+
+# ================================================================ #
+
+#
+# Begin/End the session.
+#
+function session
+{
+    case "$1" in
+        (logout)
+            # This case is the raison d'etre for this bash
+            # function. We wish to logout properly, and it's
+            # icing on the cake if the housekeeping gets done.
+
+            # Stop the watchers. Destroy the session lifetime state in
+            # case someone naughty is rummaging around in shared
+            # memory. Stopping xfce4 seems to stop i3.
+            filewatcher kill
+            wswatcher kill
+            /usr/bin/rm -rf /dev/shm/"$USER"/i3/state
+            xfce4-session-logout logout
+            ;;
+    esac
+}
+
+
+# The sink for two and four character commands [a-z][a-0-9] sent from
+# the Secondary mode subsystem. There should be one instance per i3
+# session.
+function filewatcher
+{
+    case "$1" in
+        (restart)
+            ${FUNCNAME[0]} kill
+            sleep 1.57
+            /usr/bin/xterm -T filewatcher -e /bin/bash -c ~/local/i3/bin/i3-file-watcher &
+            sleep 1.57
+            msg="floating enable,move position center;"
+            i3-msg "[title=\"filewatcher\" tiling] $msg"
+            sleep 1.57
+            msg="focus,move container to workspace i3;"
+            i3-msg "[title=\"filewatcher\" floating] $msg"
+            sleep 1.57
+            ${FUNCNAME[0]} status
+            ;;
+        (kill)
+            pkill -f "/usr/bin/xterm -T filewatcher"
+            i3-msg "[title=\"filewatcher\"] kill"
+            ;;
+        (status)
+            count=$(/usr/bin/pgrep -c -af "/usr/bin/xterm -T filewatcher")
+            case "${count}" in
+                (1)
+                    notify-send "function ${FUNCNAME[0]}:" "running :)"
+                    ;;
+                (0)
+                    notify-send "function ${FUNCNAME[0]}:" "stopped :("
+                    ;;
+                (*)
+                    notify-send "function ${FUNCNAME[0]}:" "instances ${count}"
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+# Workspace (ws) events trigger the update of one mark per workspace.
+# It is set to the 2 character command alias of the applcation that
+# owns the workspace and hosted on one of the workspace's windows.
+# There should be one instance per i3 session.
+function wswatcher
+{
+    case "$1" in
+        (restart)
+            ${FUNCNAME[0]} kill
+            sleep 3.14
+            ###i3-msg "exec --no-startup-id /usr/bin/xterm -T \"wswatcher\" -hold -e /bin/bash -c ~/local/i3/bin/i3-marks subscribe"
+            /usr/bin/xterm -T wswatcher -e ~/local/i3/bin/i3-marks subscribe &
+            sleep 1.57
+            msg="floating enable,move position center;"
+            i3-msg "[title=\"wswatcher\" tiling] $msg"
+            sleep 1.57
+            msg="focus,move container to workspace i3;"
+            i3-msg "[title=\"wswatcher\" floating] $msg"
+            sleep 1.57
+            ${FUNCNAME[0]} status
+            ;;
+        (kill)
+            pkill -f "/usr/bin/xterm -T wswatcher"
+            i3-msg "[title=\"wswatcher\"] kill"
+            ;;
+        (status)
+            count=$(/usr/bin/pgrep -c -af "/usr/bin/xterm -T wswatcher")
+            case "${count}" in
+                (1)
+                    notify-send "function ${FUNCNAME[0]}:" "running :)"
+                    ;;
+                (0)
+                    notify-send "function ${FUNCNAME[0]}:" "stopped :("
+                    ;;
+                (*)
+                    notify-send "function ${FUNCNAME[0]}:" "instances ${count}"
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+ #
+ # Launch a capable and standard terminal.
+ #
+ function terminal
+ {
+     case "$1" in
+         (i3)
+             # Hardcore i3 user?
+             i3-sensible-terminal &
+             ;;
+         (xfce4)
+             # i3/xubuntu configurations.
+             xfce4-terminal
+             ;;
+     esac
+ }
+
+
+ #
+ # Emacs wrapper to fit the use case of a dropdown terminal running
+ # emacs. The place where the supreme emacsserver lives as distinct
+ # from emacsclients. A feature is the animated show and hide.
+ #
+ # The following link tells how to automagically start emacs as a service of systemd at login time
+ # https://www.reddit.com/r/emacs/comments/kpo64a/cannot_start_emacs_server_as_a_service_on_systemd/
+ #
+ function emacsinside
+ {
+     case "$1" in
+         (client2022e[0-9])
+             cws=${1/client2022/}
+             state=$(cat /dev/shm/"$USER"/i3/state/emacsinside"$cws")
+             if [ "${state}" = "show$cws" ]; then
+                 # In order to get the emacinside toggle to work on any
+                 # of three tabs in the terminal I have resorted to
+                 # xdotool and pixel coords. I should be using
+                 # D-Bus. It's therefore slightly sensitive to the menu
+                 # bar font: DejaVu Sans Mono Book 11pt.
+                 i3-msg "workspace \"$cws\", exec --no-startup-id \
+                xfce4-terminal -T \"Emacs inside $cws\" -x emacsclient -t"
+                 # This delay ensures that emacs is up and running inside.
+                 sleep 2.5
+                 # The xdotool delay is adjusted for speed versus reliblity.
+                 xdotoolseconds=0.1
+                 # For the xdotool key hackery to work the keystrokes have to
+                 # reach the xfce4-terminal and not be intercepted by Emacs.
+                 i3-msg "[title=\"Emacs inside $cws\" tiling] floating enable;"
+                 sleep "$xdotoolseconds"
+                 # Tab number 2
+                 # File | Open tab
+                 xdotool getwindowfocus mousemove --window %1 24 16  click 1
+                 xdotool getwindowfocus mousemove --window %1 24 32  click 1
+                 xdotool key alt+2
+                 sleep "$xdotoolseconds"
+                 # Terminal | Set title
+                 xdotool getwindowfocus mousemove --window %1 184 16 click 1
+                 xdotool getwindowfocus mousemove --window %1 184 32 click 1
+                 xdotool type "Emacs inside $cws"
+                 xdotool key Return
+                 sleep "$xdotoolseconds"
+                 # Tab number 3
+                 # File | Open tab
+                 xdotool getwindowfocus mousemove --window %1 24 16  click 1
+                 xdotool getwindowfocus mousemove --window %1 24 32  click 1
+                 xdotool key alt+3
+                 sleep "$xdotoolseconds"
+                 # Terminal | Set title
+                 xdotool getwindowfocus mousemove --window %1 184 16 click 1
+                 xdotool getwindowfocus mousemove --window %1 184 32 click 1
+                 xdotool type "Emacs inside $cws"
+                 xdotool key Return
+                 # Tab number 1, Emacs
+                 sleep "$xdotoolseconds"
+                 xdotool key alt+1
+                 sleep "$xdotoolseconds"
+                 msg=$(printf "resize set %s %s, move position center;" "1600px" "900px")
+                 i3-msg "[title=\"Emacs inside $cws\" floating] $msg"
+                 sleep "$xdotoolseconds"
+                 i3-msg "rename workspace to ${1/client2022/}"
+             elif [ "${state}" = "hide$cws" ]; then
+                 ${FUNCNAME[0]} "show$cws"
+             elif [ "${state}" = "busy$cws" ]; then
+                 send "${FUNCNAME[0]} ${cws}" "client in busy state, wait and try again"
+             else
+                 echo "Programmer error ${cws} ${state}"
+                 exit 112
+             fi
+             ;;
+         (serverstart)
+             # Start the emacs server "by hand".
+             if [ "$(pgrep -c -f "emacs --daemon -rv")" -eq 0 ]; then
+                 (emacs --daemon -rv) &
+                 sleep 3
+                 notify-send "system" "emacs server start"
+             fi
+             ;;
+         (serverstop)
+             # Stop the emacs server "by hand".
+             pkill -f  "emacs --daemon -rv"
+             notify-send "system" "emacs server stopped"
+             ;;
+         (toggle)
+             cws=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')
+             state=$(cat /dev/shm/"$USER"/i3/state/emacsinside"$cws")
+             if [ "${state}" = "show$cws" ]; then
+                 ${FUNCNAME[0]} "hide$cws"
+             fi
+             if [ "${state}" = "hide$cws" ]; then
+                 ${FUNCNAME[0]} "show$cws"
+             fi
+             ;;
+         (hide*)
+             cws=${1/hide/}
+             echo "busy$cws" > /dev/shm/"$USER"/i3/state/emacsinside"$cws"
+             msg="floating enable, move position center;"
+             i3-msg "[title=\"Emacs inside $cws\" tiling] $msg"
+             ${FUNCNAME[0]} "squeeze$cws"
+             msg="focus,move container to workspace i3;"
+             i3-msg "[title=\"Emacs inside $cws\" floating] $msg"
+             echo "$1" > /dev/shm/"$USER"/i3/state/emacsinside"$cws"
+             ;;
+         (show*)
+             cws=${1/show/}
+             echo "busy$cws" > /dev/shm/"$USER"/i3/state/emacsinside"$cws"
+             # Workspace i3 is used like a scratchpad, so it's not
+             # permitted to show 'Emacs inside' on workspace i3, which
+             # is where 'Emacs inside' is put when it is is hidden. If
+             # the current workspace is i3, it is forced to e0.
+             if [ "_$cws" = "_i3" ]; then
+                 msg="move container to workspace e0 workspace e0, focus;"
+             else
+                 msg="move container to workspace $cws, workspace $cws, focus;"
+             fi
+             i3-msg "[title=\"Emacs inside $cws\" floating] $msg"
+             ${FUNCNAME[0]} "inflate$cws"
+             echo "$1" > /dev/shm/"$USER"/i3/state/emacsinside"$cws"
+             ;;
+         (squeeze*)
+             for size in 80 70 60 50 40 30 20; do
+                 msg=$(printf "move position center, resize set %d ppt %d ppt;" 80 $size)  # height shrink
+                 i3-msg "[title=\"Emacs inside ${1/squeeze/}\" floating] $msg"
+                 sleep 0.1
+             done
+             for size in 80 70 60 50 40 30 20; do
+                 msg=$(printf "move position center, resize set %d ppt %d ppt;" $size 20)  # width shrink
+                 i3-msg "[title=\"Emacs inside ${1/squeeze/}\" floating] $msg"
+                 sleep 0.1
+             done
+             ;;
+         (inflate*)
+             for size in 20 30 40 50 60 70 80 90 93 96 99 93 91 90; do
+                 # centre the window before resizing so it cannot
+                 # overlap a screen edge.
+                 msg=$(printf ", move position center, resize set %d ppt %d ppt;" $size $size)
+                 i3-msg "[title=\"Emacs inside ${1/inflate/}\" floating] $msg"
+                 sleep 0.1
+             done
+             ;;
+     esac
+ }
+
+ function config {
+     #
+     # Make reads the deployed i3 config, extracts the bindings,
+     # tidies up and writes the result into 'i3-config-digest'.
+     #
+     state=$(cat /dev/shm/"$USER"/i3/state/digest)
+     case "$1" in
+         (trackerstart)
+             # There should be no more than one subscription to this.
+             notify-send "BINDING MODE INDICATOR" "binding mode tracker started"
+             (i3-msg -t subscribe -m '[ "binding" ]' | \
+                  while read -r line;
+                  do
+                      # A user who finds that this is sufficient to inform about a mode
+                      # might choose to disable the Binding Mode Indicator on the i3bar.
+                      mode=$(echo "$line" | awk -F : '{print $8}')
+                      case "$mode" in
+                          (*event*)
+                              notify-send "BINDING MODE INDICATOR" "binding mode default"
+                              ;;
+                          (*)
+                              notify-send "BINDING MODE INDICATOR" "binding mode $mode"
+                              ;;
+                      esac
+                  done)&
+             ;;
+         (trackerstop)
+             if [ "$(pgrep -caf 'i3-config-bash config trackerstart')" -gt 0 ]; then
+                 pkill -f 'i3-config-bash config trackerstart'
+                 sleep 1.57
+                 notify-send "BINDING MODE INDICATOR" "binding mode tracker stopped"
+             fi
+             ;;
+         (popup)
+             status=3
+             # Don't launch on workspace i3.
+             ws="$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')"
+             if [ "${ws}" != "i3" ]; then
+                 status=2
+                 # Only launch a new instance if all previous instances have been killed.
+                 i3-msg "[title=\"i3 config digest (less: q to quit)\" floating] kill"
+                 sleep 1.57
+                 if [ "$(pgrep -c -f 'xterm -title "i3 config digest (less: q to quit)"')" -eq 0 ]; then
+	             status=1
+                     # Launch the utility "less" in an xterm, no need to hold, support search and user dismiss.
+                     if [ -e /dev/shm/"$USER"/i3/digest ]; then
+                         status=0
+                         (xterm -title 'i3 config digest (less: q to quit)' -e less -sN /dev/shm/"$USER"/i3/digest)&
+                     fi
+                 fi
+             fi
+             notify-send "i3-config-digest" "Status $status {0} ok {1=several 2=exists 3=i3} nok"
+             ;;
+         (lines)
+             # Used to match line numbers in red nagbar error messages.
+             # BUG BUG BUG - "~/.i3/config" should not be hardcoded, grep the Makefile!
+             if [ -e ~/.i3/config ]; then
+                 (xterm -title 'i3 config as deployed (less: q to quit)' -e less -sN ~/.i3/config)&
+             fi
+             ;;
+         (toggle)
+             # The digest is always written at startup and is rewritten when make succeeds.
+             state=$(cat /dev/shm/"$USER"/i3/state/digest)
+             case "$state" in
+                 (show)
+                     echo "busy" > /dev/shm/"$USER"/i3/state/digest
+                     ${FUNCNAME[0]} popup
+                     echo "show" > /dev/shm/"$USER"/i3/state/digest
+                     ;;
+                 (hide)
+                     echo "busy" > /dev/shm/"$USER"/i3/state/digest
+                     i3-msg "[title=\"i3 config digest\"] kill"
+                     echo "hide" > /dev/shm/"$USER"/i3/state/digest
+                     ;;
+             esac
+             ;;
+         (write)
+             # BUG BUG BUG - "~/.i3/config" should not be hardcoded, grep the Makefile!
+             # Remove most bash comments except for those we wish to keep which we indicate with the exclamation mark.
+             # Bash comments to be renoved are converted to C++ comments and passsd to cpp which cuts them out.
+             # Bash comments to keep are converted to C++ hash-pragma directive + message and pass through cpp.
+             # (hash-pragma directives preserve following text but indentation may suffer.
+             # Blank lines, including those made by removing comments, are deleted by cpp (which is why it's used here).
+             # "<stdin>:372:28: warning: missing terminating ' character" caused by e.g. the word "don't" in a comment.
+             # Comments to keep have issues unless entered as a single line that may be longer than a screen is wide.
+             # The digest can be built by 'make' (preferred) or at run tine.
+             # The digest is "formatted" to be searchable and comfortably legible using the terminal program 'less'.
+             # BEGIN
+             # shellcheck disable=SC2002  # prototyped in a terminal
+             cat ~/.i3/config | sed 's!##!//!g' | sed 's!#\x20!//!g' | sed 's/[\x20]*#!/#pragma /g' | cpp - | sed 's/#pragma/# /g' | grep -E 'bind|mode|bar|}'| grep -E -v 'barstatus' | tee /dev/shm/"$USER"/i3/digest >/dev/null
+             # END
+             ;;
+     esac
+ }
+
+#
+# Keyboard configuration. Hardcode what works for you.
+#
+function keyboard
+{
+    setxkbmap -option
+    setxkbmap -option caps:ctrl_modifier
+    killall -q xcape
+    k2='Alt_L=Escape'
+    xcape -t 667 -e "$k2"
+}
+
+#
+# - Run commands from the prompt. It's hit-and-miss, be lucky.
+# - Take over the keyboard before rogue keystrokes do damage.
+# - xterm launched here will be tiny and floating, handy for
+#   running edit-make-test repeatedly.
+# - The dmenus all show on the same monitor, choose which one.
+# - Ongoing attempt to automate said choice uses heuristics.
+# - I inverted the d as q to avoid running dmenu by accident.
+#
+function qmenu
+{
+    case "$1" in
+        (show)
+            # A command prompt and a little menu of useful commands.
+            media="vlc"
+            guide="xdg-open https://i3wm.org/docs/userguide.html"
+            xterm="xterm -T '=xterm='"
+            # shellcheck disable=SC2037
+            items="'=='%$xterm%$media%$guide%"
+            # Ask me about that '==' filter, can you see what (evils) it provides?
+            # shellcheck disable=SC2091 # 'cos the result is to be executed.
+            cmd="$(echo -e "${items}" | sed 's/%/\n/g' | \
+                 ${dmenulooknfeel} -p 'Enter a command: ')"
+            eval "${cmd/==/}"
+            ;;
+        (number=*)
+            # It is not necessarily a bug if this is overidden.
+            # left centre right == 2,1,0 for EllaTheCat but ymmv.
+            echo "${1/number=/}" > /dev/shm/"$USER"/i3/state/dmenunumber
+            ;;
+        (visible)
+            # Try to avoid apparent freezing caused by a dmenu on an
+            # output with a dummy load.
+            favourite=1
+            dummy=0
+            if [ "$(cat /dev/shm/"$USER"/i3/state/dmenunumber)" = "$dummy" ]; then
+                echo "$favourite" > /dev/shm/"$USER"/i3/state/dmenunumber
+            fi
+            ;;
+        (*)
+            echo "Programmer error!" "$item"
+            exit 112
+            ;;
+    esac
+}
+
+#
+# Look at the geometry of the window in focus, and unless it could be
+# a monster {emacs, browser, synaptic, ... } window, dismisses it,
+function dismiss_container_by_size
+{
+    # i3wm floating_maximum_size can't help here.
+    xywh=$(xdotool getwindowfocus getwindowgeometry --shell)
+    w=$(echo "$xywh" | grep "WIDTH=")
+    w=${w/WIDTH=//}
+    h=$(echo "$xywh" | grep "HEIGHT=")
+    h=${h/HEIGHT-//}
+
+    # My outputs are 1920x1080, the 1280x720 used here still work on
+    # crappy HD-ready 1366 wide screens, but are for sure bioggr than
+    # any stupid dialog box needs to be.
+    if [ "$w" -lt 1280 ] && [ "$h" -lt 720 ] ; then
+        xdotool getwindowfocus windowkill
+    fi
+}
+
+
+#
+# Dismiss one or more workspaces, INTERACTIVELY or EXPLICITLY.
+#
+function dismiss_workspace_interactive
+{
+    qmenu visible
+
+
+    # If kill fails or if kill blocked, don't risk looping forever.
+    count=100
+    done=0
+    while [ $count -gt 0 ] && [ $done -eq 0 ]; do
+        (( count=count-1 ))
+        # KISS: recalculate on each pass.
+        cws=$(i3-msg -t get_workspaces | jq -r 'map(select(.focused))[0].name')
+        case "$1" in
+            (menu)
+                # Dismiss a chosen workspace on each pass round a loop
+                # until done.
+                zlist=$(i3-msg -t get_workspaces |\
+                            jq -r '.[] | select(.output=="HDMI2").name')
+                xlist=$(i3-msg -t get_workspaces |\
+                            jq -r '.[] | select(.output=="HDMI1").name')
+                clist=$(i3-msg -t get_workspaces |\
+                            jq -r '.[] | select(.output=="VGA1").name')
+                #
+                ws=$(echo -e "done\n$zlist\n$xlist\n$clist\n" | \
+                         ${dmenulooknfeel} -p "[Current=$cws] Workspace to dismiss: ")
+                ;;
+            (current)
+                # Dismiss the current workspace.
+                case "$cws" in
+                    ([1-9][0-9]|[a-z][0-9]|[a-z][a-z])
+                        ws=$cws
+                        ;;
+                    (*)
+                        exit 1
+                        ;;
+                esac
+                ;;
+            ([a-z][a-z]|[a-z][0-9]|[1-9][0-9])
+                # Dismiss the requested workspace.
+                zlist=$(i3-msg -t get_workspaces |\
+                            jq -r '.[] | select(.output=="HDMI2").name')
+                xlist=$(i3-msg -t get_workspaces |\
+                            jq -r '.[] | select(.output=="HDMI1").name')
+                clist=$(i3-msg -t get_workspaces |\
+                            jq -r '.[] | select(.output=="VGA1").name')
+                # The workspace to dismiss must exist.
+                list=$(printf "%s\n%s\n%s\n" "$zlist" "$xlist" "$clist")
+                echo "$list"
+                ws=
+                for w in $list; do
+                    if [ "$w" = "$1" ]; then
+                        echo "$1 $w"
+                        ws=$1
+                        break
+                    fi
+                done
+                if [ "_$ws" = "_" ]; then
+                    notify-send "${FUNCNAME[0]}" ">$1< is not a listed workspace"
+                    exit 1
+                fi
+                ;;
+            (*)
+                # Not a workspace.
+                notify-send "${FUNCNAME[0]}" ">$1< does not match [1-9][0-9] [a-z][0-9] [a-z][a-z]"
+                exit 1
+                ;;
+        esac
+        case "$ws" in
+            (done)
+                exit 0
+                ;;
+            (i3)
+                notify-send "${FUNCNAME[0]}" ">$ws< is a protected workspace."
+                ;;
+            (*)
+                # Dismiss the chosen workspace.
+                i3-msg "[workspace=\"$ws\"] kill"
+                # This removes the workspace tab.
+                i3-msg "workspace next"
+                ;;
+        esac
+    done
+    exit 0
+}
+
+#
+# Dismiss all workspaces on the specified output.
+#
+function dismiss_output
+{
+    # I do not know how to fold these three expressions into one that
+    # takes the name of an output as a parameter.
+    case "$1" in
+        (HDMI2)
+            ws=$(i3-msg -t get_workspaces |\
+                     jq -r '.[] | select(.output=="HDMI2").name');;
+        (HDMI1)
+            ws=$(i3-msg -t get_workspaces |\
+                     jq -r '.[] | select(.output=="HDMI1").name');;
+        (VGA1)
+            ws=$(i3-msg -t get_workspaces |\
+                     jq -r '.[] | select(.output=="VGA1").name');;
+        (all)
+            ${FUNCNAME[0]} HDMI2 "$2"
+            ${FUNCNAME[0]} HDMI1 "$2"
+            ${FUNCNAME[0]} VGA1  "$2"
+            return
+            ;;
+    esac
+
+    case "$1" in
+        (HDMI2|HDMI1|VGA1)
+            if [ "_$ws" != "_" ]; then
+                for w in $ws
+                do
+                    i3-msg "[workspace=\"$w\"] kill"
+                done
+            fi
+            ;;
+        (*)
+            # "all" should NEVER fall through, check for 'return' stmt.
+            echo "function ${FUNCNAME[0]}: parameter $1 not implemented"
+            ;;
+    esac
+}
+
+#
+# Absolutely ad-hoc naming convention enforcement.
+#
+function conform_workspaces
+{
+    list=$(i3-msg -t get_workspaces | jq -r '.[] | .name' | grep -E "^[0-9]$")
+    for count in $list; do
+        first=1
+        i3-msg "$(printf 'rename workspace %s to %s%s' "$count" $first"$count")"
+    done
+}
+
+#
+# Workspaces: visit a ws, move a container to a ws, rename a ws.
+# - These offer a dmenu instead of the i3-input used in three commands.
+#
+function vmr_workspace
+{
+    items=
+    #
+    # Step 1 of 2.
+    #
+    case "$1" in
+        (visit|move|follow)
+            zlist=$(i3-msg -t get_workspaces | \
+                        jq -r '.[] | select(.output=="HDMI2").name')
+            xlist=$(i3-msg -t get_workspaces | \
+                        jq -r '.[] | select(.output=="HDMI1").name')
+            clist=$(i3-msg -t get_workspaces | \
+                        jq -r '.[] | select(.output=="VGA1").name')
+            for item in $zlist; do
+                items=${items}$item%
+            done
+            for item in $xlist; do
+                items=${items}$item%
+            done
+            for item in $clist; do
+                items=${items}$item%
+            done
+            ;;
+        (rename)
+            cws=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')
+            items='leave empty to cancel' # this is not selectable because no linefeed.
+            ;;
+    esac
+    #
+    # Step 2 of 2.
+    #
+    case "$1" in
+        (visit)
+            # shellcheck disable=SC2091 # because the result is to be executed.
+            ws=$(echo -e "$items" | sed 's/%/\n/g' | \
+                     ${dmenulooknfeel} -p 'workspace to visit: ').
+            i3-msg "workspace ${ws}"
+            ;;
+        (move)
+            # The container moves but the user stays put.
+            # shellcheck disable=SC2091 # because the result is to be executed.
+            ws=$(echo -e "$items" | sed 's/%/\n/g' | \
+                     ${dmenulooknfeel} -p 'destination workspace: ')
+            i3-msg "move container to workspace ${ws}"
+            ;;
+        (follow)
+            # The container moves and the user follows it.
+            # shellcheck disable=SC2091 # because the result is to be executed.
+            ws=$(echo -e "$items" | sed 's/%/\n/g' | \
+                     ${dmenulooknfeel} -p 'destination workspace: ')
+            i3-msg "move container to workspace ${ws}, workspace ${ws}"
+            ;;
+        (rename)
+            # shellcheck disable=SC2091 # because the result is to be executed.
+            ws=$(echo -e "$items" | sed 's/,/\n/g' | \
+                     ${dmenulooknfeel} \
+                         -p "rename or renumber workspace ->${cws}<- by typing two characters: ")
+            if [ "_$ws" != "_" ] && [ "_$cws" != "_$ws" ]; then
+                i3-msg "rename workspace to ${ws}"
+            fi
+            ;;
+        (*)
+            echo "function ${FUNCNAME[0]}: parameter $1 not implemented"
+            ;;
+    esac
+}
+
+#
+# Specify a workspace and an output, in either order. INTERACTIVELY
+# and EXPLICITLY using a dmenu, move the workspace to the output.
+#
+function move_workspace_to_output_interactive
+{
+    qmenu visible
+
+    # List the workspaces each on each output. Hardcoded as three.
+    z=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI2").name')
+    x=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI1").name')
+    c=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="VGA1").name')
+    # The objective is to specify both the output and the probably not
+    # activated workspace to be moved to that output. This can be done
+    # in either order by selecting twice from the menu, but choosing
+    # the output before the workspace allows the user to specify a
+    # workspace already on the output. The listed outputs are marked
+    # by a colon suffix.
+    list="cancel\nz:\n$z\nx:\n$x\nc:\n$c\n"
+    count=0
+    while true;
+    do
+        (( count=count+1 ))
+        if [ "${count}" -gt 4 ]; then
+            # via safety net
+           return;
+        fi
+        # Combine into a list of workspaces for all outputs, keeping
+        # the per output lists contiguous and headed by the output
+        # name. Put all this into a dmenu at the bottom, overlaying
+        # the workspace tabs. Allow the user to cancel on any pass.
+        s='Choose the desired output and the workspace to send: '
+        opws=$(echo -e "${list/==/}" | ${dmenulooknfeel} -p "$s")
+        case "${opws}" in
+            (z:)
+                list="cancel\n==\nx:\n$x\nc:\n$c\n"
+                output="HDMI2"
+                ;;
+            (x:)
+                list="cancel\n==\nz:\n$z\nc:\n$c\n"
+                output="HDMI1"
+                ;;
+            (c:)
+                output="VGA1"
+                list="cancel\n==\nz:\n$z\nx:\n$x\n"
+                ;;
+            (cancel)
+                # via the menu item
+                return
+                ;;
+            (*)
+                if [ "_$opws" = "_" ]; then
+                    # via the escape key
+                    return
+                else
+                    # Activate the chosen workspace.
+                    workspace="${opws}"
+                    i3-msg "workspace ${workspace}"
+                fi
+                ;;
+        esac
+        # do-while loop test is inside the loop hence the break.
+        if [ "_${output}" != "_" ] && [ "_${workspace}" != "_" ]; then
+            # Move the activated workspace to the chosen output.
+            i3-msg "move workspace to output $output" && break
+        fi
+    done
+}
+
+#
+# Swap two workspaces by swapping their names.
+#
+function swap_two_workspaces_by_reference
+{
+    qmenu visible
+
+    # List the workspaces each on each output. Hardcoded as three.
+    z=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI2").name')
+    x=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI1").name')
+    c=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="VGA1").name')
+    count=0
+    list="cancel\nz:\n$z\nx:\n$x\nc:\n$c\n"
+    export s0="1st workspace"
+    export s1="2nd workspace"
+    while [ "$count" -lt 2 ]; do
+        wsws=$(echo -e "${list/==/}" | ${dmenulooknfeel} -p "$s$count")
+        case "${wsws}" in
+            (cancel)
+                # via menu
+                return
+                ;;
+            ([zxc]:)
+                # Do nothing, these are merely labels here.
+                ;;
+            (*)
+                # The order of the two if-stmts at this indent matters!
+                if [ "$count" = 1 ]; then
+                    # The menu could not have set $two equal to $one
+                    # because $one was removed from $wsws just before
+                    # the count was set to 1.
+                    if [ "$two" == "$one" ]; then
+                        # I inadvertently took this branch when it was
+                        # configured to let the user try again. It
+                        # triggered screenfuls of the notification as
+                        # it looped endlessly, with slowly rising CPU
+                        # temperature. The loop now has a limiting
+                        # counte.r
+                        notify-send "swap_two_workspaces" "(&gt;$two&lt;,&gt;$one&lt;) REJECTED"
+                        count=2
+                    else
+                        two="${wsws}"
+                        count=2
+                    fi
+                fi
+                if [ "$count" = 0 ]; then
+                    one="${wsws}"
+                    # The two workspace names must differ; the first
+                    # will be removed from the menu offered for the
+                    # second.
+                    wsws=${wsws/$one/}
+                    count=1
+                fi
+                ;;
+        esac
+    done
+    notify-send "swap_two_workspaces" "/$one/$two/ &gt;&gt;--&gt; /$two/$one/"
+    # My head hurt so I didn't optimise.
+    i3-msg "rename workspace $one to $one$one, rename workspace $two to $two$two;"
+    i3-msg "rename workspace $one$one to $two, rename workspace $two$two to $one;"
+    i3-msg "workspace $one"
+}
+
+#
+# Swap the contents of two marked containers.
+#
+function swap_two_containers_by_value
+{
+    qmenu visible
+
+    # List the container marks on each output. A list item is three
+    # digits, enclosed in double quotes, with a trailing comma to
+    # separate it from the next item.
+    z=$(i3-msg -t get_tree | jq '.. | select(.type?) | select(.output=="HDMI2").marks' | \
+            grep '"' | grep -E -v '"[a-z]+' | sed 's/,//g')
+    x=$(i3-msg -t get_tree | jq '.. | select(.type?) | select(.output=="HDMI1").marks' | \
+            grep '"' | grep -E -v '"[a-z]+' | sed 's/,//g')
+    c=$(i3-msg -t get_tree | jq '.. | select(.type?) | select(.output=="VGA1").marks' | \
+            grep '"' | grep -E -v '"[a-z]+' | sed 's/,//g')
+    # The objective is to specify two existing marks. This can be done
+    # in either order by selecting twice from the menu. The marks are
+    # grouped by output, outputs are identified by a colon suffix.
+    count=0
+    list="cancel\nz:\n$z\nx:\n$x\nc:\n$c\n"
+    export s0="1st mark"
+    export s1="2nd mark"
+    # Decimal values (with leading zeroes) below 32 are reserved.
+    srcmark=001
+    dstmark=002
+    while [ "${count}" -lt 2 ]; do
+        s="$s$count"
+        mark=$(echo -e "${list/==/}" | ${dmenulooknfeel} -p "$s")
+        # Mark 0 > "546" shows two leadíng spaces and 3 digits.
+        # enclosed in double quotes.
+        mark=${mark:3:3}
+        echo "Mark $count >$mark<"
+        case "${mark}" in
+            (cancel)
+                # click to quit
+                return
+                ;;
+            (z:|x:|c:)
+                # not clickable, labels
+                ;;
+            ([a-z][a-z]|[a-z][0-9])
+                # These were not container marks.
+                echo "Programmer Error!"
+                exit 112
+                ;;
+            ([0-9][0-9][0-9])
+                case "$count" in
+                    (0)
+                        srcmark=${mark}
+                        count=1
+                        ;;
+                    (1)
+                        dstmark=${mark}
+                        count=2
+                        ;;
+                esac
+                ;;
+        esac
+    done
+    i3-msg "[con_mark=\"${srcmark}\"] focus, swap container with mark ${dstmark};"
+}
+
+#
+# Arrange three screens using functions rotate and swap.
+#
+# Consider three monitors side-by-side. Imagine the three are mounted
+# on train tracks that run parallel to their bottom edges and that the
+# three are free to move; the track is in fact a loop. It is possible
+# to show the three screens to a bystander in the order ZXC, XCZ or
+# CZX by sending one screen round the loop, in either direction. Also
+# known as a barrel shifter.
+#
+# Consider swapping pairs ZX, ZC, XC to obtain XZC, CXZ, ZCX
+#
+
+#
+# Original function refactored into function rotate and function swap.
+#
+function rotate
+{
+    # Empty workspaces disappear. This is not a bug.
+    zlist=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI2").name')
+    xlist=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI1").name')
+    clist=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="VGA1").name')
+    tick=${2:-0.67}
+    case "$1" in
+        (backward)
+            backdrop forward
+            # Given ABC, this will yield BCA.
+            for z in $zlist; do
+                i3-msg "[workspace=\"$z\"] focus, move workspace to output VGA1;"
+                sleep "${tick}"
+            done
+            for x in $xlist; do
+                i3-msg "[workspace=\"$x\"] focus, move workspace to output HDMI2;"
+                sleep "${tick}"
+            done
+            for c in $clist; do
+                i3-msg "[workspace=\"$c\"] focus, move workspace to output HDMI1;"
+                sleep "${tick}"
+            done
+            ;;
+        (forward)
+            backdrop backward
+            # Given ABC, this will yield CAB.
+            for z in $zlist; do
+                i3-msg "[workspace=\"$z\"] focus, move workspace to output HDMI1;"
+                sleep "${tick}"
+            done
+            for c in $clist; do
+                i3-msg "[workspace=\"$c\"] focus, move workspace to output HDMI2;"
+                sleep "${tick}"
+            done
+            for x in $xlist; do
+                i3-msg "[workspace=\"$x\"] focus, move workspace to output VGA1;"
+                sleep "${tick}"
+            done
+            ;;
+    esac
+}
+
+#
+# Original function refactored into function rotate and function swap.
+#
+function swap
+{
+    # Empty workspaces disappear. This is not a bug.
+    zlist=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI2").name')
+    xlist=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="HDMI1").name')
+    clist=$(i3-msg -t get_workspaces | jq -r '.[] | select(.output=="VGA1").name')
+    tick=${2:-0.67}
+    case "$1" in
+        (zx)
+            # Given ABC, this will yield BAC.
+            for z in $zlist; do
+                i3-msg "[workspace=\"$z\"] focus, move workspace to output HDMI1;"
+                sleep "${tick}"
+            done
+            for x in $xlist; do
+                i3-msg "[workspace=\"$x\"] focus, move workspace to output HDMI2;"
+                sleep "${tick}"
+            done
+            ;;
+        (xz)
+            # Given ABC, this will yield CBA.
+            for z in $zlist; do
+                i3-msg "[workspace=\"$z\"] focus, move workspace to output VGA1;"
+                sleep "${tick}"
+            done
+            for x in $xlist; do
+                i3-msg "[workspace=\"$x\"] focus, move workspace to output HDMI2;"
+                sleep "${tick}"
+            done
+            ;;
+        (xc)
+            # Given ABC, this will yield ACB.
+            for x in $xlist; do
+                i3-msg "[workspace=\"$x\"] focus, move workspace to output VGA1;"
+                sleep "${tick}"
+            done
+            for c in $clist; do
+                i3-msg "[workspace=\"$c\"] focus, move workspace to output HDMI1;"
+                sleep "${tick}"
+            done
+            ;;
+    esac
+}
+
+function backdrop
+{
+    # Start with concrete definition, abstract it later.
+    declare -A london=(
+        ["le00000.jpg"]="le17280.jpg le01920.jpg"
+        ["le01920.jpg"]="le00000.jpg le03840.jpg"
+        ["le03840.jpg"]="le01920.jpg le05760.jpg"
+        ["le05760.jpg"]="le03840.jpg le07680.jpg"
+        ["le07680.jpg"]="le05760.jpg le09600.jpg"
+        ["le09600.jpg"]="le07680.jpg le11520.jpg"
+        ["le11520.jpg"]="le09600.jpg le13440.jpg"
+        ["le13440.jpg"]="le11520.jpg le15360.jpg"
+        ["le15360.jpg"]="le13440.jpg le17280.jpg"
+        ["le17280.jpg"]="le15360.jpg le00000.jpg"
+    );
+
+    # The exact command that posted the image, plus a --no-fehbg
+    # switch so that executing .fehbg doesn't rewrite itself.
+    fehbg=$(cat ~/.fehbg)
+
+    # The contents of ~/.fehbg : a command, args,
+    # file-in-single-quotes makes the single quote awk delimiter
+    # robust, the file is $2.
+    # feh --no-fehbg --bg-max --no-xinerama --geometry +0-800 '/.k../le11520.jpg'
+    # Black bar at bottom -> decrease magnitude of y, e.g. +0-400
+
+    oldimg=$(basename  "$(grep 'jpg' ~/.fehbg | awk -F\' '{print $2}')")
+    adjimg=${london[$oldimg]}
+
+    # Get ready to write a fresh '~/.fehbg' by removing the '--no-fehbg' switch.
+    # Determine the adjacent image strip, wrapping round, substitute it for the old one.
+    case "$1" in
+        (backward)
+            fehbg=${fehbg/--no-fehbg/}
+            eval "${fehbg/$oldimg/${adjimg:0:11}}"
+            ;;
+        (forward)
+            fehbg=${fehbg/--no-fehbg/}
+            eval "${fehbg/$oldimg/${adjimg:12:11}}"
+            ;;
+        (*)
+            echo "function ${FUNCNAME[0]}: parameter $1 not implemented"
+            ;;
+    esac
+}
+
+# = UNUSED? OBSOLETE? ============================================ #
+
+function marks
+{
+    notify-send "i3-config-bash: function marks" "Programmer Error!"
+    case "$1" in
+        (restart|init)
+            # i3-msg -t subscribe window events lives in here and we
+            # want to hide its monotonous output, until something
+            # stalls, then we want to see that it is still alive.
+            xterm -T 'marks subscribe window' -e /bin/bash \
+                -c ~/local/i3/bin/i3-marks subscribe window
+            ;;
+        (kill)
+            i3-msg "unmark"
+            if [ "$(pgrep -c -af "xterm -T 'marks subscribe window'")" -gt 0 ]; then
+                pkill -f "xterm -T 'marks subscribe window'"
+            fi
+            ;;
+    esac
+    exit 112
+}
+
+# = UNUSED, IN RESERVE =========================================== #
+
+### function empty_workspace_watchdog
+### {
+###     percent=0
+###     seconds=300
+###     while [ $seconds -gt 0 ]; do
+###         zenity --title='empty workspace watchdog' --progress \
+###                --timeout=33 --time-remaining --percentage="$percent" \
+###                --auto-close --text="$1"
+###         (( seconds = seconds - 30 ))
+###         (( percent = percent + 10 ))
+###     done
+### }
+
+
+# = UNUSED, IN RESERVE =========================================== #
+
+# Warp the mouse to normalised window coords (0.33,0.33) inside the
+# window in focus. Allow a fraction of a second for the requested
+# window to gain focus.
+#
+# I have a 4 way KVM switch, finding the mouse is a pain, hence
+# this. Of course I'm not hardcore i3 if I mouse.
+#
+# https://www.reddit.com/r/i3wm/comments/nr73k6/
+# mouse_following_the_focused_window/
+# h0f4var?utm_source=share&utm_medium=web2x&context=3
+#
+# I imagine that this will need tweaks to work on any machine it
+# hasn't been working on.
+#
+# Requires: xdotool xwininfo
+#
+function mousewarp
+{
+    sleep 0.2
+    HERE="$(xdotool getwindowfocus)"
+
+    ULX=$(xwininfo -id "$HERE" | grep "  Absolute upper-left X:" | awk '{print $4}')
+    ULY=$(xwininfo -id "$HERE" | grep "  Absolute upper-left Y:" | awk '{print $4}')
+
+    # If there is no window, ULX == 1 and ULY == 1.
+    if [ "$ULX" != "-1" ] || [ "$ULY" != "-1" ]; then
+        eval "$(xdotool getwindowgeometry --shell "$HERE")"
+        # shellcheck disable=SC2153
+        ((NX="$WIDTH"/3))
+        ((NY="$HEIGHT"/3))
+
+        xdotool mousemove --window "$WINDOW" "$NX" "$NY"
+    fi
+}
+
+# PARAMETER PASSING=============================================== #
+
+# case stmt voodoo incantation
+shopt -s extglob
+
+#
+# The $emit macro in 'config' calls i3-config-bash with one parameter,
+# a base ten integerin the range 000 to 999 inclusive.
+#
+function params1x3digits
+{
+    case "$1" in
+        ([0-9][0-9][0-9])
+            head="$(cat /dev/shm/"$USER"/i3/state/head)"
+            case "${head}" in
+                (m|x|w|c)
+                    echo "${head}$1" > "/dev/shm/$USER/i3/command"
+                    notify-send "system" "command4 ${head}$1"
+                    echo "?" > /dev/shm/"$USER"/i3/state/head
+                    exit 0
+                    ;;
+                (*)
+                    echo "Programmer error!"
+                    exit 112
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+#
+# The $send macro in 'config' calls i3-config-bash with two
+# parameters, the 1st being a lowercase letter, :lower:,
+# the 2nd another lowercase letter :lower: or a digit :digit:.
+#
+function params2x1char
+{
+    case "$1" in
+        (^[a-z0-9])
+            notify-send "system" "The 1st character of a command2 cannot be other than a lower case letter or a digit."
+            exit 0
+            ;;
+    esac
+    case "$2" in
+        (^[a-z0-9])
+            notify-send "system" "The 2nd character of a command2 cannot be other than a lower case letter or a digit."
+            exit 0
+            ;;
+    esac
+    case "$1$2" in
+        ([0-9][a-z])
+            notify-send "system" "The 2nd character of a command2 cannot be a letter if the 1st character is a digit."
+            exit 0
+            ;;
+        ([a-z][a-z]|[a-z][0-9]|[0-9][0-9])
+            # Concatenate $1 and $2 into a two character string and write
+            # that into the command processor.
+            echo "$1$2" > "/dev/shm/$USER/i3/command"
+            notify-send "system" "command2 $1$2"
+            exit 0
+            ;;
+    esac
+}
+
+#
+# 'config' has a plethora of function calls into i3-config-bash where
+# the first parameter is the name of a function therein and the second
+# parameter is the function's argument (list).
+#
+function params2x1word
+{
+    # Validate function names, apply "refactoring fudges", such as
+    # required to call "vmr_workspace".
+    case "$1" in
+        (session|filewatcher|wswatcher)
+            "$1" "$2"
+            ;;
+        (keyboard|terminal|emacsinside)
+            "$1" "$2"
+            ;;
+        (qmenu|config|backdrop)
+            "$1" "$2"
+            ;;
+        (dismiss_container_by_size)
+            "$1"
+            ;;
+        (dismiss_workspace_interactive)
+            "$1" "$2"
+            ;;
+        (dismiss_output)
+            "$1" "$2"
+            ;;
+        (conform_workspaces)
+            "$1"
+            ;;
+        (visit_workspace)
+            vmr_workspace visit
+            ;;
+        (move_container_to_workspace)
+            vmr_workspace move
+            ;;
+        (follow_container_to_workspace)
+            vmr_workspace follow
+            ;;
+        (rename_workspace)
+            vmr_workspace rename
+            ;;
+        (move_workspace_to_output_interactive)
+            "$1"
+            ;;
+        (swap_two_workspaces_by_reference)
+            "$1"
+            ;;
+        (swap_two_containers_by_value)
+            "$1"
+            ;;
+        (rotate|swap)
+            "$1" "$2"
+            ;;
+        ([0-9][0-9][0-9])
+            echo "Programmer error: params1x3digits argument"
+            exit 112
+        ;;
+        ([a-z][a-z]|[a-z][0-9])
+            echo "Programmer error: params2x1char argument"
+            exit 112
+        ;;
+        (*)
+            echo "Programmer error: bad parameter &gt;$1&lt;"
+            exit 112
+            ;;
+    esac
+}
+
+#
+# Start here
+#
+
+# Mutually incompatible function signatures direct the parameters to
+# the approprate functions. It's obvious that i3-config-bash needs to
+# be refactored into three with hindsight..
+params1x3digits "$1"
+params2x1char "$1" "$2"
+params2x1word "$1" "$2"
+
+#
+# Done.
+#
+
+
+
+
+
+
+
+
+
+
+
+# MY JQ SCRATCHPAD =============================================== #
+
+#i3-msg -t get_tree | jq '.. | select(.type?) | select(.focused==true).name'
+#"xfce4-terminal"
+#
+#i3-msg mark 44
+#i3-msg -t get_tree | jq '.. | select(.type?) | select(.marks==["44"]).name'
+#"xfce4-terminal"
+#i3-msg -t get_tree | jq '.. | select(.type?) | select(.focused==true).marks'
+#[
+#  "44"
+#]
+# i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name'
+
+# ============================================================== #

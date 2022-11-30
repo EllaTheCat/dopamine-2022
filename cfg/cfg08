@@ -1,0 +1,153 @@
+# -*- Mode: Shell-script -*-
+
+#
+# EXECUTABLE SETTINGS BEGIN HERE.
+#
+
+# AUDIO SETUP ==================================================== #
+
+# AUDIO MIXER CONTROLS for PULSEAUDIO and probably PIPEWIRE.
+#
+# These strings apply to my equipment, you're going to have to check
+# on your equipment and adjust as required.
+
+# Type 'pactl list sinks' to list audio outputs.
+#
+set $analogaudiosink alsa_output.pci-0000_00_1b.0.analog-stereo
+set $bluetoothaudiosink bluez_sink.30_22_00_00_C7_F5.a2dp_sink
+set $hdmiaudiosink alsa_output.pci-0000_00_03.0.hdmi-stereo
+set $usbaudiosink=alsa_output.usb-Generic_USB2.0_Device_20121120222017-01.analog-stereo
+set $iec958audiosink=alsa_output.pci-0000_00_1b.0.iec958-stereo
+
+# Type 'pactl list sources' to list audio inputs.
+#
+set $analogaudiosource alsa_input.pci-0000_00_1b.0.analog-stereo
+set $webcamaudiosource alsa_input.usb-Alcor_Micro__Corp._TeckNet-02.mono-fallback
+
+# Microphones' defaults. 1 = mute here.
+
+exec --no-startup-id pactl set-source-mute $usbaudiosource 1
+exec --no-startup-id pactl set-source-mute $analogaudiosource 1
+exec --no-startup-id pactl set-source-mute $webcamaudiosource 1
+
+# Bluetooth from my phone into a dedicated bluetooth audio RX driving
+# 3.5mm Line In, with loopback so I can do a.o. Spotify over speakers.
+# Start with Line In baseline volume unmuted for convenience, you may
+# wish to mute (set to 1) to protect your ears and speakers.
+exec_always --no-startup-id \
+            pacmd unload-module module-loopback
+exec_always --no-startup-id \
+            pacmd load-module module-loopback latency_msec=10
+exec_always --no-startup-id \
+            pactl set-source-volume $analogaudiosource 11%
+exec_always --no-startup-id \
+            pactl set-source-mute $analogaudiosource 0
+
+exec_always --no-startup-id pactl set-sink-volume $usbaudiosink 70%
+exec_always --no-startup-id pactl set-sink-volume $iec958audiosink 70%
+
+# Stereo speaker check. Allow enough time (10s) for system to warm up
+# and separate the announcements (3s apart).
+
+exec_always --no-startup-id sleep 10 && \
+    /usr/bin/play -c 2 -r 22050 /usr/share/sounds/alsa/Front_Left.wav remix 1 0
+exec_always --no-startup-id sleep 13 && \
+    /usr/bin/play -c 2 -r 22050 /usr/share/sounds/alsa/Front_Right.wav remix 0 1
+exec_always --no-startup-id sleep 16 && \
+    /usr/bin/play -c 2 -r 16000 /usr/share/sounds/alsa/Front_Center.wav remix 1 1
+
+# BLUETOOTH ====================================================== #
+
+# The Bluetooth icon should appear in xfce4-panel...
+
+# PANEL ========================================================== #
+
+# Trusty xfce4-panel is a must-have. Mine is the top on HDMI2.
+# Avoid notification area lost popups by ensuring only one instance?
+# 20220922: No bindings, deliberately. USE XFCE4 AUTOSTART.
+
+### exec --no-startup-id xfce4-panel --disable-wm-check &
+### exec --no-startup-id pkill -f xfce4-panel
+
+# WALLPAPER ====================================================== #
+
+# When feh sets desktop wallpaper it can write a script
+# here that when run restores said backdrop. Please keep feh installed
+# and ~/.fehbg valid. The rotate {backward|forward} functions on the
+# xfce4-panel and in Primary mode rely on ~/.fehbg.
+
+exec_always --no-startup-id ~/.fehbg
+
+# TERMINAL ======================================================= #
+
+# The preferred terminal type is xfce4-terminal, hardcore i3
+# users have an i3-sensible terminal option.
+
+exec --no-startup-id \
+    ~/local/i3/bin/i3-config-bash terminal xfce4-terminal
+
+# QUICK DMENU ==================================================== #
+
+# This isn't intended to be the main menu. It's just a dinky
+# dmenu with a prompt where you might want to type shell commands.
+# Define menu items in function qmenu | file i3-config-bash. it also
+# has '==' support so you can launch from the prompt.
+
+exec --no-startup-id \
+   ~/local/i3/bin/i3-config-bash qmenu number=1
+
+# KEYBOARD & MOUSE =============================================== #
+
+# I have decided against anything other than this functinn which the
+# user should rewrite from scratch.
+
+exec_always --no-startup-id \
+            ~/local/i3/bin/i3-config-bash keyboard
+
+# SESSION VARIABLES (mumble) ===================================== #
+
+# Saves wear on the floppy disk.
+# The filewatcher manages /dev/shm/"$USER"/i3/{command,execute}
+exec --no-startup-id mkdir -p /dev/shm/"$USER"/i3/state/
+
+# i3-config.bash
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/digest
+exec --no-startup-id echo "1" > /dev/shm/"$USER"/i3/state/digest
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/dmenunumber
+exec --no-startup-id echo "1" > /dev/shm/"$USER"/i3/state/dmenunumber
+# This copy-paste nightmare shows why using bash in i3-config-bash is easier.
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee0
+exec --no-startup-id echo "showe0" > /dev/shm/"$USER"/i3/state/emacsinsidee0
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee1
+exec --no-startup-id echo "showe1" > /dev/shm/"$USER"/i3/state/emacsinsidee1
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee2
+exec --no-startup-id echo "showe2" > /dev/shm/"$USER"/i3/state/emacsinsidee2
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee3
+exec --no-startup-id echo "showe3" > /dev/shm/"$USER"/i3/state/emacsinsidee3
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee4
+exec --no-startup-id echo "showe4" > /dev/shm/"$USER"/i3/state/emacsinsidee4
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee5
+exec --no-startup-id echo "showe5" > /dev/shm/"$USER"/i3/state/emacsinsidee5
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee6
+exec --no-startup-id echo "showe6" > /dev/shm/"$USER"/i3/state/emacsinsidee6
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee7
+exec --no-startup-id echo "showe7" > /dev/shm/"$USER"/i3/state/emacsinsidee7
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee8
+exec --no-startup-id echo "showe8" > /dev/shm/"$USER"/i3/state/emacsinsidee8
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/emacsinsidee9
+exec --no-startup-id echo "showe9" > /dev/shm/"$USER"/i3/state/emacsinsidee9
+
+# i3-three-digits
+exec --no-startup-id touch /dev/shm/"$USER"/i3/state/head
+exec --no-startup-id echo 'head' > /dev/shm/"$USER"/i3/state/head
+
+# I'm supposed to be the owner.
+exec --no-startup-id chmod -R ugo+rwX /dev/shm/"$USER"/i3/state/
+exec --no-startup-id chmod -R go-w /dev/shm/"$USER"/i3/state/
+
+# i3-config-digest: Updated by 'make' but volatile like session vars.
+exec_always --no-startup-id ~/local/i3/bin/i3-config config write
+
+#
+# EXECUTABLE SETTINGS END HERE.
+#

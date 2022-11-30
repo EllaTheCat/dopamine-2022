@@ -1,0 +1,170 @@
+# -*- Mode: Shell-script -*-
+
+# MARKUP CONVENTIONS============================================== #
+
+# This file will be processed by Makefile to create a two demnus:
+# firstly a list of two-character commanmd aliases that can be used as
+# a launcher and secondly to display help trxt for the previously
+# selected command alias in the same menu.
+
+# For this to work, each array item is laid out as below with a one
+# line comment on the line above. The comment must begin with hash
+# immediately followed by a ! and a space then a string. Items in
+# $wsapps set the string to ws, items in $non_wsapps set the string to
+# /ws. The item order is as for this file.
+
+declare -A wsapps=(
+    #! ws Alternative to Excel?
+    ["ae"]="xterm -fg white -bg gray67 -title calc"
+    #! ws Alternative to PowerPoint>
+    ["ap"]="xterm -fg white -bg gray67 -title impress"
+    #! ws Alternative to word?
+    ["aw"]="xterm -fg white -bg gray67 -title writer"
+    #! ws i3 config as deployed, with line numbers to match red nagbar errors.
+    ["db"]="i3-config-bash config lines"
+    #! ws i3 config bindings - a terminal using "less" to show bindings.
+    ["dg"]="i3-config-bash config popup"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e0"]="i3-config-bash emacsinside client2022e0"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e1"]="i3-config-bash emacsinside client2022e1"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e2"]="i3-config-bash emacsinside client2022e2"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e3"]="i3-config-bash emacsinside client2022e3"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e4"]="i3-config-bash emacsinside client2022e4"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e5"]="i3-config-bash emacsinside client2022e5"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e6"]="i3-config-bash emacsinside client2022e6"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e7"]="i3-config-bash emacsinside client2022e7"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e8"]="i3-config-bash emacsinside client2022e8"
+    #! ws Emacs client + 2 shells in a tabbed terminal.
+    ["e9"]="i3-config-bash emacsinside client2022e9"
+    #! ws Apply, Repair, Remove, Review id3 tags.
+    ["et"]="easytag"
+    #! ws 1 of 10 instances of this browser.
+    ["f0"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f1"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f2"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f3"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f4"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f5"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f6"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f7"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f8"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["f9"]="firefox"
+    #! ws 1 of 10 instances of this browser.
+    ["g0"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g1"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g2"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g3"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g4"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g5"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g6"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g7"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g8"]="google-chrome"
+    #! ws 1 of 10 instances of this browser.
+    ["g9"]="google-chrome"
+    #! ws Handbrake with a limit on CPU usage to keep temperature down.
+    ["hb"]="${HOME}/local/public/bin/handbrake-cpulimit"
+    #! ws Graphical diff.
+    ["md"]="meld"
+    #! ws Two separate nautilus windows side by side, 1st of 4.
+    ["n0"]="i3-msg 'exec nautilus' && i3-msg 'exec nautilus'"
+    #! ws Two separate nautilus windows side by side, 2nd of 4.
+    ["n1"]="i3-msg 'exec nautilus' && i3-msg 'exec nautilus'"
+    #! ws Two separate nautilus windows side by side, 3rd of 4.
+    ["n2"]="i3-msg 'exec nautilus' && i3-msg 'exec nautilus'"
+    #! ws Two separate nautilus windows side by side, 4th of 4.
+    ["n3"]="i3-msg 'exec nautilus' && i3-msg 'exec nautilus'"
+    #! ws Put my phone's screen up on the PC screen, and operate it with keybd and mouse.
+    ["sc"]="xfce4-terminal -e scrcpy"
+    #! ws Chat like it's 2014! Skype is a snap package in 22.04 LTS. See 'mo' and 'mu' and i3-status for the microphone management
+    ["sk"]="skype"
+    #! ws APT package manager with sensible GUI.
+    ["sy"]="synaptic-pkexec"
+    #! ws Email not gmail.
+    ["tb"]="thunderbird"
+    #! ws Beautiful kitchen sink process/temperature/space monitor.
+    ["tm"]="xfce4-terminal -T 'bpytop' -e bpytop"
+    #! ws DVB-T2 tuners and epg server.
+    ["tv"]="etc-tvheadend start"
+    #! ws Nice tabbed layout for fullscreen size guests.
+    ["vm"]="virtualbox"
+    #! ws VLC complements mpv.
+    ["vp"]="vlc"
+
+)    # ----------------------------------------------------------- #
+
+declare -A not_wsapps=(
+    #! /ws Backdrop of Fuerteventura by EllaTheCat (not on github, huge file).
+    ["bf"]="feh --bg-fill --no-xinerama ${HOME}/local/i3/share/fuerteventura.png"
+    #! /ws Backdrop of a scottish fryup (not on github, visit reddit r/fryup).
+    ["bs"]="feh --bg-fill --no-xinerama --geometry +0+800 ${HOME}/local/i3/share/scottishfryup.jpg"
+    #! /ws Put this dialog box on a workspace you want to keep alive.
+    ["bz"]="(zenity --info --timeout=300 --text=\"Keeping this workspace from being closed.\")&"
+    #! /ws Emacsclient without an associated workspace. USes GUI to show images, move cursor with mouse.
+    ["ec"]="emacsclient -c"
+    #! /ws Special effects dedicated to r/unixporn, emacs window animation on workspace e0.
+    ["ee"]="i3-config-bash emacsinside toggle"
+    #! /ws Emacs server start (if you want hands-on).
+    ["es"]="i3-config-bash emacsinside serverstart"
+    #! /ws Emacs server stop (if you want hands-on).
+    ["ex"]="i3-config-bash emacsinside serverstop"
+    #! /ws No assignment to workspace. The alternative browser.
+    ["ff"]="firefox"
+    #! /ws No assignment to workspace. The alternative browser.
+    ["gc"]="google-chrome"
+    #! /ws Spindown external usb drive. Mnemonic hd-[i]dle drive sd[e].
+    ["ie"]="sudo hd-idle -t sde"
+    #! /ws Check stereo speaker placement and connections. The letters stand for l[E]ft [R]ight and [C]entre. Press a letter to hear the speaker say its position.
+    ["ls"]="i3-msg mode ':alsafront: Press E R C listen'"
+    #! /ws Track changes to the binding [M]ode [B]egin.
+    ["mb"]="i3-config-bash config trackerstart"
+    #! /ws Track changes to the binding [M]ode [E]ndq.
+    ["me"]="i3-config-bash config trackerstop"
+    #! /ws Microphone on webcam MUted
+    ["mu"]="pactl set-source-mute alsa_input.usb-Alcor_Micro__Corp._TeckNet-02.mono-fallback 1"
+    #! /ws Microphone on webcam Open
+    ["mo"]="pactl set-source-mute alsa_input.usb-Alcor_Micro__Corp._TeckNet-02.mono-fallback 0"
+    #! /ws No assignment to workspace. Nautilus (not unlike Thunar).
+    ["ns"]="nautilus -w"
+    #! /ws Compositor OFF.
+    ["p0"]="killall -q picom"
+    #! /ws Compositor ON, no sfx.
+    ["p1"]="picom --backend xrender --vsync --config /dev/null -bcf -i 1.00 --no-fading-openclose"
+    #! /ws No assignment to workspace. Thunar (not unlike Nautilus).
+    ["th"]="exo-open --launch FileManager"
+    #! /ws No assignment to workspace. A terminal for small jobs.
+    ["xt"]="xterm -T =xterm="
+    #! /ws No assignment to workspace. The preferred terminal for an xubuntu based DE like this.
+    ["xf"]="xfce4-terminal"
+    #! /ws Faster than finding a terminal. The letters are far apart so resistant to false starts?
+    ["xk"]="xkill"
+    #! /ws Convenient, compact, copy-paste, ...
+    ["xp"]="xterm -T '=xterm=' -hold -e xprop"
+    #! /ws [a-z][a-z0-9] command aliases.
+    ["zz"]="i3-focus-app-by-alias menu"
+
+)    # ----------------------------------------------------------- #

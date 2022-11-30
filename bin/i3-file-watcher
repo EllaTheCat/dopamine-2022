@@ -1,0 +1,51 @@
+#!/bin/bash
+# -*- Mode: Shell-script -*-
+#
+# Writing to the $i3/command file causes the $i3/execute file to
+# evaluate the contents of the $i3/command file. The evaluated
+# contents are forwarded to the dispatcher.
+#
+# Heretofore implementation has put the forward function in a separate
+# file, it ain't broke so don't fix it.
+#
+
+#
+# Start here.
+#
+
+# The implementation uses notify-send. For some obscure reason the
+# one-liner that is the body of the if-stmt seems to be the only way
+# to get inotify-send notifications. This bolted-on wart runs the
+# one-liner once before any calls to notify-send are made.
+if [ "$(pgrep -c -f /usr/lib/x86_64-linux-gnu/xfce4/notifyd/xfce4-notifyd)" -eq 0 ]; then
+    /usr/lib/x86_64-linux-gnu/xfce4/notifyd/xfce4-notifyd &
+fi
+# Post an attribution to the London Eye backdrop immediately.
+notify-send  "$(find . -iname attribution)" "Photo by Gregg M. Erickson 2022-10-01"
+
+# Create the directory and files. Set the strictest permissions.
+i3=/dev/shm/$USER/i3
+mkdir -p "${i3}"
+touch "$i3/command"
+chmod 600 "$i3/command"
+touch "$i3/execute"
+chmod 700 "$i3/execute"
+
+# Set the file contents. The command is initialised with a nop.  The
+# execute command has to be expanded at dispatch time.  Single quotes
+# ensure that the string is not expanded when copied into the execute
+# file. Shellcheck doesn't think this is what we want so the warning
+# is disabled. Note: "echo" joins its string arguments with a space.
+notify-send "system" "Getting ready to forward secondary mode [a-z][a-z0-9] commands."
+# shellcheck disable=SC2016
+echo 'eval /bin/false' > "${i3}/command"
+# Full path to i3-dispatcher.
+# shellcheck disable=SC2016
+echo 'eval $HOME/local/i3/bin/i3-dispatcher forward' \
+     '$(cat /dev/shm/$USER/i3/command)' > "${i3}/execute"
+# Be careful! Use no terminal here! Use no ampersand here!
+inotify-hookable --watch-files "${i3}"/command --on-modify-command "${i3}"/execute
+
+#
+# Done.
+#

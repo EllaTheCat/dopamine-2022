@@ -1,0 +1,943 @@
+# -*- Mode: Shell-script -*-
+# i3 configfile (v4)
+# i3 version 4.21 © 2009 Michael Stapelberg and contributors
+#
+# EllaTheCat's advocacy of marks and modes applied to:
+# Using i3 one-handed or without modifiers.
+
+# Initial release brought up on Ubuntu 22.04.1 LTS Oct-Nov 2022.
+# 2022-11-27 i3 4.21-133-g126dacfa
+
+
+set $dummy Please_read_the_comments_like_a_manual.
+
+# DEFINE MODE SELECT KEYS & NICHE MODIFIER KEYS ================== #
+
+###INSERT_KEYS00_HERE###
+
+# Please take care to preserve the non-blank line immediately above,
+# but don't worry about it for the moment.
+
+# CURSOR KEYS ==================================================== #
+
+# Several modes have a cursor key arrangement where I have tried
+# hard to maintain consistency.
+
+# The familiar hjkl pattern of 'vi' has been used to name the $keys as
+# well as configure various sets of cursor keys to 'vi' style. Hardcore
+# i3 users might change the values to 'jkl;'.
+
+set $h h
+set $j j
+set $k k
+set $l l
+
+# Suppose 'i' and 'h' bindings are swapped for focus move and resize,
+# then this would facilitate a right handed WASD arrangement (ijkl).
+
+### set $h j
+### set $j k
+### set $k i
+### set $l l
+
+# OUTPUTS ======================================================== #
+
+# Outputs should be listed in left-to-right order, names as provided
+# by xrandr or the xubuntu Displays settings. Mine are hard coded as
+#
+# HDMI2 HDMI1 VGA1
+#
+# Makefile.bash can be reconfigured by three envvars H2 H1 V1 such
+# that the user's output names are used in the final runtime config
+# loaded into i3 (but not in the local repo).
+
+# COLOURS ======================================================== #
+
+# Defaults changed to better distinguish are:
+# 1. green title bar and border when focused.
+# 2. gold title bar when focused inactive,
+# 3. grey title bar otherwise.
+# class | border | background | text | indicator | child_border
+
+client.focused          #333333 #00aa00 #ffffff #2e9ef4   #185522
+client.focused_inactive #333333 #555500 #dddddd #484e50   #5f676a
+client.unfocused        #333333 #444444 #bbbbbb #292d2e   #222222
+client.urgent           #880000 #444444 #ffffff #880000   #900000
+client.placeholder      #000000 #444444 #ffffff #000000   #0c0c0c
+client.background       #ffffff
+
+# FONT SETTINGS ================================================== #
+
+# Font for a.o. window titles. I think it was the only font back in
+# the day.
+
+font "pango:DejaVu Sans 12"
+
+# Font for i3-input (The red outline prompting text boxes that appear
+# during { visit | move container to | rename} workspace at the top
+# left of the window. I've deprecated i3-input in this config but
+# leave this here.
+
+set $i3inputfont "pango:DejaVu Sans 11"
+
+# FOCUS SETTINGS ================================================= #
+
+# Look these up in the i3 user's guide. These defaults are safe.
+
+focus_follows_mouse yes
+focus_wrapping off
+
+# WORKSPACE SETTINGS ============================================= #
+
+# Look these up in the i3 user's guide. These defaults are safe.
+
+workspace_auto_back_and_forth no
+workspace_layout default
+
+# COMPOSITOR ===================================================== #
+
+# As of 22.04 LTS I'm using picom. 20.04 LTS used compton, which would
+# collapse the Software Updater window to just a title bar whenever
+# the compositor was enabled. I've kept the workaround, to disable the
+# compositor when the Software Updater appears. For all I know it's
+# been fixed for ages.
+
+set $nocompositor exec --no-startup-id /usr/bin/killall -q picom
+
+# I3-CONFIG-BASH ================================================= #
+
+# When this config needs to use the bash shell, it calls
+# i3-config-bash, with one or two parameters. The first parameter is a
+# function in the script, the second is the function argument (list).
+
+# This structure makes it easier to test from the commandline. Here
+# are several examples:
+
+# i3-config-bash emacsinside toggle
+# i3-config-bash config poup
+# i3-config-bash move_workspace_to_output_interactive
+# i3-config-bash swap_two_workspaces_by_reference
+# i3-config-bash swap_two_containers_by_value
+# i3-config-bash rename_workspace
+# i3-config-bash dismiss_workspace_interactive
+
+# I3 INCLUDES ==================================================== #
+#
+# From the i3 user's guide, my emphasis,
+#
+# Variables are shared between all config files, but beware of the
+# following limitation:
+# - You can define a variable and use it within an included file.
+# - YOU CANNOT USE (IN THE PARENT FILE) A VARIABLE THAT WAS DEFINED
+# - WITHIN AN INCLUDED FILE.
+
+# ETC INCLUDES =================================================== #
+
+# Explained in detail elsewhere, EllaTheCat (etc) includes behave like
+# C or C++ includes, a parent can use a variable declared in the child
+# file, provided that declaration precedes use. The include directive
+# for the included file is a "magic comment" that should be obviousm.
+
+# THE FLOATING / TILING DRAG MODIFIER ============================ #
+#
+# In mode "default", this key facilitates move and resize using the
+# mouse without having to precisely position the mouse pointer on
+# window edges. It's set in file 'cfg/keys00'.
+
+# = THE 1ST & 2ND MODE SELECT KEYS =============================== #
+
+# The 1st mode key toggles between Primary and AltPrimary modes. When
+# it is in either mode it toggles to the other.  In default mode it
+# selects Primary mode.
+
+# The 2nd mode key toggles between Secondary and AltSecondary
+# modes. When it is in either mode it toggles to the other. In default
+# mode, it selects Secondary mode.
+
+#! The space bar, without exception, switches from any other mode to
+#! default mode.
+
+# COMMENTS & ONLINE DOCUMENTATION ================================ #
+
+# Comments in bash begin with hash (octothorpe) and it's a safe bet
+# that the next character is whitepace or another hash. These comments
+# will be stripped from the deployed config file to yield the digest,
+# online documentation for bindings and modes. In order to keep some
+# commments in the digest, the hash at the beginning is followed by an
+# exclamation mark (shriek).
+
+# I3BAR BINDING MODE INDICATOR  ==================================== #
+
+# If you don't want the i3bar there is the alternative Binding Mode
+# Indicator, discussed in the next section. The i3bar section in this
+# file lets you configure the appearance or absence of the binding mode
+# indicator, workspace tabs and i3status components of the i3bar.
+
+# When you enter a mode other than default, a black-on-yellow Binding
+# Mode Indicator appears alongside the workspaces on the i3bar. The
+# text is actually the truenane of the mode. The truenames of modes
+# must be unique.
+
+# In order to decode the json sent from the subscription to binding
+# events the :mode: is enclosed in colons; it is in effect a static
+# truename. The :mode: is followed by a list of bound keys arrnged to
+# jog the memory eg hjkl is a cursor keypad. I made a fuss about
+# :mode: being static because the key lists will ineviably change.
+
+# BE CAREFUL! The i3 user's guide $4.6 "Binding Modes" shows that the
+# allowed special characters are colon and square brackets, and that
+# there are no enclosing quotes.
+
+# ALTERNATIVE BINDING MODE INDICATOR ============================= #
+
+# The 'config' function in i3-config-bash provides code that posts a
+# notification (notify-send) in response to the binding event that is
+# propagated when the mode is changed.
+
+# THE MODES (at last!) =========================================== #
+
+# Ruler is 48 chars ->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+set $Primary            :SingleTap1st:  q w ex ty a s d fmr gh jk l n z vb
+set $AltPrimary         :DoubleTap1st:  q ty z
+
+set $Dismiss            :dismiss:         s vw zxca b 0
+set $FloatingGroups     :floating groups: q ua s
+set $OutputGroups       :output groups:   q zxc a s
+
+set $cursorFocus        :focus:    ty uiop asd fg hjkl zxc mr
+set $cursorMove         :move:     w t uiop asd hjkl zx ce bv fr
+set $cursorResize       :resize:   t uiop asdg hjkl fm
+set $Layouts            :layouts:  dst rc ewm io
+
+set $Settings           :settings: s
+set $SoundSettings      :sound:    lu b fsr
+
+set $AlsaFront          :alsafront: Press E R C listen
+set $AlsaSide           :alsaside:  Press E R   listen
+set $AlsaRear           :alsarear:  Press E R C listen
+
+set $Zmode              :z mode: self-insert, except space
+
+#
+# The 1st mode key displaces an unshifted character. Sometimes you
+# want to type that character, other times you hit the mode key
+# intending to type the character.
+#
+# It's called the Z mode because Z is adjacent to a recommended mode
+# sect key position, the one to its left that types backslash.
+#
+
+mode "$Zmode" {
+    #! Insert a backslash (or other character except space), optionally type more characters, or type nothing, space returns to default mode.
+    bindsym space mode default
+}
+
+mode "$Primary" {
+    #! Dismiss (kill) singly or in batches.
+    bindsym q mode "$Dismiss"
+
+    #! Move a workspace to an output using a dmenu to choose both workspace and output.
+    bindsym w exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            move_workspace_to_output_interactive
+
+    #! [ex]change == swap two workspaces using a dmenu to choose both names-or-numbers.
+    bindsym e exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash swap_two_workspaces_by_reference1
+    #! [ex]change == swap the contents of two containers using a dmenu to chose both marks.
+    bindsym x exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash swap_two_containers_by_value
+
+    #! Toggle the container between floating or tiling.
+    bindsym t floating toggle
+    #! Toggle the focus to work on floating or tiling.
+    bindsym y mode default, focus mode_toggle;
+
+    #! [A]ttention! Visit a workspace with a red tab. NB mpv triggers this when mpv starts.
+    bindsym a [urgent="latest"] focus
+
+    #! Access to specific settings modes like PictureSettings and SoundSettings.
+    bindsym s mode "$Settings"
+
+    #! Command prompt and mini-menu.
+    bindsym d exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash qmenu show
+
+    #! Cursor modes: focus move resize
+    bindsym f mode "$cursorFocus"
+    bindsym m mode "$cursorMove"
+    bindsym r mode "$cursorResize"
+
+    #! embiGGen windows to fill one or all monitor screens.
+    bindsym      g floating disable, fullscreen toggle;
+    bindsym $fgm+g floating disable, fullscreen toggle global;
+    bindsym      h nop
+    # DANGER WILL ROBINSON!!! The modifier is there to make it harder
+    # to invoke by accident. Standard i3 uses mod+f and mod+g, sway
+    # uses mod+f and mod+shift+f. This config associates the f key
+    # with focus (fmr triplet) hence g and $fgmod+g for embiggen. If
+    # you don't like $fgm+g, use h instead. See cfg/keys00 for the
+    # $fgm ([F]ullscreen[G]lobal[M]odifier} setting.
+
+    #! Rotate workspaces view in front of a backdrop. EXPERIMENTAL.
+    bindsym k  exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash rotate backward
+    bindsym j exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash rotate forward
+
+    #! How containers are arranged in workspaces.
+    bindsym l mode "$Layouts"
+
+    #! This is how to type a character when the usual unshifted key is
+    #! now the 1st mode key. It must be done for Primary and AltPrimary
+    #! modes.
+    bindsym z mode "$Zmode", focus;
+    bindsym c nop
+
+    bindsym v split v
+    bindsym b split h
+
+    #! Change the (N)ame or (N)umber of a named-or-numbered workspace.
+    bindsym n exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            rename_workspace
+
+    # Control-X is an Emacs command prefix, Suppose you type it
+    # forgetting that you must hit space to enter default mode.  This
+    # sneaky binding catches control-x, enters default mode, then
+    # restores the control-x using xdotool.
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    #! Toggle between Primary and AltPrimary modes.
+    bindcode --release "$_1st" mode "$AltPrimary"
+    bindcode --release "$_2nd" mode "$Secondary"
+
+    bindsym space mode default
+}
+
+mode "$AltPrimary" {
+
+    #! Dismiss (kill) singly or in batches.
+    bindsym q mode "$Dismiss"
+
+    #! Open a terminal, preceded by a horizontal or vertical split.
+    bindsym t mode default, split h, \
+            exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash terminal xfce4
+    bindsym y mode default, split v, \
+            exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash terminal xfce4
+
+    #! This is how to type a character when the usual unshifted key is
+    #! now the 1st mode key. It must be done for Primary and AltPrimary
+    #! modes.
+    bindsym z mode "$Zmode", focus;
+
+    #! Emacs users who forget to return to default mode before saving might lose work so this attempts to save the day. Vi users might want to substitute C-x with a colon.
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    #! Toggle between AltPrimary and Primary modes.
+    bindcode --release "$_1st" mode "$Primary"
+    bindcode --release "$_2nd" mode "$Secondary"
+
+    bindsym space mode default
+}
+
+mode "$FloatingGroups" {
+    #! Dismiss containers in groups defined on-the-fly
+
+    #! Toggling a tiled by default container to floating marks it for deletion.
+
+    bindsym t floating toggle
+
+    #! Dismiss all tiled by default containers subsequently set to floating (recent change request).
+    bindsym u [floating_from="user"] kill
+    bindsym a [floating_from="auto"] kill
+
+    #! Dismiss a single container.
+    bindsym s kill
+
+    bindsym q mode "$Dismiss"
+    bindsym space mode default
+}
+
+mode "$OutputGroups" {
+    #! Dismiss all containers in all workspaces on the specified output(s).
+
+    #! Dismiss all containers in the specified output and re-enter dismiss mode.
+    bindsym z mode "$Dismiss", exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash dismiss_output HDMI2;
+    bindsym x mode "$Dismiss", exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash dismiss_output HDMI1;
+    bindsym c mode "$Dismiss", exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash dismiss_output VGA1;
+    #! Dismiss all containers in [a]ll outputs and re-enter dismiss mode.
+    bindsym a mode "$Dismiss", exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash dismiss_output all
+
+    #! Dismiss a single container.
+    bindsym s kill
+
+    bindsym q mode "$Dismiss"
+    bindsym space mode default
+}
+
+
+mode "$Dismiss" {
+    #! Dismiss containers singly or in batches.
+
+    #! Dismiss a single container AND return to default mode.
+    bindsym s kill, mode default;
+
+    #! Dismiss all containers in the currently focused workspace.
+    bindsym v exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            dismiss_workspace_interactive current
+
+    #! Dismiss all containers in selected workspaces. Workspaces are selected from a menu and subsequently dismissed one-at-a-time to encourage the automatic removal of their associated workspace tabs.
+    bindsym w exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            dismiss_workspace_interactive menu
+
+    #! Dismiss containers in groups defined on-the-fly.
+    bindsym f mode "$Groups"
+    #! Dismiss all containers for all workspaces on the specified outputs. Two-step procedure to avoid mistakes. Press this key then choose or cancel.
+    bindsym o mode "OutputGroups"
+
+    #! Take a [b]reak, [b]lank to avoid burn-in, save power.
+    bindsym --release b mode default, \
+            exec --no-startup-id xset dpms force off;
+
+    bindsym --release l mode default, exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash session logout;
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    bindsym space mode default
+}
+
+mode "$cursorFocus" {
+
+    #! 3
+    bindsym q nop
+    bindsym w nop
+    bindsym e nop
+
+    #! Toggle a container between floating|tiling.
+    bindsym t floating toggle
+    #! Toggle the focus to work on tiled or floating.
+    bindsym y mode default, focus mode_toggle;
+
+    # Focus an adjacent workspace, wrap around within an output.
+    bindsym u workspace prev_on_output
+    bindsym i workspace next_on_output
+    #! Focus an adjacent workspace, wrap around across all outputs.
+    bindsym o workspace prev
+    bindsym p workspace next
+    #! Focus [A]dult, [S]on or [D]aughter.
+    bindsym a focus parent
+    bindsym s focus child
+    bindsym d focus child
+    #! Focus <mumble>
+    bindsym f focus prev
+    bindsym g focus next
+    #! vi-style cursor keys for focus.
+    bindsym $h focus left
+    bindsym $j focus down
+    bindsym $k focus up
+    bindsym $l focus right
+
+    #! Focus an unspecified container on specified output, e.g. zxc = left middle right
+    bindsym z focus output HDMI2, \
+            exec --no-startup-id i3-config-bash qmenu number=2;
+    bindsym x focus output HDMI1, \
+            exec --no-startup-id i3-config-bash qmenu number=1;
+    bindsym c focus output VGA1, \
+            exec --no-startup-id i3-config-bash qmenu number=0;
+
+    #! 3
+    bindsym v nop
+    bindsym b nop
+    bindsym n nop
+
+    #! Direct transitions between {focus move resize} modes.
+    bindsym m mode "$cursorMove"
+    bindsym r mode "$cursorResize"
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    bindsym space mode default
+}
+
+# The focus, move, resize modes use common cursor key bindings.
+mode "$cursorMove" {
+
+    bindsym q nop
+
+    #! Move a named-or-numbered WORKSPACE to an OUTPUT interactively. Select the workspace aand output in either order using a menu.
+    bindsym w exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            move_workspace_to_output_interactive
+
+    #! Toggle a container between floating|tiled.
+    bindsym t floating toggle
+    bindsym y nop
+
+    #! Focus an adjacent workspace, wrap around within an output.
+    bindsym u workspace prev_on_output
+    bindsym i workspace next_on_output
+    #! Focus an adjacent workspace, wrap around across all outputs.
+    bindsym o workspace prev
+    bindsym p workspace next
+
+    #! Move a CONTAINER to an OUTPUT.
+    bindsym a mode default, move container to output HDMI2;
+    bindsym s mode default, move container to output HDMI1;
+    bindsym d mode default, move container to output VGA1;
+
+    bindsym g nop
+
+    #! vi-style cursor keys for movement.
+    bindsym $h move left
+    bindsym $j move down
+    bindsym $k move up
+    bindsym $l move right
+
+    #! Move a container to an adjacent workspace.
+    bindsym z move container to workspace prev
+    bindsym x move container to workspace next
+
+    #! Move a container to a named-or-numbered workspace but do not move.
+    bindsym c exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            move_container_to_workspace
+
+    #! Move a container to a named-or-numbered workspace and follow it there.
+    bindsym e exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            follow_container_to_workspace
+
+
+    bindsym b split h
+    bindsym v split v
+
+    bindsym n nop
+    bindsym m nop
+
+    #! Direct transition between {focus move resize} modes.
+    bindsym f mode "$cursorFocus"
+    bindsym r mode "$cursorResize"
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    bindsym space mode default
+}
+
+mode "$cursorResize" {
+    #! Resize.
+
+    bindsym q nop
+    bindsym w nop
+    bindsym e nop
+
+    bindsym t floating toggle
+    bindsym y nop
+
+    #
+    bindsym u workspace prev_on_output
+    bindsym i workspace next_on_output
+    bindsym o workspace prev
+    bindsym p workspace next
+
+    bindsym a floating enable, \
+            resize set 50 ppt 50 ppt, move position center;
+    bindsym s floating enable, \
+            resize set 70 ppt 70 ppt, move position center;
+    bindsym d floating enable, \
+            resize set 90 ppt 90 ppt, move position center;
+    bindsym g floating enable, \
+            resize set 100 ppt 96 ppt, move position center;
+
+    #! vi-style cursor keys for movement.
+    bindsym $h resize shrink width 10 px or 5 ppt
+    bindsym $j resize shrink height 10 px or 5 ppt
+    bindsym $k resize grow height 10 px or 5 ppt
+    bindsym $l resize grow width 10 px or 5 ppt
+
+    #! Direct transition between {focus move resize} modes.
+    bindsym f mode "$cursorFocus"
+    bindsym m mode "$cursorMove"
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    bindsym space mode default
+}
+
+mode "$Layouts" {
+    #! How containers are arranged in workspaces.
+
+    bindsym d mode default, layout default;
+    bindsym s mode default, layout stacking;
+    bindsym t mode default, layout tabbed;
+
+    #! Pivot. With A focused, change the column AB into the [r]ow AB.
+    bindsym r mode default, \
+            focus down, split h, focus up, move down, move left;
+    #! Pivot. With A focused, change the row AB into the [c]olumn AB.
+    bindsym c mode default, \
+            focus right, split v, focus left, move right, move up ;
+
+    #! Workspace i3 is a "waiting room" for entry to the scratchpad.
+    bindsym e [workspace="i3" instance="xfce4-terminal" title="Emacs inside"] move scratchpad
+    bindsym w [workspace="i3" instance="xterm" title="*watcher"] move scratchpad
+    bindsym h [workspace="i3" instance="xterm" title="*headend"] move scratchpad
+
+    bindsym i move scratchpad
+    bindsym o scratchpad show
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    bindsym space mode default
+}
+
+# ================================================================ #
+
+mode "$Settings" {
+    # The 's' key is available for a direct jump to here but I prefer
+    # the familiar Control Panel or Settings (Manager) hierarchy.
+    bindsym s mode "$SoundSettings"
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+    bindsym space mode default
+}
+
+mode "$SoundSettings" {
+    # Loopback. Source (20kHz) smartphone audio, at cinema / theatre
+    # quality. Input 3.5 mm line in routed back out from PC over USB
+    # to Nobsound 50W+50W amplifier and Ditton speakers. Loud and
+    # clear. If I don't unload the module first it loads every time.
+    bindsym l exec --no-startup-id \
+            pacmd load-module module-loopback latency_msec=10
+    bindsym u exec --no-startup-id \
+            pacmd unload-module module-loopback
+    # Show a list of bluetooth beacons and devices so you can route
+    # bluetooth to various headphons, amplifiers etc. I put this on
+    # workspace 'au' (audio) alongside pavucontrol to help me trace
+    # and route audio.
+    bindsym b exec --no-startup-id blueman-manager
+
+    #! Test front speakers.
+    bindsym f mode "$AlsaFront"
+    #! Test side speakers.
+    bindsym s mode "$AlsaSide"
+    #! Test rear speakers.
+    bindsym r mode "$AlsaRear"
+
+    bindsym Control+x mode default, \
+            exec --no-startup-id xdotool key ctrl+x
+
+    bindsym space mode default
+}
+
+#
+# Speaker Check modes
+#
+# I only have 2 channel stereo but I want it the correct way round.
+# Ubuntu supplies 8 handy mono files named by position. Type two
+# letters e,g SL for Side Left.
+#
+# Compare and contrast doing the same front speaker tests as secondary
+# mode commands {fl,fr,fc,fe} in cfg/apps00. It's easy to define such
+# conmands but it's quicker to use the bindings here.
+#
+# Writing nested modes like this is fun, but commands in apps00 are
+# the preferred approach.
+#
+
+mode "$AlsaFront" {
+    #! Say the full names of the front speakers.
+    bindsym l exec --no-startup-id \
+            /usr/bin/play -c 2 -r 22050 /usr/share/sounds/alsa/Front_Left.wav remix 1 0
+    bindsym r exec --no-startup-id \
+            /usr/bin/play -c 2 -r 22050 /usr/share/sounds/alsa/Front_Right.wav remix 0 1
+    # "Center" speakers are usually a woofer on low-end kit so drop
+    # the sampling rate for a slowly enunciated bass voice.
+    bindsym c exec --no-startup-id \
+            /usr/bin/play -c 2 -r 16000 /usr/share/sounds/alsa/Front_Center.wav remix 1 1
+    # The letter L for left is distant from the others.  Using E for
+    # left (which is indeed to the l[e]ft of R) makes a nice cluster.
+    bindsym e exec --no-startup-id \
+            /usr/bin/play -c 2 -r 22050 /usr/share/sounds/alsa/Front_Left.wav remix 1 0
+
+    bindsym s mode "$SoundSettings"
+    bindsym space mode default
+}
+
+mode "$AlsaSide" {
+    #! Say the full names of the side speakers.
+    bindsym l nop
+    bindsym r nop
+
+    #! Direct jump to ...
+    bindsym s mode "$SoundSettings"
+    bindsym space mode default
+    }
+
+mode "$AlsaRear" {
+    #! Say the full names of the rear speakers.
+    bindsym l nop
+    bindsym r nop
+    bindsym c nop
+
+    bindsym s mode "$SoundSettings"
+    bindsym space mode default
+    }
+
+# ================================================================ #
+
+set $Secondary          :SingleTap2nd:
+set $AltSecondary       :DoubleTap2nd:
+
+#
+# The root of a fully populated tree of 26 branches and 36 leaves
+# representing two keystrokes [a-z][a-z] or [a-z][0-9].
+#
+mode "$Secondary" {
+    bindsym q mode "z_q"
+    bindsym w mode "z_w"
+    bindsym e mode "z_e"
+    bindsym r mode "z_r"
+    bindsym t mode "z_t"
+    bindsym y mode "z_y"
+    bindsym u mode "z_u"
+    bindsym i mode "z_i"
+    bindsym o mode "z_o"
+    bindsym p mode "z_p"
+    bindsym a mode "z_a"
+    bindsym s mode "z_s"
+    bindsym d mode "z_d"
+    bindsym f mode "z_f"
+    bindsym g mode "z_g"
+    bindsym h mode "z_h"
+    bindsym j mode "z_j"
+    bindsym k mode "z_k"
+    bindsym l mode "z_l"
+    bindsym z mode "z_z"
+    bindsym x mode "z_x"
+    bindsym c mode "z_c"
+    bindsym v mode "z_v"
+    bindsym b mode "z_b"
+    bindsym n mode "z_n"
+    bindsym m mode "z_m"
+
+    bindcode --release $_2nd mode "$AltSecondary"
+    bindsym space mode default
+}
+
+
+mode "$AltSecondary" {
+    # Mnemonics: Mark, eXchange, Workspace, Container.  This value is
+    # retrieved after the digits have been read in a state transition
+    # sequence along one path.
+    bindsym m mode x_h,  exec --no-startup-id echo "m" > /dev/shm/"$USER"/i3/state/head;
+    bindsym x mode x_h,  exec --no-startup-id echo "x" > /dev/shm/"$USER"/i3/state/head;
+    bindsym w mode x_t0, exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head;
+    bindsym c mode x_t0, exec --no-startup-id echo "c" > /dev/shm/"$USER"/i3/state/head;
+
+    bindcode --release $_2nd mode "$Secondary"
+    bindsym space mode default
+}
+
+#
+# Default mode absolutely minimal bindings using dedicated keys.
+#
+bindsym F5 mode x_h, \
+        exec --no-startup-id echo "m" > /dev/shm/"$USER"/i3/state/head ;
+bindsym F6 mode x_h, \
+        exec --no-startup-id echo "x" > /dev/shm/"$USER"/i3/state/head ;
+# Workspaces 010 through 099 with ONE leading zero and TWO keypresses.
+bindsym F7 mode x_t0, \
+        exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head ;
+bindsym F8 mode x_t0, \
+        exec --no-startup-id echo "c" > /dev/shm/"$USER"/i3/state/head ;
+# Workspaces 000 through 009 with TWO leading zeroes and ONE keypress.
+# Since we do not recognise workspaces with these numbers, commands do
+# other more interesting things.
+bindsym F9 mode x_u0, \
+        exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head ;
+
+# ================================================================ #
+
+# $Secondary: Forward the two single characters $1 $2 like this:
+set $send mode default, exec --no-startup-id ~/local/i3/bin/i3-config-bash
+# $AltSecondary: Forward the three digit value $1 like this:
+set $emit mode default, exec --no-startup-id ~/local/i3/bin/i3-config-bash
+
+# ================================================================ #
+
+# This example of including a file uses EllaTheCat's method in which
+# text is inserted at the start of the line containing a magic comment
+# consisting of three hashes, the word INSERT, an underscore, a label
+# (CFG03 or CFG06), an underscore, the word HERE, and three hashes.
+
+###INSERT_CFG03_HERE###
+
+###INSERT_CFG06_HERE###
+
+# This example yields files derived from 'config' (this file) by
+# 'make' as follows:
+
+# config.inc = config after inserting into config from magic comments
+# config.tmp - config.inc after stream editing output names etc
+
+# ================================================================ #
+
+#! My right hand muscle memory binding for dropdown terminal, ymmv.
+bindsym control+Delete exec --no-startup-id \
+        "~/local/i3/bin/i3-config-bash emacsinside toggle"
+
+# ================================================================ #
+
+#
+# I3BAR SETTINGS BEGIN HERE.
+#
+
+# From right to left:
+# 1) Show system indicators - i3status
+# 2) Show cursor xy, sensors - i3-status
+# 3) Show this output's workspaces - i3bar
+# 4) Show the current binding mode - i3bar
+
+bar {
+    # Show the bar on these outputs.
+    output HDMI2
+    output HDMI1
+    i3bar_command /usr/bin/i3bar
+    # A wrapper around "i3status" may be easier than mastering the
+    # dot-i3status.conf syntax. Specify the wrapper script in the
+    # i3bar declaration.
+    status_command ~/local/i3/bin/i3-status-wrapper -f ~/.i3status.conf
+
+    # The long-standing default size is 11, to match the status bar,
+    # but size 12 is better for the binding mode indicator.
+    font pango:DejaVu Sans 12
+    position bottom
+
+    # EllaTheCat strongly recommends that the binding mode indicator
+    # is enabled here and that it stands out with a bright background.
+    binding_mode_indicator yes
+    colors {
+        binding_mode #ffff00 #ffff00 #000000
+    }
+    # These are better enabled, but you may disable them without any
+    # side effect on the binding mode indicator.
+    workspace_buttons yes
+    # The long-standing default squeezes the buttons into minimum
+    # space, this value gives a nice even look.
+    workspace_min_width 40
+
+    # Mouse buttons that can take effect when the pointer is in the
+    # i3bar area. Button 1 selects workspace tabs so is off-limits.
+    bindsym button2 nop
+    bindsym button3 nop
+    # The MS mouse wheel 'feel' on my mouse is especially grotty.
+}
+
+#
+# I3BAR SETTINGS END HERE.
+#
+
+# I3WM INCLUDES ================================================== #
+
+# These two examples use the i3wm 4.20 (or later) method of including
+# files at runtime. This makes things more difficult compared to the
+# EllaTheCat method, but it's important to show it can be used and
+# what are the consequnces.
+
+# i3 4.20 include
+# assign / for_window / workspace declarations
+include ~/local/i3/cfg/cfg07
+
+# i3 4.20 include
+# initialisations performed by executing scripts and apps.
+include ~/local/i3/cfg/cfg08
+
+# MORE REGARDING SECONDARY MODE ================================== #
+
+# Commands of length 2 require 3 keystrokes, 50% overhead
+# (1) Press Secondary,
+# (2) Press a lowercase letter,
+# (3) Press a lowercase letter OR a digit.,
+
+# Commands of length 4 require 6 keystrokes, also 50% overhead, but
+# see how (1)(2) can become a fast double tap, and how (4)(5)(6) can
+# use the numpad arrangement to advantage.
+
+# (1) Press Secondary,
+# (2) Press Secondary,
+# (3) Press a letter,
+# (4) Press a digit,
+# (5) Press a digit.
+# (6) Press a digit.
+
+# Step (3) is the weak point, if we send the letter from the eponymous
+# key. Using 4 keys adjacent to the numpad minimises finger movement,
+# hence there are suitble bindings in $AltSecondary mode.
+
+# If you are prepared to use dedicated keys then you can combine steps
+# (1)(2)(3) into one keystroke, hence there are "dedicated F-keys" F5
+# through F9 (more or less) adjacent to the top row of the numpad,
+# operable in default mode.
+
+# SECONDARY COMMAND 'zz' LISTS COMMAND ALIASES and SHOWS HELP ==== #
+
+# Entering a command [a-z][a-z0-9] may result in a visit to a
+# workspace whose name bears some relation to an application,
+# e.g. an app that occupies over half the workspace area:
+
+# f3 = firefox window 3
+# e2 = emacs window 2
+# sy = synaptics
+# gm = gmail
+# tb = thunderbird
+
+# If the workspace so entered is empty, the associated application
+# is launched.
+
+# If the workspace so entered is empty, and there is no associated
+# application, a placeholder container is added so the user can add
+# more containers to the workspace without the system tidying up
+# otherwise empty containers.
+
+# How does the system recognise an "associated" application? The file
+# "cfg/apps00" holds two bash associative arrays, $wsapps and
+# $nonwsapps. $ws_apps is the set of commands that exhibit the "focus
+# and if required, launch" behaviour just described, $not_wsapps is
+# the set of commands that 'do something", everything else (commands in
+# neither array) exhibits the placeholder behaviour.
+
+# The file "i3-focus-app-by-alias" implements the aforementioned
+# logic. It has a history. It is peppered with comments because
+# frankly it is fragile as f-ck. I've grown to like the notify-send
+# pous that tell me what it's thinking.
+
+# START SEQUENCE ================================================= #
+
+exec_always --no-startup-id "~/local/i3/bin/i3-config-bash conform_workspaces"
+exec_always --no-startup-id "~/local/i3/bin/i3-config-bash backdrop londoneye"
+
+exec_always --no-startup-id "~/local/i3/bin/i3-config-bash filewatcher restart"
+exec_always --no-startup-id "~/local/i3/bin/i3-config-bash   wswatcher restart"
+
+#
+# EllaTheCat 2022-10-23
+#

@@ -1,0 +1,208 @@
+#!/bin/bash
+# -*- Mode: Shell-script -*-
+#
+
+
+#
+# Apply a 3 digit mark to a container.
+#
+function markwindow
+{
+    case "$1" in
+        (clear)
+            # To ensure one container mark only, remove any existing
+            # container mark before setting another. Get the list of
+            # this contaimer's marks that are 3 digit numbers.
+            marks=$(i3-msg -t get_tree | \
+                        jq '.. | select(.type?) | select(.focused==true).marks' | \
+                        grep -E "[0-9]{3}" | sed 's/"//g')
+            # Remove JSON indentation and separator commas from the
+            # list of strings containing 3 digit numbers.
+            for mark in ${marks}; do
+                mark=${mark:3:3}
+                mark=${mark/,/}
+                echo "unmark $mark"
+                i3-msg "unmark $mark"
+            done
+            ;;
+        (auto)
+            # Apply a 3 digit mark that looks random to a container
+            # that is confirmed to be unmarked. Collision with othr
+            # container marks is mitigated by a recursive call after
+            # the attempt, which immediately fails after a success.
+            marks=$(i3-msg -t get_tree | \
+                        jq '.. | select(.type?) | select(.focused==true).marks' | \
+                        grep -E "[0-9]{3}")
+            if [ "$(echo "${marks}" | grep -E -c "[0-9]{3}")" -eq 0 ]; then
+                mark="$(shuf -i 1032-1999 -n 1)"
+                mark="${mark:1:3}"
+                echo "mark $mark"
+                i3-msg "mark ${mark}"
+                # DANGER WILL ROBINSON!!!
+                ### ${FUNCNAME[0]} auto
+            fi
+            ;;
+        ([0][1-2][0-9]|[0][3][01])
+            # Reserved marks 010..031, unused i3-three-digits z? commands,
+            ;;
+        ([0][0][0-9])
+            # Copypaste the "auto" case, note that values 0 to 31
+            # decimal are reserved with leading zeroes padding to
+            # width 3, apply a reserved value in the range 0-9.
+            marks=$(i3-msg -t get_tree | \
+                        jq '.. | select(.type?) | select(.focused==true).marks' | \
+                        grep -E "[0-9]{3}")
+            if [ "$(echo "${marks}" | grep -E -c "[0-9]{3}")" -eq 0 ]; then
+                mark="$1"
+                i3-msg "mark ${mark}"
+            fi
+            ;;
+        (*)
+            # Do nothing silently, it's enough.
+            return
+            ;;
+    esac
+}
+
+#
+# Update a "workspace mark" to one of any of the containers in a workspace.
+# - The target container choice is arbitrary for to or more containers.
+# - Called from a subscription to the i3-msg workspace event.
+#
+function update
+{
+    # The mark to be applied is the name of the focused workspace.
+    cws=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name')
+    # Pending improved jq skills, the grep pipeline stages are:
+    # 1) Reject any 3 digit mark to avoid 2 digit substring matches.
+    # 2) Accept any 'alpha alpha' or 'alpha digit' or 'digit digit' mark.
+    # Consequently this also protects 3 digit marks from deletion here.
+    marks=$(i3-msg -t get_tree | \
+                jq '.. | select(.type?) | select(.focused==true).marks' | \
+                grep -v -E "[0-9]{3}" | grep -E "[a-z0-9][0-9]" | \
+                sed 's/"//g')
+    # Don't have nightmares, but there are bash<->json shenanigans going
+    # on here with double dquotes ->""<- that shellcheck exposes.
+    cwsfound="n"
+    for mark in $marks
+    do
+        mark=${mark:0:2}
+        if [ "${mark}" != "${cws}" ]; then
+            # Remove any mark that doesn't match the current workspace
+            # from whatever window has it (marks are unique).
+            echo "removing $mark from $marks"
+            i3-msg "[con_mark=${mark}] unmark $mark"
+        else
+            cwsfound="y";
+        fi
+    done
+    if [ "${cwsfound}" = "n" ]; then
+        # Apply the new workspace mark to the focused window.
+        echo "adding $cws to $marks"
+        i3-msg "[con_id=\"__focused__\"] mark --add ${cws}"
+    fi
+}
+
+#
+# Refresh the workspac emark (after unintended deletion).
+#
+function refresh
+{
+    # The i3 back_and_forth logic drives me crazy, I've got jq so I
+    # can get stuff done.
+    cws=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name')
+    # Enaure that the current and temporary workspaces are distinct.
+    tws=x0
+    if [ "$cws" = "$tws" ] ; then tws=x1; fi
+    # This creates multiple workspace events. Containers are restored
+    # to their starting positions, with correct workspace marks. The
+    # delay is there to ensure i3 can't optimise away.
+    i3-msg "move container to workspace \"${tws}\", workspace \"${tws}\";"
+    sleep 3
+    i3-msg "move container to workspace \"${cws}\", workspace \"${cws}\";"
+}
+
+#
+# On a workspace change event, update the workspace marks.
+#
+function subscribe
+{
+    # This stops previous subscriptions, silently.
+    i3-marks unsubscribe > /dev/null 2>&1
+    # shellcheck disable=SC2034,SC2162
+    i3-msg -t subscribe -m '[ "workspace" ]' | \
+        while read -r line
+        do
+            # Call the function from the script, not directly from
+            # here, because this lets us stop the subscription by
+            # killing the script.
+            i3-marks update
+        done
+}
+
+#
+# Unsubscribe from all subscriptions.
+#
+function unsubscribe
+{
+    pkill -f 'i3-marks update'
+    pkill -f 'i3-msg -t subscribe'  # be careful.
+}
+
+#
+# Do housekeeping at start of a session.
+#
+function tidyup
+{
+    case "$1" in
+        (terminal)
+            i3-msg "[class=\"(?i)xfce4-terminal\"] unmark"
+        ;;
+        (editor)
+             i3-msg "[class=\"(?i)emacs :\"] unmark"
+        ;;
+        (browser)
+             i3-msg "[instance=\"Navigator\" class=\"firefox\"] unmark"
+             i3-msg "[class=\"google-chrome\"] unmark"
+            ;;
+        (all)
+            ${FUNCNAME[0]} terminal
+            ${FUNCNAME[0]} editor
+            ${FUNCNAME[0]} browser
+            ;;
+    esac
+}
+
+#
+# Start here.
+#
+
+case "$1" in
+    (clear|auto)
+        # 3 digit marks
+        markwindow "$1"
+        ;;
+    ([0][0-2][0-9]|[0][3][01])
+        # 3 digit marks 000...031
+        markwindow "$1"
+        ;;
+    (update)
+        "$1"
+        ;;
+    (refresh)
+        "$1"
+        ;;
+    (subscribe)
+        "$1"
+        ;;
+    (unsubscribe)
+        "$1"
+        ;;
+    (unmarkworkspaces)
+        "$1"
+        ;;
+  esac
+
+#
+# Done.
+#

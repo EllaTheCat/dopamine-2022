@@ -1,0 +1,1112 @@
+# -*- Shell-script -*-
+#
+# etc i3 configuration file
+# etc isn't et cetera, etc is EllaThcat!
+#
+# Pass the result of pressing two keys to i3-config bash $1 $2
+#
+
+# Row 3
+
+mode "z_q" {
+    bindsym q $send q q
+    bindsym w $send q w
+    bindsym e $send q e
+    bindsym r $send q r
+    bindsym t $send q t
+    bindsym y $send q y
+    bindsym u $send q u
+    bindsym i $send q i
+    bindsym o $send q o
+    bindsym p $send q p
+    bindsym a $send q a
+    bindsym s $send q s
+    bindsym d $send q d
+    bindsym f $send q f
+    bindsym g $send q g
+    bindsym h $send q h
+    bindsym j $send q j
+    bindsym k $send q k
+    bindsym l $send q l
+    bindsym z $send q z
+    bindsym x $send q x
+    bindsym c $send q c
+    bindsym v $send q v
+    bindsym b $send q b
+    bindsym n $send q n
+    bindsym m $send q m
+
+    bindsym 0 $send q 0
+    bindsym 1 $send q 1
+    bindsym 2 $send q 2
+    bindsym 3 $send q 3
+    bindsym 4 $send q 4
+    bindsym 5 $send q 5
+    bindsym 6 $send q 6
+    bindsym 7 $send q 7
+    bindsym 8 $send q 8
+    bindsym 9 $send q 9
+
+    bindsym space mode default
+}
+
+mode "z_w" {
+    bindsym q $send w q
+    bindsym w $send w w
+    bindsym e $send w e
+    bindsym r $send w r
+    bindsym t $send w t
+    bindsym y $send w y
+    bindsym u $send w u
+    bindsym i $send w i
+    bindsym o $send w o
+    bindsym p $send w p
+    bindsym a $send w a
+    bindsym s $send w s
+    bindsym d $send w d
+    bindsym f $send w f
+    bindsym g $send w g
+    bindsym h $send w h
+    bindsym j $send w j
+    bindsym k $send w k
+    bindsym l $send w l
+    bindsym z $send w z
+    bindsym x $send w x
+    bindsym c $send w c
+    bindsym v $send w v
+    bindsym b $send w b
+    bindsym n $send w n
+    bindsym m $send w m
+
+    bindsym 0 $send w 0
+    bindsym 1 $send w 1
+    bindsym 2 $send w 2
+    bindsym 3 $send w 3
+    bindsym 4 $send w 4
+    bindsym 5 $send w 5
+    bindsym 6 $send w 6
+    bindsym 7 $send w 7
+    bindsym 8 $send w 8
+    bindsym 9 $send w 9
+
+    bindsym space mode default
+}
+
+mode "z_e" {
+    bindsym q $send e q
+    bindsym w $send e w
+    bindsym e $send e e
+    bindsym r $send e r
+    bindsym t $send e t
+    bindsym y $send e y
+    bindsym u $send e u
+    bindsym i $send e i
+    bindsym o $send e o
+    bindsym p $send e p
+    bindsym a $send e a
+    bindsym s $send e s
+    bindsym d $send e d
+    bindsym f $send e f
+    bindsym g $send e g
+    bindsym h $send e h
+    bindsym j $send e j
+    bindsym k $send e k
+    bindsym l $send e l
+    bindsym z $send e z
+    bindsym x $send e x
+    bindsym c $send e c
+    bindsym v $send e v
+    bindsym b $send e b
+    bindsym n $send e n
+    bindsym m $send e m
+
+    bindsym 0 $send e 0
+    bindsym 1 $send e 1
+    bindsym 2 $send e 2
+    bindsym 3 $send e 3
+    bindsym 4 $send e 4
+    bindsym 5 $send e 5
+    bindsym 6 $send e 6
+    bindsym 7 $send e 7
+    bindsym 8 $send e 8
+    bindsym 9 $send e 9
+
+    bindsym space mode default
+}
+
+mode "z_r" {
+    bindsym q $send r q
+    bindsym w $send r w
+    bindsym e $send r e
+    bindsym r $send r r
+    bindsym t $send r t
+    bindsym y $send r y
+    bindsym u $send r u
+    bindsym i $send r i
+    bindsym o $send r o
+    bindsym p $send r p
+    bindsym a $send r a
+    bindsym s $send r s
+    bindsym d $send r d
+    bindsym f $send r f
+    bindsym g $send r g
+    bindsym h $send r h
+    bindsym j $send r j
+    bindsym k $send r k
+    bindsym l $send r l
+    bindsym z $send r z
+    bindsym x $send r x
+    bindsym c $send r c
+    bindsym v $send r v
+    bindsym b $send r b
+    bindsym n $send r n
+    bindsym m $send r m
+
+    bindsym 0 $send r 0
+    bindsym 1 $send r 1
+    bindsym 2 $send r 2
+    bindsym 3 $send r 3
+    bindsym 4 $send r 4
+    bindsym 5 $send r 5
+    bindsym 6 $send r 6
+    bindsym 7 $send r 7
+    bindsym 8 $send r 8
+    bindsym 9 $send r 9
+
+    bindsym space mode default
+}
+
+mode "z_t" {
+    bindsym q $send t q
+    bindsym w $send t w
+    bindsym e $send t e
+    bindsym r $send t r
+    bindsym t $send t t
+    bindsym y $send t y
+    bindsym u $send t u
+    bindsym i $send t i
+    bindsym o $send t o
+    bindsym p $send t p
+    bindsym a $send t a
+    bindsym s $send t s
+    bindsym d $send t d
+    bindsym f $send t f
+    bindsym g $send t g
+    bindsym h $send t h
+    bindsym j $send t j
+    bindsym k $send t k
+    bindsym l $send t l
+    bindsym z $send t z
+    bindsym x $send t x
+    bindsym c $send t c
+    bindsym v $send t v
+    bindsym b $send t b
+    bindsym n $send t n
+    bindsym m $send t m
+
+    bindsym 0 $send t 0
+    bindsym 1 $send t 1
+    bindsym 2 $send t 2
+    bindsym 3 $send t 3
+    bindsym 4 $send t 4
+    bindsym 5 $send t 5
+    bindsym 6 $send t 6
+    bindsym 7 $send t 7
+    bindsym 8 $send t 8
+    bindsym 9 $send t 9
+
+    bindsym space mode default
+}
+
+mode "z_y" {
+    bindsym q $send y q
+    bindsym w $send y w
+    bindsym e $send y e
+    bindsym r $send y r
+    bindsym t $send y t
+    bindsym y $send y y
+    bindsym u $send y u
+    bindsym i $send y i
+    bindsym o $send y o
+    bindsym p $send y p
+    bindsym a $send y a
+    bindsym s $send y s
+    bindsym d $send y d
+    bindsym f $send y f
+    bindsym g $send y g
+    bindsym h $send y h
+    bindsym j $send y j
+    bindsym k $send y k
+    bindsym l $send y l
+    bindsym z $send y z
+    bindsym x $send y x
+    bindsym c $send y c
+    bindsym v $send y v
+    bindsym b $send y b
+    bindsym n $send y n
+    bindsym m $send y m
+
+    bindsym 0 $send y 0
+    bindsym 1 $send y 1
+    bindsym 2 $send y 2
+    bindsym 3 $send y 3
+    bindsym 4 $send y 4
+    bindsym 5 $send y 5
+    bindsym 6 $send y 6
+    bindsym 7 $send y 7
+    bindsym 8 $send y 8
+    bindsym 9 $send y 9
+
+    bindsym space mode default
+}
+
+mode "z_u" {
+    bindsym q $send u q
+    bindsym w $send u w
+    bindsym e $send u e
+    bindsym r $send u r
+    bindsym t $send u t
+    bindsym y $send u y
+    bindsym u $send u u
+    bindsym i $send u i
+    bindsym o $send u o
+    bindsym p $send u p
+    bindsym a $send u a
+    bindsym s $send u s
+    bindsym d $send u d
+    bindsym f $send u f
+    bindsym g $send u g
+    bindsym h $send u h
+    bindsym j $send u j
+    bindsym k $send u k
+    bindsym l $send u l
+    bindsym z $send u z
+    bindsym x $send u x
+    bindsym c $send u c
+    bindsym v $send u v
+    bindsym b $send u b
+    bindsym n $send u n
+    bindsym m $send u m
+
+    bindsym 0 $send u 0
+    bindsym 1 $send u 1
+    bindsym 2 $send u 2
+    bindsym 3 $send u 3
+    bindsym 4 $send u 4
+    bindsym 5 $send u 5
+    bindsym 6 $send u 6
+    bindsym 7 $send u 7
+    bindsym 8 $send u 8
+    bindsym 9 $send u 9
+
+    bindsym space mode default
+}
+
+mode "z_i" {
+    bindsym q $send i q
+    bindsym w $send i w
+    bindsym e $send i e
+    bindsym r $send i r
+    bindsym t $send i t
+    bindsym y $send i y
+    bindsym u $send i u
+    bindsym i $send i i
+    bindsym o $send i o
+    bindsym p $send i p
+    bindsym a $send i a
+    bindsym s $send i s
+    bindsym d $send i d
+    bindsym f $send i f
+    bindsym g $send i g
+    bindsym h $send i h
+    bindsym j $send i j
+    bindsym k $send i k
+    bindsym l $send i l
+    bindsym z $send i z
+    bindsym x $send i x
+    bindsym c $send i c
+    bindsym v $send i v
+    bindsym b $send i b
+    bindsym n $send i n
+    bindsym m $send i m
+
+    bindsym 0 $send i 0
+    bindsym 1 $send i 1
+    bindsym 2 $send i 2
+    bindsym 3 $send i 3
+    bindsym 4 $send i 4
+    bindsym 5 $send i 5
+    bindsym 6 $send i 6
+    bindsym 7 $send i 7
+    bindsym 8 $send i 8
+    bindsym 9 $send i 9
+
+    bindsym space mode default
+}
+
+mode "z_o" {
+    bindsym q $send o q
+    bindsym w $send o w
+    bindsym e $send o e
+    bindsym r $send o r
+    bindsym t $send o t
+    bindsym y $send o y
+    bindsym u $send o u
+    bindsym i $send o i
+    bindsym o $send o o
+    bindsym p $send o p
+    bindsym a $send o a
+    bindsym s $send o s
+    bindsym d $send o d
+    bindsym f $send o f
+    bindsym g $send o g
+    bindsym h $send o h
+    bindsym j $send o j
+    bindsym k $send o k
+    bindsym l $send o l
+    bindsym z $send o z
+    bindsym x $send o x
+    bindsym c $send o c
+    bindsym v $send o v
+    bindsym b $send o b
+    bindsym n $send o n
+    bindsym m $send o m
+
+    bindsym 0 $send o 0
+    bindsym 1 $send o 1
+    bindsym 2 $send o 2
+    bindsym 3 $send o 3
+    bindsym 4 $send o 4
+    bindsym 5 $send o 5
+    bindsym 6 $send o 6
+    bindsym 7 $send o 7
+    bindsym 8 $send o 8
+    bindsym 9 $send o 9
+
+    bindsym space mode default
+}
+
+mode "z_p" {
+    bindsym q $send p q
+    bindsym w $send p w
+    bindsym e $send p e
+    bindsym r $send p r
+    bindsym t $send p t
+    bindsym y $send p y
+    bindsym u $send p u
+    bindsym i $send p i
+    bindsym o $send p o
+    bindsym p $send p p
+    bindsym a $send p a
+    bindsym s $send p s
+    bindsym d $send p d
+    bindsym f $send p f
+    bindsym g $send p g
+    bindsym h $send p h
+    bindsym j $send p j
+    bindsym k $send p k
+    bindsym l $send p l
+    bindsym z $send p z
+    bindsym x $send p x
+    bindsym c $send p c
+    bindsym v $send p v
+    bindsym b $send p b
+    bindsym n $send p n
+    bindsym m $send p m
+
+    bindsym 0 $send p 0
+    bindsym 1 $send p 1
+    bindsym 2 $send p 2
+    bindsym 3 $send p 3
+    bindsym 4 $send p 4
+    bindsym 5 $send p 5
+    bindsym 6 $send p 6
+    bindsym 7 $send p 7
+    bindsym 8 $send p 8
+    bindsym 9 $send p 9
+
+    bindsym space mode default
+}
+
+# Row 2
+
+mode "z_a" {
+    bindsym q $send a q
+    bindsym w $send a w
+    bindsym e $send a e
+    bindsym r $send a r
+    bindsym t $send a t
+    bindsym y $send a y
+    bindsym u $send a u
+    bindsym i $send a i
+    bindsym o $send a o
+    bindsym p $send a p
+    bindsym a $send a a
+    bindsym s $send a s
+    bindsym d $send a d
+    bindsym f $send a f
+    bindsym g $send a g
+    bindsym h $send a h
+    bindsym j $send a j
+    bindsym k $send a k
+    bindsym l $send a l
+    bindsym z $send a z
+    bindsym x $send a x
+    bindsym c $send a c
+    bindsym v $send a v
+    bindsym b $send a b
+    bindsym n $send a n
+    bindsym m $send a m
+
+    bindsym 0 $send a 0
+    bindsym 1 $send a 1
+    bindsym 2 $send a 2
+    bindsym 3 $send a 3
+    bindsym 4 $send a 4
+    bindsym 5 $send a 5
+    bindsym 6 $send a 6
+    bindsym 7 $send a 7
+    bindsym 8 $send a 8
+    bindsym 9 $send a 9
+
+    bindsym space mode default
+}
+
+mode "z_s" {
+    bindsym q $send s q
+    bindsym w $send s w
+    bindsym e $send s e
+    bindsym r $send s r
+    bindsym t $send s t
+    bindsym y $send s y
+    bindsym u $send s u
+    bindsym i $send s i
+    bindsym o $send s o
+    bindsym p $send s p
+    bindsym a $send s a
+    bindsym s $send s s
+    bindsym d $send s d
+    bindsym f $send s f
+    bindsym g $send s g
+    bindsym h $send s h
+    bindsym j $send s j
+    bindsym k $send s k
+    bindsym l $send s l
+    bindsym z $send s z
+    bindsym x $send s x
+    bindsym c $send s c
+    bindsym v $send s v
+    bindsym b $send s b
+    bindsym n $send s n
+    bindsym m $send s m
+
+    bindsym 0 $send s 0
+    bindsym 1 $send s 1
+    bindsym 2 $send s 2
+    bindsym 3 $send s 3
+    bindsym 4 $send s 4
+    bindsym 5 $send s 5
+    bindsym 6 $send s 6
+    bindsym 7 $send s 7
+    bindsym 8 $send s 8
+    bindsym 9 $send s 9
+
+    bindsym space mode default
+}
+
+mode "z_d" {
+    bindsym q $send d q
+    bindsym w $send d w
+    bindsym e $send d e
+    bindsym r $send d r
+    bindsym t $send d t
+    bindsym y $send d y
+    bindsym u $send d u
+    bindsym i $send d i
+    bindsym o $send d o
+    bindsym p $send d p
+    bindsym a $send d a
+    bindsym s $send d s
+    bindsym d $send d d
+    bindsym f $send d f
+    bindsym g $send d g
+    bindsym h $send d h
+    bindsym j $send d j
+    bindsym k $send d k
+    bindsym l $send d l
+    bindsym z $send d z
+    bindsym x $send d x
+    bindsym c $send d c
+    bindsym v $send d v
+    bindsym b $send d b
+    bindsym n $send d n
+    bindsym m $send d m
+
+    bindsym 0 $send d 0
+    bindsym 1 $send d 1
+    bindsym 2 $send d 2
+    bindsym 3 $send d 3
+    bindsym 4 $send d 4
+    bindsym 5 $send d 5
+    bindsym 6 $send d 6
+    bindsym 7 $send d 7
+    bindsym 8 $send d 8
+    bindsym 9 $send d 9
+
+    bindsym space mode default
+}
+
+mode "z_f" {
+    bindsym q $send f q
+    bindsym w $send f w
+    bindsym e $send f e
+    bindsym r $send f r
+    bindsym t $send f t
+    bindsym y $send f y
+    bindsym u $send f u
+    bindsym i $send f i
+    bindsym o $send f o
+    bindsym p $send f p
+    bindsym a $send f a
+    bindsym s $send f s
+    bindsym d $send f d
+    bindsym f $send f f
+    bindsym g $send f g
+    bindsym h $send f h
+    bindsym j $send f j
+    bindsym k $send f k
+    bindsym l $send f l
+    bindsym z $send f z
+    bindsym x $send f x
+    bindsym c $send f c
+    bindsym v $send f v
+    bindsym b $send f b
+    bindsym n $send f n
+    bindsym m $send f m
+
+    bindsym 0 $send f 0
+    bindsym 1 $send f 1
+    bindsym 2 $send f 2
+    bindsym 3 $send f 3
+    bindsym 4 $send f 4
+    bindsym 5 $send f 5
+    bindsym 6 $send f 6
+    bindsym 7 $send f 7
+    bindsym 8 $send f 8
+    bindsym 9 $send f 9
+
+    bindsym space mode default
+}
+
+mode "z_g" {
+    bindsym q $send g q
+    bindsym w $send g w
+    bindsym e $send g e
+    bindsym r $send g r
+    bindsym t $send g t
+    bindsym y $send g y
+    bindsym u $send g u
+    bindsym i $send g i
+    bindsym o $send g o
+    bindsym p $send g p
+    bindsym a $send g a
+    bindsym s $send g s
+    bindsym d $send g d
+    bindsym f $send g f
+    bindsym g $send g g
+    bindsym h $send g h
+    bindsym j $send g j
+    bindsym k $send g k
+    bindsym l $send g l
+    bindsym z $send g z
+    bindsym x $send g x
+    bindsym c $send g c
+    bindsym v $send g v
+    bindsym b $send g b
+    bindsym n $send g n
+    bindsym m $send g m
+
+    bindsym 0 $send g 0
+    bindsym 1 $send g 1
+    bindsym 2 $send g 2
+    bindsym 3 $send g 3
+    bindsym 4 $send g 4
+    bindsym 5 $send g 5
+    bindsym 6 $send g 6
+    bindsym 7 $send g 7
+    bindsym 8 $send g 8
+    bindsym 9 $send g 9
+
+    bindsym space mode default
+}
+
+mode "z_h" {
+    bindsym q $send h q
+    bindsym w $send h w
+    bindsym e $send h e
+    bindsym r $send h r
+    bindsym t $send h t
+    bindsym y $send h y
+    bindsym u $send h u
+    bindsym i $send h i
+    bindsym o $send h o
+    bindsym p $send h p
+    bindsym a $send h a
+    bindsym s $send h s
+    bindsym d $send h d
+    bindsym f $send h f
+    bindsym g $send h g
+    bindsym h $send h h
+    bindsym j $send h j
+    bindsym k $send h k
+    bindsym l $send h l
+    bindsym z $send h z
+    bindsym x $send h x
+    bindsym c $send h c
+    bindsym v $send h v
+    bindsym b $send h b
+    bindsym n $send h n
+    bindsym m $send h m
+
+    bindsym 0 $send h 0
+    bindsym 1 $send h 1
+    bindsym 2 $send h 2
+    bindsym 3 $send h 3
+    bindsym 4 $send h 4
+    bindsym 5 $send h 5
+    bindsym 6 $send h 6
+    bindsym 7 $send h 7
+    bindsym 8 $send h 8
+    bindsym 9 $send h 9
+
+    bindsym space mode default
+}
+
+mode "z_j" {
+    bindsym q $send j q
+    bindsym w $send j w
+    bindsym e $send j e
+    bindsym r $send j r
+    bindsym t $send j t
+    bindsym y $send j y
+    bindsym u $send j u
+    bindsym i $send j i
+    bindsym o $send j o
+    bindsym p $send j p
+    bindsym a $send j a
+    bindsym s $send j s
+    bindsym d $send j d
+    bindsym f $send j f
+    bindsym g $send j g
+    bindsym h $send j h
+    bindsym j $send j j
+    bindsym k $send j k
+    bindsym l $send j l
+    bindsym z $send j z
+    bindsym x $send j x
+    bindsym c $send j c
+    bindsym v $send j v
+    bindsym b $send j b
+    bindsym n $send j n
+    bindsym m $send j m
+
+    bindsym 0 $send j 0
+    bindsym 1 $send j 1
+    bindsym 2 $send j 2
+    bindsym 3 $send j 3
+    bindsym 4 $send j 4
+    bindsym 5 $send j 5
+    bindsym 6 $send j 6
+    bindsym 7 $send j 7
+    bindsym 8 $send j 8
+    bindsym 9 $send j 9
+
+    bindsym space mode default
+}
+
+mode "z_k" {
+    bindsym q $send k q
+    bindsym w $send k w
+    bindsym e $send k e
+    bindsym r $send k r
+    bindsym t $send k t
+    bindsym y $send k y
+    bindsym u $send k u
+    bindsym i $send k i
+    bindsym o $send k o
+    bindsym p $send k p
+    bindsym a $send k a
+    bindsym s $send k s
+    bindsym d $send k d
+    bindsym f $send k f
+    bindsym g $send k g
+    bindsym h $send k h
+    bindsym j $send k j
+    bindsym k $send k k
+    bindsym l $send k l
+    bindsym z $send k z
+    bindsym x $send k x
+    bindsym c $send k c
+    bindsym v $send k v
+    bindsym b $send k b
+    bindsym n $send k n
+    bindsym m $send k m
+
+    bindsym 0 $send k 0
+    bindsym 1 $send k 1
+    bindsym 2 $send k 2
+    bindsym 3 $send k 3
+    bindsym 4 $send k 4
+    bindsym 5 $send k 5
+    bindsym 6 $send k 6
+    bindsym 7 $send k 7
+    bindsym 8 $send k 8
+    bindsym 9 $send k 9
+
+    bindsym space mode default
+}
+
+mode "z_l" {
+    bindsym q $send l q
+    bindsym w $send l w
+    bindsym e $send l e
+    bindsym r $send l r
+    bindsym t $send l t
+    bindsym y $send l y
+    bindsym u $send l u
+    bindsym i $send l i
+    bindsym o $send l o
+    bindsym p $send l p
+    bindsym a $send l a
+    bindsym s $send l s
+    bindsym d $send l d
+    bindsym f $send l f
+    bindsym g $send l g
+    bindsym h $send l h
+    bindsym j $send l j
+    bindsym k $send l k
+    bindsym l $send l l
+    bindsym z $send l z
+    bindsym x $send l x
+    bindsym c $send l c
+    bindsym v $send l v
+    bindsym b $send l b
+    bindsym n $send l n
+    bindsym m $send l m
+
+    bindsym 0 $send l 0
+    bindsym 1 $send l 1
+    bindsym 2 $send l 2
+    bindsym 3 $send l 3
+    bindsym 4 $send l 4
+    bindsym 5 $send l 5
+    bindsym 6 $send l 6
+    bindsym 7 $send l 7
+    bindsym 8 $send l 8
+    bindsym 9 $send l 9
+
+    bindsym space mode default
+}
+
+# Row 1
+
+mode "z_z" {
+    bindsym q $send z q
+    bindsym w $send z w
+    bindsym e $send z e
+    bindsym r $send z r
+    bindsym t $send z t
+    bindsym y $send z y
+    bindsym u $send z u
+    bindsym i $send z i
+    bindsym o $send z o
+    bindsym p $send z p
+    bindsym a $send z a
+    bindsym s $send z s
+    bindsym d $send z d
+    bindsym f $send z f
+    bindsym g $send z g
+    bindsym h $send z h
+    bindsym j $send z j
+    bindsym k $send z k
+    bindsym l $send z l
+    bindsym z $send z z
+    bindsym x $send z x
+    bindsym c $send z c
+    bindsym v $send z v
+    bindsym b $send z b
+    bindsym n $send z n
+    bindsym m $send z m
+
+    bindsym 0 $send z 0
+    bindsym 1 $send z 1
+    bindsym 2 $send z 2
+    bindsym 3 $send z 3
+    bindsym 4 $send z 4
+    bindsym 5 $send z 5
+    bindsym 6 $send z 6
+    bindsym 7 $send z 7
+    bindsym 8 $send z 8
+    bindsym 9 $send z 9
+
+    bindsym space mode default
+}
+
+mode "z_x" {
+    bindsym q $send x q
+    bindsym w $send x w
+    bindsym e $send x e
+    bindsym r $send x r
+    bindsym t $send x t
+    bindsym y $send x y
+    bindsym u $send x u
+    bindsym i $send x i
+    bindsym o $send x o
+    bindsym p $send x p
+    bindsym a $send x a
+    bindsym s $send x s
+    bindsym d $send x d
+    bindsym f $send x f
+    bindsym g $send x g
+    bindsym h $send x h
+    bindsym j $send x j
+    bindsym k $send x k
+    bindsym l $send x l
+    bindsym z $send x z
+    bindsym x $send x x
+    bindsym c $send x c
+    bindsym v $send x v
+    bindsym b $send x b
+    bindsym n $send x n
+    bindsym m $send x m
+
+    bindsym 0 $send x 0
+    bindsym 1 $send x 1
+    bindsym 2 $send x 2
+    bindsym 3 $send x 3
+    bindsym 4 $send x 4
+    bindsym 5 $send x 5
+    bindsym 6 $send x 6
+    bindsym 7 $send x 7
+    bindsym 8 $send x 8
+    bindsym 9 $send x 9
+
+    bindsym space mode default
+}
+
+mode "z_c" {
+    bindsym q $send c q
+    bindsym w $send c w
+    bindsym e $send c e
+    bindsym r $send c r
+    bindsym t $send c t
+    bindsym y $send c y
+    bindsym u $send c u
+    bindsym i $send c i
+    bindsym o $send c o
+    bindsym p $send c p
+    bindsym a $send c a
+    bindsym s $send c s
+    bindsym d $send c d
+    bindsym f $send c f
+    bindsym g $send c g
+    bindsym h $send c h
+    bindsym j $send c j
+    bindsym k $send c k
+    bindsym l $send c l
+    bindsym z $send c z
+    bindsym x $send c x
+    bindsym c $send c c
+    bindsym v $send c v
+    bindsym b $send c b
+    bindsym n $send c n
+    bindsym m $send c m
+
+    bindsym 0 $send c 0
+    bindsym 1 $send c 1
+    bindsym 2 $send c 2
+    bindsym 3 $send c 3
+    bindsym 4 $send c 4
+    bindsym 5 $send c 5
+    bindsym 6 $send c 6
+    bindsym 7 $send c 7
+    bindsym 8 $send c 8
+    bindsym 9 $send c 9
+
+    bindsym space mode default
+}
+
+mode "z_v" {
+    bindsym q $send v q
+    bindsym w $send v w
+    bindsym e $send v e
+    bindsym r $send v r
+    bindsym t $send v t
+    bindsym y $send v y
+    bindsym u $send v u
+    bindsym i $send v i
+    bindsym o $send v o
+    bindsym p $send v p
+    bindsym a $send v a
+    bindsym s $send v s
+    bindsym d $send v d
+    bindsym f $send v f
+    bindsym g $send v g
+    bindsym h $send v h
+    bindsym j $send v j
+    bindsym k $send v k
+    bindsym l $send v l
+    bindsym z $send v z
+    bindsym x $send v x
+    bindsym c $send v c
+    bindsym v $send v v
+    bindsym b $send v b
+    bindsym n $send v n
+    bindsym m $send v m
+
+    bindsym 0 $send v 0
+    bindsym 1 $send v 1
+    bindsym 2 $send v 2
+    bindsym 3 $send v 3
+    bindsym 4 $send v 4
+    bindsym 5 $send v 5
+    bindsym 6 $send v 6
+    bindsym 7 $send v 7
+    bindsym 8 $send v 8
+    bindsym 9 $send v 9
+
+    bindsym space mode default
+}
+
+mode "z_b" {
+    bindsym q $send b q
+    bindsym w $send b w
+    bindsym e $send b e
+    bindsym r $send b r
+    bindsym t $send b t
+    bindsym y $send b y
+    bindsym u $send b u
+    bindsym i $send b i
+    bindsym o $send b o
+    bindsym p $send b p
+    bindsym a $send b a
+    bindsym s $send b s
+    bindsym d $send b d
+    bindsym f $send b f
+    bindsym g $send b g
+    bindsym h $send b h
+    bindsym j $send b j
+    bindsym k $send b k
+    bindsym l $send b l
+    bindsym z $send b z
+    bindsym x $send b x
+    bindsym c $send b c
+    bindsym v $send b v
+    bindsym b $send b b
+    bindsym n $send b n
+    bindsym m $send b m
+
+    bindsym 0 $send b 0
+    bindsym 1 $send b 1
+    bindsym 2 $send b 2
+    bindsym 3 $send b 3
+    bindsym 4 $send b 4
+    bindsym 5 $send b 5
+    bindsym 6 $send b 6
+    bindsym 7 $send b 7
+    bindsym 8 $send b 8
+    bindsym 9 $send b 9
+
+    bindsym space mode default
+}
+
+mode "z_n" {
+    bindsym q $send n q
+    bindsym w $send n w
+    bindsym e $send n e
+    bindsym r $send n r
+    bindsym t $send n t
+    bindsym y $send n y
+    bindsym u $send n u
+    bindsym i $send n i
+    bindsym o $send n o
+    bindsym p $send n p
+    bindsym a $send n a
+    bindsym s $send n s
+    bindsym d $send n d
+    bindsym f $send n f
+    bindsym g $send n g
+    bindsym h $send n h
+    bindsym j $send n j
+    bindsym k $send n k
+    bindsym l $send n l
+    bindsym z $send n z
+    bindsym x $send n x
+    bindsym c $send n c
+    bindsym v $send n v
+    bindsym b $send n b
+    bindsym n $send n n
+    bindsym m $send n m
+
+    bindsym 0 $send n 0
+    bindsym 1 $send n 1
+    bindsym 2 $send n 2
+    bindsym 3 $send n 3
+    bindsym 4 $send n 4
+    bindsym 5 $send n 5
+    bindsym 6 $send n 6
+    bindsym 7 $send n 7
+    bindsym 8 $send n 8
+    bindsym 9 $send n 9
+
+    bindsym space mode default
+}
+
+mode "z_m" {
+    bindsym q $send m q
+    bindsym w $send m w
+    bindsym e $send m e
+    bindsym r $send m r
+    bindsym t $send m t
+    bindsym y $send m y
+    bindsym u $send m u
+    bindsym i $send m i
+    bindsym o $send m o
+    bindsym p $send m p
+    bindsym a $send m a
+    bindsym s $send m s
+    bindsym d $send m d
+    bindsym f $send m f
+    bindsym g $send m g
+    bindsym h $send m h
+    bindsym j $send m j
+    bindsym k $send m k
+    bindsym l $send m l
+    bindsym z $send m z
+    bindsym x $send m x
+    bindsym c $send m c
+    bindsym v $send m v
+    bindsym b $send m b
+    bindsym n $send m n
+    bindsym m $send m m
+
+    bindsym 0 $send m 0
+    bindsym 1 $send m 1
+    bindsym 2 $send m 2
+    bindsym 3 $send m 3
+    bindsym 4 $send m 4
+    bindsym 5 $send m 5
+    bindsym 6 $send m 6
+    bindsym 7 $send m 7
+    bindsym 8 $send m 8
+    bindsym 9 $send m 9
+
+    # Goes to mode default and clears the binding mode indicator.
+    bindsym space mode default
+}
+
+
+
+#
+# Done.
+#
