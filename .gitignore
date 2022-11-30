@@ -1,0 +1,15 @@
+
+bin/i3-config-bash.inc
+bin/i3-config-bash.inc.tmp
+bin/i3-config-bash.log
+bin/i3-focus-app-by-alias.inc
+bin/i3-focus-app-by-alias.log
+bin/i3-status-wrapper.log
+bin/shellcheck.log
+cfg/cfg07.tmp
+config.inc
+config.tmp
+reloaded
+restarted
+
+
