@@ -78,10 +78,8 @@ $(RUNTIME_BINDIR)/i3-file-watcher \
 $(RUNTIME_BINDIR)/i3-focus-app-by-alias \
 $(RUNTIME_BINDIR)/i3-marks \
 $(RUNTIME_BINDIR)/i3-numeric \
+$(RUNTIME_BINDIR)/etc-desktop \
 $(RUNTIME_BINDIR)/etc-tvheadend
-
-.todo: \
-$(RUNTIME_BINDIR)/i3-recorder
 
 .installflags: \
 reloaded restarted

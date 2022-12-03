@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# This module captures desktop video inside a clipping rectangle.
+# Resource usage is roughly proportional to the rectangle area.
+#
+# 25 frames per second is the norm where this program was developed, I
+# don't know if it is safe to change this value.
+#
+fps=${3:-25}
+#
+# Geometry can be set from the command line. The xy separator is a
+# comma, the wh separator is the letter x. These defaults do not
+# guarantee that recording will work.
+#
+xy_default=+0,0
+wh_default=1920x1080
+xy=${4:-$xy_default}
+wh=${5:-$wh_default}
+#
+# 2 pass recording: pass 1 does realtime lossless capture, pass 2 does
+# encoding as a postprocess.  The absurd resource usage is deliberate,
+# the end result must not blur text. Consequently the storage for the
+# output of pass 1 has to be fast and huge. Data on your storage is
+# not safe from being overwritten in either pass.  Your CPU is not
+# protected from thermal damage during pass 2.
+#
+duration=${2:-30}
+pass1dir=${HOME}/orion/grabber/Videos/
+pass2dir=${HOME}/orion/grabber/Videos/
+pass1file=grab.mkv
+pass2file=grab.mp4
+#
+# HDMI is reported as disconnected on my machine (because DVI to DVI
+# cable) hence audio recording uses the monitor input associated with
+# the audio output. I like the 3.5mm jack simplicity but it is analog
+# and can be noisy. External USB sound cards have worked. I currently
+# use the SPDIF output to obtain electrical separation. Audio sync is
+# not guaranteed.
+#
+audiosink=alsa_output.pci-0000_00_1b.0.analog-stereo
+audiosink=alsa_output.pci-0000_00_1b.0.iec958-stereo
+
+record()
+{
+    case "$1 $2" in
+        (video?start)
+            rm -f "${pass1dir}/${pass1file}"
+            (ffmpeg \
+                 -f pulse -ac 2 -i "${audiosink}.monitor" \
+                 -f x11grab -s "${wh}" -r "${fps}" -i :0.0"${xy}" -c:v huffyuv \
+                 -q:v 0 -y "${pass1dir}/${pass1file}") &
+            ;;
+        (video?stop)
+            pkill -f "ffmpeg -f pulse"
+            ffmpeg -i "${pass1dir}/${pass1file}" -c:v mpeg4 -c:a mp3 \
+                   -q:v 0 -y "${pass2dir}/${pass2file}"
+            ;;
+        (video?[1-9]*)
+            record 'video' 'start'
+            sleep "${duration}"
+            record 'video' 'stop'
+            ;;
+        (*)
+            exit 1
+            ;;
+    esac
+}
+
+
+#
+# Start here.
+#
+
+mkdir -p "${pass1dir}" "${pass2dir}"
+
+# video 60s 25 0,0 1920x1080
+record "$1" "$2" "$3" "$4" "$5"
+
+#
+# Done.
+#

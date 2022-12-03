@@ -83,8 +83,9 @@ set $i3inputfont "pango:DejaVu Sans 11"
 # FOCUS SETTINGS ================================================= #
 
 # Look these up in the i3 user's guide. These defaults are safe.
+# It's safe, but 'focus_follows_mouse yes' will drive you crazy.
 
-focus_follows_mouse yes
+focus_follows_mouse no
 focus_wrapping off
 
 # WORKSPACE SETTINGS ============================================= #
@@ -198,17 +199,17 @@ set $nocompositor exec --no-startup-id /usr/bin/killall -q picom
 
 # Ruler is 48 chars ->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-set $Primary            :SingleTap1st:  q w ex ty a s d fmr gh jk l n z vb
-set $AltPrimary         :DoubleTap1st:  q ty z
+set $Primary            :SingleTap1st:  q w ex a s d fmry gh jk l n z vb
+set $AltPrimary         :DoubleTap1st:  q et z vb
 
 set $Dismiss            :dismiss:         s vw zxca b 0
 set $FloatingGroups     :floating groups: q ua s
 set $OutputGroups       :output groups:   q zxc a s
 
-set $cursorFocus        :focus:    ty uiop asd fg hjkl zxc mr
-set $cursorMove         :move:     w t uiop asd hjkl zx ce bv fr
-set $cursorResize       :resize:   t uiop asdg hjkl fm
-set $Layouts            :layouts:  dst rc ewm io
+set $cursorFocus        :focus:    et uiop asd fg hjkl zxc mry
+set $cursorMove         :move:     w et uiop asd hjkl zx c bv fry
+set $cursorResize       :resize:   et uiop asdg hjkl fmy
+set $Layouts            :layouts:  dst xy ewm io fmr
 
 set $Settings           :settings: s
 set $SoundSettings      :sound:    lu b fsr
@@ -232,7 +233,7 @@ mode "$Zmode" {
     #! Insert a backslash (or other character except space), optionally type more characters, or type nothing, space returns to default mode.
     bindsym space mode default
 }
-
+\
 mode "$Primary" {
     #! Dismiss (kill) singly or in batches.
     bindsym q mode "$Dismiss"
@@ -249,25 +250,36 @@ mode "$Primary" {
     bindsym x exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash swap_two_containers_by_value
 
-    #! Toggle the container between floating or tiling.
-    bindsym t floating toggle
-    #! Toggle the focus to work on floating or tiling.
-    bindsym y mode default, focus mode_toggle;
+    bindsym t nop
 
     #! [A]ttention! Visit a workspace with a red tab. NB mpv triggers this when mpv starts.
     bindsym a [urgent="latest"] focus
 
-    #! Access to specific settings modes like PictureSettings and SoundSettings.
+    #! Access to specific settings modes. SoundSettings is the first, anticipate more to come.
     bindsym s mode "$Settings"
 
     #! Command prompt and mini-menu.
     bindsym d exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash qmenu show
 
-    #! Cursor modes: focus move resize
+    #! These four modes are directly accessible from each other viashared bindings.
     bindsym f mode "$cursorFocus"
     bindsym m mode "$cursorMove"
     bindsym r mode "$cursorResize"
+    bindsym y mode "$Layouts"
+    # Modifiers incur no overheads when a use case entangles focus,
+    # move, layout. Modes incur an overhead when the mode changes. The
+    # least overhead is when each of the modes in a group can change
+    # to any other mode in the group with one keypress and one
+    # transition.
+
+    # I started with making the cursor keys HJKL common to focus move
+    # resize. I then bound keys FMR to go direct to another of the
+    # modes in the group. Keys that would have gone direct to where
+    # they already were could be freed up. 20221203: The layout mode
+    # now has direct links to and from the aforementioned {focus,
+    # move, resize} The letter Y is associated with la[Y]out because L
+    # is a common cursor key).
 
     #! embiGGen windows to fill one or all monitor screens.
     bindsym      g floating disable, fullscreen toggle;
@@ -285,9 +297,6 @@ mode "$Primary" {
             ~/local/i3/bin/i3-config-bash rotate backward
     bindsym j exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash rotate forward
-
-    #! How containers are arranged in workspaces.
-    bindsym l mode "$Layouts"
 
     #! This is how to type a character when the usual unshifted key is
     #! now the 1st mode key. It must be done for Primary and AltPrimary
@@ -322,18 +331,21 @@ mode "$AltPrimary" {
     #! Dismiss (kill) singly or in batches.
     bindsym q mode "$Dismiss"
 
-    #! Open a terminal, preceded by a horizontal or vertical split.
-    bindsym t mode default, split h, \
-            exec --no-startup-id \
-            ~/local/i3/bin/i3-config-bash terminal xfce4
-    bindsym y mode default, split v, \
-            exec --no-startup-id \
-            ~/local/i3/bin/i3-config-bash terminal xfce4
+    #! Toggle the focus to work on tiled or floating.
+    bindsym e mode default, focus mode_toggle;
+    #! Toggle a container between floating|tiling.
+    bindsym t floating toggle
 
-    #! This is how to type a character when the usual unshifted key is
-    #! now the 1st mode key. It must be done for Primary and AltPrimary
-    #! modes.
+    #! This is how to type a character when the usual unshifted key is now the 1st mode key. It must be done for Primary and AltPrimary modes.
     bindsym z mode "$Zmode", focus;
+
+    #! Open a terminal, preceded by a horizontal or vertical split.
+    bindsym v mode default, split h, \
+            exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash terminal xfce4
+    bindsym b mode default, split v, \
+            exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash terminal xfce4
 
     #! Emacs users who forget to return to default mode before saving might lose work so this attempts to save the day. Vi users might want to substitute C-x with a colon.
     bindsym Control+x mode default, \
@@ -425,12 +437,11 @@ mode "$cursorFocus" {
     #! 3
     bindsym q nop
     bindsym w nop
-    bindsym e nop
 
+    #! Toggle the focus to work on tiled or floating.
+    bindsym e mode default, focus mode_toggle;
     #! Toggle a container between floating|tiling.
     bindsym t floating toggle
-    #! Toggle the focus to work on tiled or floating.
-    bindsym y mode default, focus mode_toggle;
 
     # Focus an adjacent workspace, wrap around within an output.
     bindsym u workspace prev_on_output
@@ -464,9 +475,10 @@ mode "$cursorFocus" {
     bindsym b nop
     bindsym n nop
 
-    #! Direct transitions between {focus move resize} modes.
+    #! Direct transitions between {focus move resize layout} modes.
     bindsym m mode "$cursorMove"
     bindsym r mode "$cursorResize"
+    bindsym y mode "$Layouts"
 
     bindsym Control+x mode default, \
             exec --no-startup-id xdotool key ctrl+x
@@ -484,9 +496,10 @@ mode "$cursorMove" {
             ~/local/i3/bin/i3-config-bash \
             move_workspace_to_output_interactive
 
+    #! Toggle the focus to work on tiled or floating.
+    bindsym e mode default, focus mode_toggle;
     #! Toggle a container between floating|tiled.
     bindsym t floating toggle
-    bindsym y nop
 
     #! Focus an adjacent workspace, wrap around within an output.
     bindsym u workspace prev_on_output
@@ -517,21 +530,16 @@ mode "$cursorMove" {
             ~/local/i3/bin/i3-config-bash \
             move_container_to_workspace
 
-    #! Move a container to a named-or-numbered workspace and follow it there.
-    bindsym e exec --no-startup-id \
-            ~/local/i3/bin/i3-config-bash \
-            follow_container_to_workspace
-
-
     bindsym b split h
     bindsym v split v
 
     bindsym n nop
     bindsym m nop
 
-    #! Direct transition between {focus move resize} modes.
+    #! Direct transition between {focus move resize layout} modes.
     bindsym f mode "$cursorFocus"
     bindsym r mode "$cursorResize"
+    bindsym y mode "$Layouts"
 
     bindsym Control+x mode default, \
             exec --no-startup-id xdotool key ctrl+x
@@ -544,10 +552,11 @@ mode "$cursorResize" {
 
     bindsym q nop
     bindsym w nop
-    bindsym e nop
 
+    #! Toggle the focus to work on tiled or floating.
+    bindsym e mode default, focus mode_toggle;
+    #! Toggle a container between floating|tiled.
     bindsym t floating toggle
-    bindsym y nop
 
     #
     bindsym u workspace prev_on_output
@@ -570,9 +579,10 @@ mode "$cursorResize" {
     bindsym $k resize grow height 10 px or 5 ppt
     bindsym $l resize grow width 10 px or 5 ppt
 
-    #! Direct transition between {focus move resize} modes.
+    #! Direct transition between {focus move resize layout} modes.
     bindsym f mode "$cursorFocus"
     bindsym m mode "$cursorMove"
+    bindsym y mode "$Layouts"
 
     bindsym Control+x mode default, \
             exec --no-startup-id xdotool key ctrl+x
@@ -586,12 +596,17 @@ mode "$Layouts" {
     bindsym d mode default, layout default;
     bindsym s mode default, layout stacking;
     bindsym t mode default, layout tabbed;
+    bindsym b mode default, layout splith;
+    bindsym v mode default, layout splitv;
+
+    #! Pivot. Does not return to default mode unlike most of the others..
+    bindsym p layout toggle split;
 
     #! Pivot. With A focused, change the column AB into the [r]ow AB.
-    bindsym r mode default, \
+    bindsym x mode default, \
             focus down, split h, focus up, move down, move left;
     #! Pivot. With A focused, change the row AB into the [c]olumn AB.
-    bindsym c mode default, \
+    bindsym y mode default, \
             focus right, split v, focus left, move right, move up ;
 
     #! Workspace i3 is a "waiting room" for entry to the scratchpad.
@@ -601,6 +616,11 @@ mode "$Layouts" {
 
     bindsym i move scratchpad
     bindsym o scratchpad show
+
+    #! Direct transition between {focus move resize layout} modes.
+    bindsym f mode "$cursorFocus"
+    bindsym m mode "$cursorMove"
+    bindsym r mode "$cursorResize"
 
     bindsym Control+x mode default, \
             exec --no-startup-id xdotool key ctrl+x

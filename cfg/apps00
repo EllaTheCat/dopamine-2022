@@ -160,10 +160,16 @@ declare -A not_wsapps=(
     ["xt"]="xterm -T =xterm="
     #! /ws No assignment to workspace. The preferred terminal for an xubuntu based DE like this.
     ["xf"]="xfce4-terminal"
-    #! /ws Faster than finding a terminal. The letters are far apart so resistant to false starts?
+    #! /ws Faster than finding a terminal to type this. Resistant to false starts?
     ["xk"]="xkill"
     #! /ws Convenient, compact, copy-paste, ...
     ["xp"]="xterm -T '=xterm=' -hold -e xprop"
+    #! /ws "Start desktop recording.
+    ["zr"]="nohup xterm -T '=xterm=' -hold -e etc-desktop video 9999 25 +1920x100,0 1920x1080 &"
+    #! /ws "Stop desktop recording.
+    ["zs"]="pkill -f 'ffmpeg -f pulse'"
+    #! /ws Playback desktop recording. Ignore audio. Loop forever.
+    ["zp"]="mpv -aid 0 -loop 0 ~/orion/grabber/Videos/grab.mkv"
     #! /ws [a-z][a-z0-9] command aliases.
     ["zz"]="i3-focus-app-by-alias menu"
 
