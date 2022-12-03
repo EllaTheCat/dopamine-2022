@@ -11,8 +11,8 @@ bindsym Mod4+Return exec --no-startup-id xfce4-terminal
 
 # THE 1st & 2nd MODE SELECT KEYS ================================= #
 
-set $_1st 94
-set $_2nd 133
+set $_1st 133
+set $_2nd  94
 
 bindcode --release $_1st mode "$Primary"
 bindcode --release $_2nd mode "$Secondary"
@@ -22,8 +22,11 @@ bindcode --release $_2nd mode "$Secondary"
 ### set $_1st 94
 ### set $_2nd 133 or 134
 
-# I'll be honest, your typo count will go thriough the roof as you try
+# I'll be honest, your typo count will go through the roof as you try
 # to get used to this.
+
+# I am also trying with all the keycodes for one mode select key
+# swapped with all those for the other.
 
 # TWO MODE SELECT KEYS CONFIGURATION 2of2 ======================== #
 

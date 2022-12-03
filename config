@@ -202,8 +202,8 @@ set $nocompositor exec --no-startup-id /usr/bin/killall -q picom
 set $Primary            :SingleTap1st:  q w ex a s d fmry gh jk l n z vb
 set $AltPrimary         :DoubleTap1st:  q et z vb
 
-set $Dismiss            :dismiss:         s vw zxca b 0
-set $FloatingGroups     :floating groups: q ua s
+set $Dismiss            :dismiss:         s vw [f]loat o b [l]ogout
+set $FloatingGroups     :floating groups: q [u]ser a s
 set $OutputGroups       :output groups:   q zxc a s
 
 set $cursorFocus        :focus:    et uiop asd fg hjkl zxc mry
@@ -250,8 +250,6 @@ mode "$Primary" {
     bindsym x exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash swap_two_containers_by_value
 
-    bindsym t nop
-
     #! [A]ttention! Visit a workspace with a red tab. NB mpv triggers this when mpv starts.
     bindsym a [urgent="latest"] focus
 
@@ -262,7 +260,7 @@ mode "$Primary" {
     bindsym d exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash qmenu show
 
-    #! These four modes are directly accessible from each other viashared bindings.
+    #! These four modes are directly accessible from each other via shared bindings.
     bindsym f mode "$cursorFocus"
     bindsym m mode "$cursorMove"
     bindsym r mode "$cursorResize"
@@ -304,8 +302,13 @@ mode "$Primary" {
     bindsym z mode "$Zmode", focus;
     bindsym c nop
 
-    bindsym v split v
-    bindsym b split h
+    #! Open a terminal, preceded by a vertical or horizontal split.
+    bindsym v split v, exec --no-startup-id xfce4-terminal
+    bindsym b split h, exec --no-startup-id xfce4-terminal
+    # 20221203: Consistency restored. Use keys v and b because they
+    # are mutually adjacent and because b looks quite like h, given
+    # hjkl cursorkeys. Do not transpose split direction in 'split and
+    # launch' bindings, it is not user-friendly to go against i3 here.
 
     #! Change the (N)ame or (N)umber of a named-or-numbered workspace.
     bindsym n exec --no-startup-id \
@@ -339,13 +342,8 @@ mode "$AltPrimary" {
     #! This is how to type a character when the usual unshifted key is now the 1st mode key. It must be done for Primary and AltPrimary modes.
     bindsym z mode "$Zmode", focus;
 
-    #! Open a terminal, preceded by a horizontal or vertical split.
-    bindsym v mode default, split h, \
-            exec --no-startup-id \
-            ~/local/i3/bin/i3-config-bash terminal xfce4
-    bindsym b mode default, split v, \
-            exec --no-startup-id \
-            ~/local/i3/bin/i3-config-bash terminal xfce4
+    bindsym v split v
+    bindsym b split h
 
     #! Emacs users who forget to return to default mode before saving might lose work so this attempts to save the day. Vi users might want to substitute C-x with a colon.
     bindsym Control+x mode default, \
@@ -414,8 +412,8 @@ mode "$Dismiss" {
             ~/local/i3/bin/i3-config-bash \
             dismiss_workspace_interactive menu
 
-    #! Dismiss containers in groups defined on-the-fly.
-    bindsym f mode "$Groups"
+    #! Dismiss containers in groups defined on-the-fly. If a container is tiling by default, and a user sets it to floating, only then is it dismissed.
+    bindsym f mode "$FloatingGroups"
     #! Dismiss all containers for all workspaces on the specified outputs. Two-step procedure to avoid mistakes. Press this key then choose or cancel.
     bindsym o mode "OutputGroups"
 
@@ -470,9 +468,8 @@ mode "$cursorFocus" {
     bindsym c focus output VGA1, \
             exec --no-startup-id i3-config-bash qmenu number=0;
 
-    #! 3
-    bindsym v nop
-    bindsym b nop
+    bindsym v split v
+    bindsym b split h
     bindsym n nop
 
     #! Direct transitions between {focus move resize layout} modes.
@@ -530,8 +527,8 @@ mode "$cursorMove" {
             ~/local/i3/bin/i3-config-bash \
             move_container_to_workspace
 
-    bindsym b split h
     bindsym v split v
+    bindsym b split h
 
     bindsym n nop
     bindsym m nop
@@ -584,6 +581,9 @@ mode "$cursorResize" {
     bindsym m mode "$cursorMove"
     bindsym y mode "$Layouts"
 
+    bindsym v split v
+    bindsym b split h
+
     bindsym Control+x mode default, \
             exec --no-startup-id xdotool key ctrl+x
 
@@ -599,7 +599,7 @@ mode "$Layouts" {
     bindsym b mode default, layout splith;
     bindsym v mode default, layout splitv;
 
-    #! Pivot. Does not return to default mode unlike most of the others..
+    #! Pivot. Does not return to default mode unlike most of the others.
     bindsym p layout toggle split;
 
     #! Pivot. With A focused, change the column AB into the [r]ow AB.

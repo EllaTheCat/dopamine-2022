@@ -118,13 +118,20 @@ declare -A wsapps=(
 )    # ----------------------------------------------------------- #
 
 declare -A not_wsapps=(
+    #! /ws Open a terminal. This is the preferred terminal for a tiling WM with an xubuntu based DE.
+    ["tt"]="xfce4-terminal"
+    #! /ws Open a terminal, preceded by a vertical split, in one "atomic" i3-msg.
+    ["vv"]="i3-msg 'mode default, split v, exec --no-startup-id xfce4-terminal;'"
+    #! /ws Open a terminal, preceded by a horizontal split, in one "atomic" i3-msg.
+    ["bb"]="i3-msg 'mode default, split h, exec --no-startup-id xfce4-terminal;'"
+
     #! /ws Backdrop of Fuerteventura by EllaTheCat (not on github, huge file).
     ["bf"]="feh --bg-fill --no-xinerama ${HOME}/local/i3/share/fuerteventura.png"
     #! /ws Backdrop of a scottish fryup (not on github, visit reddit r/fryup).
     ["bs"]="feh --bg-fill --no-xinerama --geometry +0+800 ${HOME}/local/i3/share/scottishfryup.jpg"
     #! /ws Put this dialog box on a workspace you want to keep alive.
     ["bz"]="(zenity --info --timeout=300 --text=\"Keeping this workspace from being closed.\")&"
-    #! /ws Emacsclient without an associated workspace. USes GUI to show images, move cursor with mouse.
+    #! /ws Emacsclient without an associated workspace. Uses GUI to show images, move cursor with mouse.
     ["ec"]="emacsclient -c"
     #! /ws Special effects dedicated to r/unixporn, emacs window animation on workspace e0.
     ["ee"]="i3-config-bash emacsinside toggle"
@@ -156,10 +163,8 @@ declare -A not_wsapps=(
     ["p1"]="picom --backend xrender --vsync --config /dev/null -bcf -i 1.00 --no-fading-openclose"
     #! /ws No assignment to workspace. Thunar (not unlike Nautilus).
     ["th"]="exo-open --launch FileManager"
-    #! /ws No assignment to workspace. A terminal for small jobs.
+    #! /ws A compact floating terminal for small jobs.
     ["xt"]="xterm -T =xterm="
-    #! /ws No assignment to workspace. The preferred terminal for an xubuntu based DE like this.
-    ["xf"]="xfce4-terminal"
     #! /ws Faster than finding a terminal to type this. Resistant to false starts?
     ["xk"]="xkill"
     #! /ws Convenient, compact, copy-paste, ...
