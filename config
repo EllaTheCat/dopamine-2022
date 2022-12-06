@@ -339,6 +339,10 @@ mode "$AltPrimary" {
     #! Toggle a container between floating|tiling.
     bindsym t floating toggle
 
+    bindsym m goto_mark_interactive
+    bindsym x swap_mark_interactive
+    bindsym a auto_mark_container
+
     #! This is how to type a character when the usual unshifted key is now the 1st mode key. It must be done for Primary and AltPrimary modes.
     bindsym z mode "$Zmode", focus;
 
@@ -346,8 +350,8 @@ mode "$AltPrimary" {
     bindsym b split h
 
     #! Emacs users who forget to return to default mode before saving might lose work so this attempts to save the day. Vi users might want to substitute C-x with a colon.
-    bindsym Control+x mode default, \
-            exec --no-startup-id xdotool key ctrl+x
+    bindsym Control+x [title="Emacs"] mode default, \
+            exec --no-startup-id xdotool key ctrl+x;
 
     #! Toggle between AltPrimary and Primary modes.
     bindcode --release "$_1st" mode "$Primary"
@@ -363,7 +367,7 @@ mode "$FloatingGroups" {
 
     bindsym t floating toggle
 
-    #! Dismiss all tiled by default containers subsequently set to floating (recent change request).
+    #! Dismiss all tiled by default containers subsequently set to floating (recent change request, agreed).
     bindsym u [floating_from="user"] kill
     bindsym a [floating_from="auto"] kill
 
@@ -432,7 +436,7 @@ mode "$Dismiss" {
 
 mode "$cursorFocus" {
 
-    #! 3
+    #!
     bindsym q nop
     bindsym w nop
 
@@ -768,10 +772,10 @@ mode "$AltSecondary" {
     # Mnemonics: Mark, eXchange, Workspace, Container.  This value is
     # retrieved after the digits have been read in a state transition
     # sequence along one path.
-    bindsym m mode x_h,  exec --no-startup-id echo "m" > /dev/shm/"$USER"/i3/state/head;
-    bindsym x mode x_h,  exec --no-startup-id echo "x" > /dev/shm/"$USER"/i3/state/head;
-    bindsym w mode x_t0, exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head;
-    bindsym c mode x_t0, exec --no-startup-id echo "c" > /dev/shm/"$USER"/i3/state/head;
+    bindsym m mode default, exec --no-startup-id echo "m" > /dev/shm/"$USER"/i3/state/head, mode  x_h ;
+    bindsym x mode default, exec --no-startup-id echo "x" > /dev/shm/"$USER"/i3/state/head, mode  x_h ;
+    bindsym w mode default, exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head, mode x_t0 ;
+    bindsym c mode default, exec --no-startup-id echo "c" > /dev/shm/"$USER"/i3/state/head, mode x_t0 ;
 
     bindcode --release $_2nd mode "$Secondary"
     bindsym space mode default
@@ -792,8 +796,8 @@ bindsym F8 mode x_t0, \
 # Workspaces 000 through 009 with TWO leading zeroes and ONE keypress.
 # Since we do not recognise workspaces with these numbers, commands do
 # other more interesting things.
-bindsym F9 mode x_u0, \
-        exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head ;
+bindsym F9 mode default, \
+        exec --no-startup-id echo "w" > /dev/shm/"$USER"/i3/state/head, mode x_u0 ;
 
 # ================================================================ #
 
@@ -831,7 +835,7 @@ bindsym control+Delete exec --no-startup-id \
 # I3BAR SETTINGS BEGIN HERE.
 #
 
-# From right to left:
+u# From right to left:
 # 1) Show system indicators - i3status
 # 2) Show cursor xy, sensors - i3-status
 # 3) Show this output's workspaces - i3bar
@@ -849,7 +853,7 @@ bar {
 
     # The long-standing default size is 11, to match the status bar,
     # but size 12 is better for the binding mode indicator.
-    font pango:DejaVu Sans 12
+    font pango:DejaVhhhhshu Sans 12
     position bottom
 
     # EllaTheCat strongly recommends that the binding mode indicator

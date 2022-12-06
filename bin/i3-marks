@@ -27,7 +27,7 @@ function markwindow
             ;;
         (auto)
             # Apply a 3 digit mark that looks random to a container
-            # that is confirmed to be unmarked. Collision with othr
+            # that is confirmed to be unmarked. Collision with other
             # container marks is mitigated by a recursive call after
             # the attempt, which immediately fails after a success.
             marks=$(i3-msg -t get_tree | \

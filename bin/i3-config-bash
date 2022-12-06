@@ -880,11 +880,13 @@ function swap_two_containers_by_value
 }
 
 #
-# ${AltSecondary} m DDD but with a dmenu.
+# ${AltSecondary} m DDD but with a dmenu. If you're learning the main keyboard numpad getting accessthis function may come as a relief.
 #
 function goto_mark_interactive
 {
-    mark=$(i3-msg -t get_marks | sed 's/[[,]/\n/g' | grep -E '[0-9]{3}'| ${dmenulooknfeel} -p 'goto mark ')
+    #If you're learning the main keyboard 789UIOJKLM numpad this function may come as a relief.
+    # The commas create newlines for grep. The square brackes must go. Sometimes their adjacent double quotes must go hence the choice of filter but not today.
+    mark=$(i3-msg -t get_marks | sed 's/[,]/\n/g' | sed 's/\[//g' | sed 's/\]//g' | grep -E '[0-9]{3}'| ${dmenulooknfeel} -p 'goto mark ')
     i3-msg "[con_mark=$mark] focus"
 }
 
@@ -893,8 +895,17 @@ function goto_mark_interactive
 #
 function swap_mark_interactive
 {
-    mark=$(i3-msg -t get_marks | sed 's/[[,]/\n/g' | grep -E '[0-9]{3}'| ${dmenulooknfeel} -p 'swap mark ')
+    # This should be the twin of the comment in goto..."
+    mark=$(i3-msg -t get_marks | sed 's/[,]/\n/g' | sed 's/\[//g' | sed 's/\]//g' | grep -E '[0-9]{3}'| ${dmenulooknfeel} -p 'swap mark ')
     i3-msg "swap container with mark ${mark};"
+}
+
+#
+# Wrapper for ...
+#
+function auto_mark_container
+{
+    i3-marks auto
 }
 
 #
@@ -1047,6 +1058,20 @@ function backdrop
             echo "function ${FUNCNAME[0]}: parameter $1 not implemented"
             ;;
     esac
+}
+
+#
+#
+#
+function mousefocus
+{
+    # Variables $X $Y. $SCREEN too easy
+    eval "$(xdotool getmouselocation --shell)"
+    # Extract lines with the name and the left edge, sorted by left edge, compare mousex, return name when mouse exceeds left edge, return tail off list of names
+    (xrandr | grep ' connected' | sort -k2 | sed 's/+/ /g' | awk '{print $1,$4}' | \
+             while read -r line; do \
+                 if [ "$X" -gt "$(echo "$line" | awk '{print $2}')" ]; then \
+                     echo "$line" | awk '{print $1}' ; fi ; done | tail -n 1)
 }
 
 # = UNUSED, IN RESERVE =========================================== #
@@ -1207,6 +1232,9 @@ function params2x1word
             ;;
         (rotate|swap)
             "$1" "$2"
+            ;;
+        (mousefocus)
+            "$1"
             ;;
         ([0-9][0-9][0-9])
             echo "Programmer error: params1x3digits argument"

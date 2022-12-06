@@ -49,6 +49,7 @@ TARFILE=i3-$(shell date +"%Y%V%u%H%M").tar
 
 #================================================================
 
+
 all: .installdirs .installcfg .installbin .installbinplus .installflags .installdigest
 
 dropbox : .dropbox

@@ -112,8 +112,6 @@ declare -A wsapps=(
     ["tv"]="etc-tvheadend start"
     #! ws Nice tabbed layout for fullscreen size guests.
     ["vm"]="virtualbox"
-    #! ws VLC complements mpv.
-    ["vp"]="vlc"
 
 )    # ----------------------------------------------------------- #
 

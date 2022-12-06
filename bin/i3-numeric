@@ -40,7 +40,7 @@ function decode
             ;;
         ([x][0-9][0-9][0-9])
             # 000 through 031 inclusive are reserved.
-            m=${1/x}
+            m=${1/x/}
             i3-msg swap container with mark "$m"
             notify-send "i3-numeric" "swap contents of focused and >$m<"
             ;;
