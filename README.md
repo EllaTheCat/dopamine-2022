@@ -1,4 +1,4 @@
-qb# README.md
+# README.md
 
 ## dopamine-2022
 
@@ -80,14 +80,16 @@ One-Handed Operation is facilitated by using i3 modes with bindings that
 don't require a modifier key.
 
 ## Major Modes
-There are 4 major modes in addition to default: $Primary, $AltPrimary, $Secondary, $AltSecondary.  There are TWO keys for changing mode, the 1st and 2nd mode
-select keys.
+There are 4 major modes in addition to default: $Primary, $AltPrimary, $Secondary, $AltSecondary.
+There are TWO keys for changing mode, the 1st and 2nd mode select keys.
+They may be swapped, or moved, but there must be one of each,
+and each must operate umodified and without modifying.
 
-- (1st) EITHER the backslash key next to Z OR the Menu key.
-- (2nd) The Super_L key
+- (2nd) EITHER the backslash key next to Z OR the Menu key.
+- (1st) The Super_L key
 
 Experience has shown that the 1st and 2nd mode keys should work like this
-in conjunction with the space bar
+in conjunction with the space bar.
 
 - The 1st mode key toggles between Primary and AltPrimary modes.
   In default mode and the other two major modes it selects Primary mode.
