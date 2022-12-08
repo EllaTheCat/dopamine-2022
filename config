@@ -50,6 +50,9 @@ set $l l
 # Makefile.bash can be reconfigured by three envvars H2 H1 V1 such
 # that the user's output names are used in the final runtime config
 # loaded into i3 (but not in the local repo).
+#
+# 20221206 Revertes my configuration to HDMI2 and HDMI1 monitors
+# _without_ VGA1 monitor or dummy monitor.
 
 # COLOURS ======================================================== #
 
@@ -339,9 +342,10 @@ mode "$AltPrimary" {
     #! Toggle a container between floating|tiling.
     bindsym t floating toggle
 
-    bindsym m goto_mark_interactive
-    bindsym x swap_mark_interactive
-    bindsym a auto_mark_container
+    # Mark navigation, interactive dmenus (no numpad).
+    bindsym m exec --no-startup-id ~/local/i3/bin/i3-config-bash goto_mark_interactive
+    bindsym x exec --no-startup-id ~/local/i3/bin/i3-config-bash swap_mark_interactive
+    bindsym a exec --no-startup-id ~/local/i3/bin/i3-config-bash auto_mark_container
 
     #! This is how to type a character when the usual unshifted key is now the 1st mode key. It must be done for Primary and AltPrimary modes.
     bindsym z mode "$Zmode", focus;
@@ -835,7 +839,7 @@ bindsym control+Delete exec --no-startup-id \
 # I3BAR SETTINGS BEGIN HERE.
 #
 
-u# From right to left:
+# From right to left:
 # 1) Show system indicators - i3status
 # 2) Show cursor xy, sensors - i3-status
 # 3) Show this output's workspaces - i3bar
