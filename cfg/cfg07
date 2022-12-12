@@ -97,19 +97,18 @@ for_window [title="Live Caption"] \
 
 # ================================================================ #
 
-# Record where workspaces are ending up instead of defining some grand
-# placement scheme.
+# Toggging yhe workspace outputs ike this had not previously occurred
+# to me
 
-workspace "f1" output HDMI2
-workspace "n2" output HDMI2
 workspace "tm" output HDMI1
 
 workspace "e0" output HDMI1
-workspace "f4" output HDMI1
+workspace "f0" output HDMI2
 workspace "g0" output HDMI1
-workspace "s7" output HDMI1
+workspace "n2" output HDMI1
 
-workspace "i3" output VGA1
+workspace "mb" output HDMI1
+workspace "i3" output HDMI2
 
 # ================================================================ #
 

@@ -265,7 +265,7 @@ function wswatcher
              # is where 'Emacs inside' is put when it is is hidden. If
              # the current workspace is i3, it is forced to e0.
              if [ "_$cws" = "_i3" ]; then
-                 msg="move container to workspace e0 workspace e0, focus;"
+                 msg="move container to wokspace e0 workspace e0, focus;"
              else
                  msg="move container to workspace $cws, workspace $cws, focus;"
              fi
@@ -367,7 +367,7 @@ function wswatcher
                      echo "show" > /dev/shm/"$USER"/i3/state/digest
                      ;;
                  (hide)
-                     echo "busy" > /dev/shm/"$USER"/i3/state/digest
+g                     echo "busy" > /dev/shm/"$USER"/i3/state/digest
                      i3-msg "[title=\"i3 config digest\"] kill"
                      echo "hide" > /dev/shm/"$USER"/i3/state/digest
                      ;;
@@ -680,6 +680,19 @@ function vmr_workspace
             ;;
         (*)
             echo "function ${FUNCNAME[0]}: parameter $1 not implemented"
+            ;;
+    esac
+}
+
+#
+# Specify an output, move the currrent workspace to the output.
+#
+function move_workspace_to_output
+{
+    cws=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')
+    case "$1" in
+        (HDMI2|HDMI1|VGA)
+            i3-msg "workspace $cws, move workspace to output $1;"
             ;;
     esac
 }
@@ -1218,8 +1231,11 @@ function params2x1word
         (rename_workspace)
             vmr_workspace rename
             ;;
+        (move_workspace_to_output)
+            "$1" "$2"
+            ;;
         (move_workspace_to_output_interactive)
-            "$1"
+            "$1" "$2"
             ;;
         (swap_two_workspaces_by_reference)
             "$1"

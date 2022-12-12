@@ -203,7 +203,7 @@ set $nocompositor exec --no-startup-id /usr/bin/killall -q picom
 # Ruler is 48 chars ->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 set $Primary            :SingleTap1st:  q w ex a s d fmry gh jk l n z vb
-set $AltPrimary         :DoubleTap1st:  q et z vb
+set $AltPrimary         :DoubleTap1st:  q et fmry gsa
 
 set $Dismiss            :dismiss:         s vw [f]loat o b [l]ogout
 set $FloatingGroups     :floating groups: q [u]ser a s
@@ -241,24 +241,37 @@ mode "$Primary" {
     #! Dismiss (kill) singly or in batches.
     bindsym q mode "$Dismiss"
 
-    #! Move a workspace to an output using a dmenu to choose both workspace and output.
+    #! Move a workspace to an output using a dmenu to choose them both.
     bindsym w exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash \
             move_workspace_to_output_interactive
 
-    #! [ex]change == swap two workspaces using a dmenu to choose both names-or-numbers.
+    #! [ex]change == swap two workspaces using a dmenu to choose them both.
     bindsym e exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash swap_two_workspaces_by_reference1
-    #! [ex]change == swap the contents of two containers using a dmenu to chose both marks.
-    bindsym x exec --no-startup-id \
-            ~/local/i3/bin/i3-config-bash swap_two_containers_by_value
+
+    #! Set a container to be [t]iling, i.e. Floating Disable, because
+    #! Floating Toggle is playing silly buggers.  Resize mode is
+    #! adjacentt. Please try asd to perform Floating Enable with
+    #! resize.
+    bindsym t floating disable
+    bindsym u floating enable, resize set 30 ppt 30 ppt, move position center;
+
+    #! Move the current workspace to the speciied output.
+    bindsym i exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            move_workspace_to_output HDMI2
+    bindsym o exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            move_workspace_to_output HDMI1
+    bindsym p exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash \
+            move_workspace_to_output VGA1
 
     #! [A]ttention! Visit a workspace with a red tab. NB mpv triggers this when mpv starts.
     bindsym a [urgent="latest"] focus
-
     #! Access to specific settings modes. SoundSettings is the first, anticipate more to come.
     bindsym s mode "$Settings"
-
     #! Command prompt and mini-menu.
     bindsym d exec --no-startup-id \
             ~/local/i3/bin/i3-config-bash qmenu show
@@ -267,7 +280,7 @@ mode "$Primary" {
     bindsym f mode "$cursorFocus"
     bindsym m mode "$cursorMove"
     bindsym r mode "$cursorResize"
-    bindsym y mode "$Layouts"
+    bindsym y mode "$laYouts"
     # Modifiers incur no overheads when a use case entangles focus,
     # move, layout. Modes incur an overhead when the mode changes. The
     # least overhead is when each of the modes in a group can change
@@ -285,13 +298,14 @@ mode "$Primary" {
     #! embiGGen windows to fill one or all monitor screens.
     bindsym      g floating disable, fullscreen toggle;
     bindsym $fgm+g floating disable, fullscreen toggle global;
-    bindsym      h nop
+    bindsym h nop
     # DANGER WILL ROBINSON!!! The modifier is there to make it harder
     # to invoke by accident. Standard i3 uses mod+f and mod+g, sway
     # uses mod+f and mod+shift+f. This config associates the f key
-    # with focus (fmr triplet) hence g and $fgmod+g for embiggen. If
-    # you don't like $fgm+g, use h instead. See cfg/keys00 for the
-    # $fgm ([F]ullscreen[G]lobal[M]odifier} setting.
+    # with focus (fmry quad) hence g and $fgmod+g for embiggen.  See
+    # cfg/keys00 for the $fgm ([F]ullscreen[G]lobal[M]odifier}
+    # setting.
+
 
     #! Rotate workspaces view in front of a backdrop. EXPERIMENTAL.
     bindsym k  exec --no-startup-id \
@@ -303,6 +317,10 @@ mode "$Primary" {
     #! now the 1st mode key. It must be done for Primary and AltPrimary
     #! modes.
     bindsym z mode "$Zmode", focus;
+
+    #! [ex]change == swap the contents of two containers using a dmenu to chose both marks.
+    bindsym x exec --no-startup-id \
+            ~/local/i3/bin/i3-config-bash swap_two_containers_by_value
     bindsym c nop
 
     #! Open a terminal, preceded by a vertical or horizontal split.
@@ -336,22 +354,29 @@ mode "$AltPrimary" {
 
     #! Dismiss (kill) singly or in batches.
     bindsym q mode "$Dismiss"
+    bindsym w nop
+    bindsym e nop
+    bindsym t nop
 
-    #! Toggle the focus to work on tiled or floating.
-    bindsym e mode default, focus mode_toggle;
-    #! Toggle a container between floating|tiling.
-    bindsym t floating toggle
+    bindsym f mode "$cursorFocus"
+    bindsym m mode "$cursorMove"
+    bindsym r mode "$cursorResize"
+    bindsym y mode "$Layouts"
 
     # Mark navigation, interactive dmenus (no numpad).
-    bindsym m exec --no-startup-id ~/local/i3/bin/i3-config-bash goto_mark_interactive
-    bindsym x exec --no-startup-id ~/local/i3/bin/i3-config-bash swap_mark_interactive
+    bindsym g exec --no-startup-id ~/local/i3/bin/i3-config-bash goto_mark_interactive
+    bindsym s exec --no-startup-id ~/local/i3/bin/i3-config-bash swap_mark_interactive
     bindsym a exec --no-startup-id ~/local/i3/bin/i3-config-bash auto_mark_container
+    bindsym d nop
 
     #! This is how to type a character when the usual unshifted key is now the 1st mode key. It must be done for Primary and AltPrimary modes.
     bindsym z mode "$Zmode", focus;
+    bindsym x nop
+    bindsym c nop
 
     bindsym v split v
     bindsym b split h
+    bindsym n nop
 
     #! Emacs users who forget to return to default mode before saving might lose work so this attempts to save the day. Vi users might want to substitute C-x with a colon.
     bindsym Control+x [title="Emacs"] mode default, \
@@ -857,7 +882,7 @@ bar {
 
     # The long-standing default size is 11, to match the status bar,
     # but size 12 is better for the binding mode indicator.
-    font pango:DejaVhhhhshu Sans 12
+    font pango:DejaVu Sans 12
     position bottom
 
     # EllaTheCat strongly recommends that the binding mode indicator
@@ -876,7 +901,7 @@ bar {
     # Mouse buttons that can take effect when the pointer is in the
     # i3bar area. Button 1 selects workspace tabs so is off-limits.
     bindsym button2 nop
-    bindsym button3 nop
+    bindsym button3 move workpace to output next
     # The MS mouse wheel 'feel' on my mouse is especially grotty.
 }
 
